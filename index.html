@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 진로 MBTI : 나의 미래 레시피 & 진로 포토카드</title>
+  <title>선화 진로 MBTI : 아바타 포토카드 만들기</title>
   <style>
     :root {
       --primary: #6366f1;
@@ -120,12 +120,33 @@
       text-align: center;
       box-shadow: 0 15px 30px rgba(30, 27, 75, 0.2);
       margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
     }
     .mbti-badge { display: inline-block; background: #ec4899; color: white; padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 15px; letter-spacing: 1px; margin-bottom: 12px; }
     .mbti-title { font-size: clamp(22px, 4vw, 32px); font-weight: 800; margin-bottom: 12px; color: #f8fafc; }
-    .mbti-code { font-size: 44px; font-weight: 900; letter-spacing: 4px; color: #a5b4fc; margin: 10px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .mbti-code { font-size: 44px; font-weight: 900; letter-spacing: 4px; color: #a5b4fc; margin: 10px 0; }
+
+    /* 사진 업로드 영역 스타일 */
+    .photo-upload-box {
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .photo-upload-box input[type="file"] { display: none; }
+    .upload-btn {
+      display: inline-block;
+      background: var(--secondary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .upload-btn:hover { background: #db2777; }
+    #previewImg { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-top: 10px; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: none; }
 
     .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
     
@@ -181,9 +202,8 @@
       margin-top: 24px;
     }
     .adiga-banner a {
-      background: var(--secondary); color: white; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
+      background: var(--secondary); color: white; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 700;
     }
-    .adiga-banner a:hover { background: #db2777; }
 
     footer { text-align: center; color: var(--muted); font-size: 13px; margin: 40px 0 20px; line-height: 1.6; }
 
@@ -199,7 +219,7 @@
   <header>
     <div class="school-badge">🌸 동국대학교 사범대학부속 선화여자고등학교</div>
     <h1>선화 진로 MBTI PLAY</h1>
-    <p>나의 최애 활동 레시피와 밸런스 성향으로 알아보는 나의 진로 캐릭터 코드</p>
+    <p>나의 캐릭터 코드와 내 얼굴이 쏙 들어간 아바타 포토카드 만들기</p>
     <div class="progress-box">
       <div class="progress"><div id="progress" style="width: 15%"></div></div>
       <div class="progress-text">
@@ -242,14 +262,22 @@
     </div>
   </section>
 
-  <!-- STEP 3: 최종 MBTI 스타일 결과 및 포토카드 -->
+  <!-- STEP 3 -->
   <section id="step3" class="hidden">
-    <!-- MBTI 스타일 결과 카드 -->
     <div class="mbti-result-card">
       <div class="mbti-badge" id="mbtiBadge">✨ 나의 진로 캐릭터 코드</div>
       <div class="mbti-code" id="mbtiCode">C-O-D-E</div>
       <h2 class="mbti-title" id="mbtiTitle" style="color:#ffffff; margin:8px 0;"></h2>
       <p id="resultText" style="color:#cbd5e1; font-size:14.5px; max-width:680px; margin: 12px auto 0; line-height:1.6;"></p>
+      
+      <!-- 내 얼굴 사진 업로드 영역 -->
+      <div class="photo-upload-box">
+        <div style="font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 4px;">📸 포토카드에 넣을 내 얼굴 사진을 업로드해보세요!</div>
+        <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">(사진은 서버에 저장되지 않고 내 기기 브라우저 안에서만 안전하게 합성됩니다)</div>
+        <label class="upload-btn" for="photoInput">사진 파일 선택하기</label>
+        <input type="file" id="photoInput" accept="image/*">
+        <div><img id="previewImg" alt="미리보기"></div>
+      </div>
     </div>
 
     <div class="panel">
@@ -260,21 +288,16 @@
     <div class="results-grid">
       <div class="panel" style="margin-bottom:0;">
         <h2>💼 추천 탐색 직업군</h2>
-        <p class="muted" style="font-size:13px; margin-bottom:10px;">내 캐릭터 성향과 찰떡궁합인 대표 직업입니다.</p>
         <div id="jobs" class="chips"></div>
       </div>
       <div class="panel" style="margin-bottom:0;">
         <h2>🎓 추천 관심 학과 계열</h2>
-        <p class="muted" style="font-size:13px; margin-bottom:10px;">대학 진학 시 주목해야 할 주요 학과입니다.</p>
         <div id="majors" class="chips"></div>
       </div>
     </div>
 
-    <!-- 대학 어디가 연계 및 내신 참고 등급대 -->
     <div class="panel">
       <h2>🏫 주요 대학 학과 개설 현황 및 내신 참고 등급대</h2>
-      <p class="muted">대입정보포털 '어디가' 공식 데이터를 바탕으로 한 주요 대학의 학과별 <b>학생부교과·종합 전형 합격 참고 등급대</b>입니다.</p>
-      
       <div class="filter">
         <select id="region">
           <option value="전체">전국 지역 전체</option>
@@ -286,15 +309,15 @@
           <option>호남·제주</option>
           <option>강원</option>
         </select>
-        <input id="search" type="search" placeholder="대학명 또는 학과명 검색 (예: 컴퓨터, 경영, 간호)" aria-label="대학 학과 검색">
+        <input id="search" type="search" placeholder="대학명 또는 학과명 검색 (예: 컴퓨터, 경영, 간호)">
       </div>
       
       <div id="universityList" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); margin-top: 14px;"></div>
 
       <div class="adiga-banner">
         <div>
-          <div style="font-weight: 700; font-size: 15px; color: #1e293b; margin-bottom: 2px;">정확한 전년도 입시 결과와 상세 분석이 필요하다면?</div>
-          <div style="font-size: 13px; color: var(--muted);">한국대학교육협의회 공식 대입정보포털 <b>'어디가(adiga.kr)'</b>에서 본인의 내신 성적을 입력하고 상세 산출 결과를 확인하세요.</div>
+          <div style="font-weight: 700; font-size: 15px; color: #1e293b;">정확한 전년도 입시 결과가 궁금하다면?</div>
+          <div style="font-size: 13px; color: var(--muted);">대입정보포털 <b>'어디가(adiga.kr)'</b>에서 확인하세요.</div>
         </div>
         <a href="https://www.adiga.kr" target="_blank" rel="noopener">어디가(adiga.kr) 바로가기 ↗</a>
       </div>
@@ -304,15 +327,14 @@
       <h2>💬 선배·친구와 함께 나누는 진로 대화</h2>
       <p id="talk" class="tip-box" style="margin-top: 10px; background: var(--secondary-light); border-left-color: var(--secondary); color: #831843;"></p>
       <div class="actions">
-        <button class="primary" id="save">✨ 예쁜 인생 진로 포토카드 저장하기</button>
+        <button class="primary" id="save">✨ 내 얼굴 아바타 포토카드 저장하기</button>
         <button class="secondary" id="reset">처음부터 다시 시작하기</button>
       </div>
     </div>
   </section>
 
   <footer>
-    <b>동국대학교 사범대학부속 선화여자고등학교</b> · 진로 MBTI PLAY 프로그램<br>
-    ※ 본 웹페이지의 내신 등급대는 '어디가' 일반 공개 데이터를 바탕으로 한 참고용 수치이며, 실제 입시 결과는 전형 유형 및 연도별로 달라질 수 있습니다.
+    <b>동국대학교 사범대학부속 선화여자고등학교</b> · 진로 MBTI PLAY 프로그램
   </footer>
 </main>
 
@@ -422,6 +444,7 @@
   let answers = [];
   let question = 0;
   let result = null;
+  let uploadedImage = null; // 사용자가 업로드한 얼굴 이미지 객체
 
   function show(id) {
     ['step1', 'step1b', 'step2', 'step3'].forEach(x => $('#' + x).classList.toggle('hidden', x !== id));
@@ -431,7 +454,7 @@
       step1: 'STEP 1 / 3 : 활동 재료 5개 고르기',
       step1b: 'STEP 1-2 / 3 : 핵심 레시피 3개 압축',
       step2: 'STEP 2 / 3 : 진로 밸런스 월드컵',
-      step3: 'STEP 3 / 3 : 진로 MBTI & 포토카드 리포트'
+      step3: 'STEP 3 / 3 : 아바타 포토카드 리포트'
     };
     $('#progress').style.width = pMap[id] + '%';
     $('#stepIndicator').textContent = tMap[id];
@@ -472,7 +495,7 @@
 
   function renderFinal() {
     let c = $('#finalMaterials');
-    c.replaceCore ? c.replaceCore() : c.replaceChildren();
+    c.replaceChildren();
     chosen.forEach(i => {
       c.append(makeTile(materials[i], final.includes(i), () => {
         if (final.includes(i)) {
@@ -538,12 +561,10 @@
     let jobs = [...new Set(cats.flatMap(c => db[c]?.[0] || []))].slice(0, 12);
     let majors = [...new Set(cats.flatMap(c => db[c]?.[1] || []))].slice(0, 10);
     
-    // MBTI 스타일 4글자 코드 생성 로직
     let c1 = cats[0] || '사회';
     let c2 = cats[1] || '기획';
     let code = (c1.slice(0,1) + c2.slice(0,1) + (final.length > 2 ? materials[final[0]].cat.slice(0,1) : 'P') + 'V').toUpperCase();
 
-    // 캐릭터 타이틀 매칭
     const titles = {
       '사회': '세상을 따뜻하게 연결하는 소통의 마스터',
       '보건': '생명을 지키고 치유하는 따뜻한 손길',
@@ -572,7 +593,7 @@
     chips($('#jobs'), jobs);
     chips($('#majors'), majors);
 
-    $('#talk').innerHTML = `💬 <b>선화 언니의 진로 톡:</b> "내 진로 MBTI 코드는 <b>${result.code}</b>야! 너는 어떤 코드가 나왔어? 서로 어떤 활동이 제일 끌렸는지 비교해보자!"`;
+    $('#talk').innerHTML = `💬 <b>선화 언니의 진로 톡:</b> "내 진로 MBTI 코드는 <b>${result.code}</b>야! 사진을 올리고 포토카드를 저장해서 친구들에게 자랑해봐!"`;
 
     renderUniversities();
     show('step3');
@@ -621,82 +642,129 @@
     if (!list.length) {
       let p = document.createElement('p');
       p.className = 'muted';
-      p.textContent = '조건에 일치하는 대학 정보가 없습니다. 다른 지역이나 검색어를 입력해 보세요.';
+      p.textContent = '조건에 일치하는 대학 정보가 없습니다.';
       box.append(p);
     }
   }
 
-  // 예쁘고 감성적인 포토카드 이미지 저장 (Canvas)
+  // 사진 업로드 처리
+  $('#photoInput').addEventListener('change', (e) => {
+    let file = e.target.files[0];
+    if (!file) return;
+    let reader = new FileReader();
+    reader.onload = (event) => {
+      let img = new Image();
+      img.onload = () => {
+        uploadedImage = img;
+        let preview = $('#previewImg');
+        preview.src = event.target.result;
+        preview.style.display = 'inline-block';
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // 얼굴 사진과 캐릭터 아바타가 합성된 포토카드 저장 (Canvas)
   function saveCard() {
     if (!result) return;
     const c = document.createElement('canvas');
     c.width = 1000;
-    c.height = 700;
+    c.height = 740;
     const ctx = c.getContext('2d');
     if (!ctx) {
       alert('이 기기에서는 이미지 저장을 지원하지 않습니다.');
       return;
     }
 
-    // 카드 배경 그라데이션
-    let grad = ctx.createLinearGradient(0, 0, 1000, 700);
+    // 배경 그라데이션
+    let grad = ctx.createLinearGradient(0, 0, 1000, 740);
     grad.addColorStop(0, '#1e1b4b');
     grad.addColorStop(1, '#4f46e5');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 1000, 700);
+    ctx.fillRect(0, 0, 1000, 740);
 
     // 테두리 장식
     ctx.strokeStyle = '#ec4899';
     ctx.lineWidth = 4;
-    ctx.strokeRect(40, 40, 920, 620);
+    ctx.strokeRect(40, 40, 920, 660);
 
     // 헤더 타이틀
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 24px sans-serif';
-    ctx.fillText('🌸 SUNHWA GIRLS\' HIGH SCHOOL · CAREER MBTI', 75, 95);
+    ctx.fillText('🌸 SUNHWA GIRLS\' HIGH SCHOOL · CAREER AVATAR CARD', 75, 90);
+
+    // 아바타 캐릭터 원형 베이스 (얼굴 합성 위치: 오른쪽 상단)
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(820, 170, 75, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = '#312e81';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#ec4899';
+    ctx.stroke();
+    ctx.clip();
+
+    if (uploadedImage) {
+      // 업로드한 사용자 얼굴 이미지 원형 합성
+      ctx.drawImage(uploadedImage, 745, 95, 150, 150);
+    } else {
+      // 사진이 없을 때 기본 귀여운 아바타 이모지/일러스트 표시
+      ctx.fillStyle = '#a5b4fc';
+      ctx.font = '60px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('😎', 820, 192);
+      ctx.textAlign = 'left';
+    }
+    ctx.restore();
+
+    // 캐릭터 모자/안경 데코레이션 아이콘 장식
+    ctx.font = '32px sans-serif';
+    ctx.fillText('🎓', 760, 115);
 
     // MBTI 코드
     ctx.fillStyle = '#a5b4fc';
-    ctx.font = 'bold 54px sans-serif';
-    ctx.fillText(result.code, 75, 180);
+    ctx.font = 'bold 50px sans-serif';
+    ctx.fillText(result.code, 75, 165);
 
     // 타이틀
     ctx.fillStyle = '#f8fafc';
-    ctx.font = 'bold 30px sans-serif';
-    ctx.fillText(result.titleText, 75, 235);
+    ctx.font = 'bold 27px sans-serif';
+    ctx.fillText(result.titleText, 75, 215);
 
     // 구분선
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(75, 265);
-    ctx.lineTo(925, 265);
+    ctx.moveTo(75, 245);
+    ctx.lineTo(925, 245);
     ctx.stroke();
 
     // 핵심 레시피 영역
     ctx.fillStyle = '#fce7f3';
     ctx.font = 'bold 20px sans-serif';
-    ctx.fillText('[ 나의 핵심 활동 레시피 ]', 75, 315);
+    ctx.fillText('[ 나의 핵심 활동 레시피 ]', 75, 290);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '22px sans-serif';
     result.recipe.forEach((x, i) => {
-      ctx.fillText(`✓  ${x}`, 95, 360 + (i * 40));
+      ctx.fillText(`✓  ${x}`, 95, 335 + (i * 38));
     });
 
     // 추천 직업 및 학과
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '18px sans-serif';
-    ctx.fillText('• 추천 직업: ' + result.jobs.slice(0, 3).join(' · '), 75, 510);
-    ctx.fillText('• 추천 학과: ' + result.majors.slice(0, 3).join(' · '), 75, 555);
+    ctx.fillText('• 추천 직업: ' + result.jobs.slice(0, 3).join(' · '), 75, 490);
+    ctx.fillText('• 추천 학과: ' + result.majors.slice(0, 3).join(' · '), 75, 535);
 
     // 하단 푸터
     ctx.fillStyle = '#ec4899';
     ctx.font = 'bold 16px sans-serif';
-    ctx.fillText('인생 진로 탐색 포토카드 · 어디가(adiga.kr) 연계', 75, 625);
+    ctx.fillText('선화여고 진로 MBTI 아바타 포토카드 · 어디가(adiga.kr) 연계', 75, 660);
 
     let a = document.createElement('a');
-    a.download = '선화여고_나의진로포토카드.png';
+    a.download = '선화여고_아바타_진로포토카드.png';
     a.href = c.toDataURL('image/png');
     a.click();
   }
@@ -733,6 +801,9 @@
     answers = [];
     question = 0;
     result = null;
+    uploadedImage = null;
+    $('#previewImg').style.display = 'none';
+    $('#photoInput').value = '';
     $('#region').value = '전체';
     $('#search').value = '';
     renderMaterials();
