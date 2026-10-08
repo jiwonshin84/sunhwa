@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 진로 PLAY - 미래 학생증 & 대학 탐험대</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <title>선화 진로 PLAY - 주니어 학과 & 대학 탐험대</title>
   <style>
     :root {
       --primary: #6366f1;
@@ -113,21 +112,21 @@
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
       color: white;
       border-radius: 24px;
-      padding: 30px 24px;
+      padding: 32px 24px;
       text-align: center;
       box-shadow: 0 15px 30px rgba(30, 27, 75, 0.2);
       margin-bottom: 24px;
     }
-    .persona-badge { display: inline-block; background: #ec4899; color: white; font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 99px; margin-bottom: 12px; }
-    .persona-title { font-size: clamp(22px, 4vw, 30px); font-weight: 800; margin: 0 0 10px; color: #fff; }
-    .persona-desc { color: #cbd5e1; font-size: 14.5px; max-width: 650px; margin: auto; line-height: 1.6; }
+    .persona-badge { display: inline-block; background: #ec4899; color: white; font-size: 13px; font-weight: 800; padding: 5px 14px; border-radius: 99px; margin-bottom: 12px; }
+    .persona-title { font-size: clamp(22px, 4vw, 32px); font-weight: 800; margin: 0 0 10px; color: #fff; }
+    .persona-desc { color: #cbd5e1; font-size: 15px; max-width: 650px; margin: auto; line-height: 1.6; }
 
-    /* 학과 & 대학교 카드 */
-    .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; }
+    /* 학과 & 대학교 카드 그리드 */
+    .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 18px; }
     .major-card {
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 20px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 22px;
       background: #fff;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -135,56 +134,23 @@
       flex-direction: column;
       justify-content: space-between;
     }
-    .major-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99,102,241,0.1); }
-    .major-card h4 { margin: 0 0 6px 0; font-size: 17px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; }
-    .major-card .badge { background: #e0e7ff; color: #3730a3; font-size: 12px; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+    .major-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(99,102,241,0.12); }
+    .major-card h4 { margin: 0 0 8px 0; font-size: 18px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; }
+    .major-card .badge { background: #e0e7ff; color: #3730a3; font-size: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 700; }
 
-    /* 미래 학생증 (ID CARD) */
-    .id-card-wrapper {
-      max-width: 440px;
-      margin: 24px auto;
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #4338ca 100%);
-      border-radius: 24px;
-      padding: 26px 22px;
-      color: white;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    .id-card-wrapper::before {
-      content: '';
-      position: absolute;
-      top: -50px; right: -50px;
-      width: 150px; height: 150px;
-      background: radial-gradient(circle, rgba(236,72,153,0.4) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .id-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 12px; margin-bottom: 16px; }
-    .id-header .logo { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #f472b6; }
-    .id-header .chip-deco { width: 36px; height: 26px; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-    .id-body { display: flex; gap: 18px; align-items: center; margin-bottom: 16px; }
-    .id-photo { width: 85px; height: 105px; background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 38px; }
-    .id-details { flex: 1; }
-    .id-name { font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px; }
-    .id-role { font-size: 12.5px; color: #a5b4fc; font-weight: 700; margin-bottom: 10px; }
-    .id-info-row { font-size: 12px; color: #cbd5e1; margin-bottom: 3px; display: flex; justify-content: space-between; }
-    .id-info-row span { color: #f8fafc; font-weight: 600; }
-    .id-footer { border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 12px; font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; }
-
-    /* 모달 */
+    /* 커리어넷 학과 상세 모달 */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
-    .modal-content { background: white; border-radius: 24px; max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: fadeIn 0.2s ease; }
+    .modal-content { background: white; border-radius: 24px; max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: fadeIn 0.2s ease; }
     .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 18px; }
     .modal-header h3 { margin: 0; font-size: 24px; color: #1e293b; font-weight: 800; }
-    .modal-section { margin-bottom: 20px; }
+    .modal-section { margin-bottom: 22px; }
     .modal-section h4 { margin: 0 0 8px; font-size: 16px; color: #4338ca; font-weight: 700; display: flex; align-items: center; gap: 6px; }
     .subject-pill-box { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 14px; border-radius: 14px; font-size: 13.5px; border: 1px solid #e2e8f0; }
     .indicator-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
     .indicator-card { background: #f1f5f9; padding: 14px; border-radius: 12px; text-align: center; }
-    .indicator-card strong { display: block; font-size: 18px; color: #db2777; margin-top: 4px; }
-    .univ-tag-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 8px; max-height: 200px; overflow-y: auto; }
-    .univ-tag { background: #f0fdf4; color: #166534; padding: 8px 12px; border-radius: 10px; font-size: 12.5px; text-decoration: none; font-weight: 700; border: 1px solid #bbf7d0; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
+    .indicator-card strong { display: block; font-size: 19px; color: #db2777; margin-top: 4px; }
+    .univ-tag-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 8px; max-height: 220px; overflow-y: auto; }
+    .univ-tag { background: #f0fdf4; color: #166534; padding: 9px 12px; border-radius: 10px; font-size: 12.5px; text-decoration: none; font-weight: 700; border: 1px solid #bbf7d0; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
     .univ-tag:hover { background: #dcfce7; }
     .univ-tag small { color: #15803d; font-weight: normal; }
 
@@ -201,8 +167,8 @@
 <main class="wrap">
   <header>
     <div class="school-badge">🌸 동국대학교 사범대학부속 선화여자고등학교</div>
-    <h1>선화 진로 PLAY : 미래 학생증 & 대학 탐험대</h1>
-    <p>10단계 밸런스 월드컵으로 찾는 부캐 성향과 미래 대학 합격증 패스!</p>
+    <h1>선화 진로 PLAY : 주니어 학과 & 대학 탐험대</h1>
+    <p>10단계 진로 밸런스 월드컵으로 알아보는 나만의 맞춤 전공과 전국 대학 탐색!</p>
     <div class="progress-box">
       <div class="progress"><div id="progress" style="width: 15%"></div></div>
       <div class="progress-text">
@@ -216,7 +182,7 @@
   <section id="step1" class="panel">
     <h2>① 나의 호기심 레시피 : 꽂히는 활동 5개 고르기</h2>
     <p class="muted">성적이나 시선은 잠시 내려놓고, <b>"내가 시간 가는 줄 모르고 신나게 할 활동"</b> 5개를 골라주세요.</p>
-    <div class="tip-box">💡 <b>진로 팁:</b> 솔직하게 고를수록 나만의 미래 학생증에 딱 맞는 전공이 연결돼요! (<span id="count">0</span>/5개 선택됨)</div>
+    <div class="tip-box">💡 <b>진로 팁:</b> 솔직하게 고를수록 나에게 딱 맞는 대학 학과와 전공이 추천돼요! (<span id="count">0</span>/5개 선택됨)</div>
     <div id="materials" class="grid"></div>
     <div class="actions">
       <button class="primary" id="next1" disabled>5개 선택 완료! 최애 3개로 압축하기 →</button>
@@ -245,7 +211,7 @@
     </div>
   </section>
 
-  <!-- STEP 3 (결과 + 미래 학생증 + 대학 탐색기) -->
+  <!-- STEP 3 (결과: 부캐 분석 + 대학 및 학과 탐색 전용) -->
   <section id="step3" class="hidden">
     <!-- 부캐 페르소나 카드 -->
     <div class="persona-card">
@@ -254,43 +220,16 @@
       <p class="persona-desc" id="personaDesc"></p>
     </div>
 
-    <!-- 미래 학생증 (ID 카드) -->
-    <div class="panel">
-      <h2 style="text-align: center;">🪪 나의 미래 진로 학생증 (FUTURE STUDENT ID)</h2>
-      <p class="muted" style="text-align: center; font-size: 13.5px;">영수증 대신 나만의 진로 부캐와 미래 목표 대학이 새겨진 학생증을 간직해보세요!</p>
-
-      <div class="id-card-wrapper" id="captureIdCard">
-        <div class="id-header">
-          <div class="logo">SEONHWA HIGH SCHOOL · FUTURE PASS</div>
-          <div class="chip-deco"></div>
-        </div>
-        <div class="id-body">
-          <div class="id-photo" id="idCardEmoji">🎓</div>
-          <div class="id-details">
-            <div class="id-name" id="idCardName">미래의 선화인</div>
-            <div class="id-role" id="idCardRole">디지털 테크 이노베이터</div>
-            <div class="id-info-row">동아리: <span id="idCardClub">선화 테크랩</span></div>
-            <div class="id-info-row">추천전공: <span id="idCardMajor">컴퓨터·AI소프트웨어학</span></div>
-            <div class="id-info-row">목표대학: <span id="idCardUniv">전국 주요 명문대</span></div>
-          </div>
-        </div>
-        <div class="id-footer">
-          <div>ISSUED: 2026.10.08</div>
-          <div style="color:#f472b6; font-weight:700;">선화여고가 너의 꿈을 응원해 🌸</div>
-        </div>
-      </div>
-
-      <div class="actions" style="justify-content: center; gap: 12px;">
-        <button class="primary" id="downloadCardBtn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); font-size:15px;">📸 미래 학생증 이미지 저장 (PNG)</button>
-        <button class="secondary" id="reset">처음부터 다시하기 🔄</button>
-      </div>
-    </div>
-
     <!-- 커리어넷 학과 및 개설대학 정보사전 -->
     <div class="panel">
-      <h2>🎓 커리어넷 맞춤 학과 & 개설 대학교 탐색기</h2>
-      <p class="muted">커리어넷 Open API를 통해 수신한 전공 정보입니다. 카드를 누르면 <b>2022 개정 고교 추천과목</b>과 <b>전국 개설 대학교(홈페이지 바로가기)</b>를 바로 확인할 수 있습니다.</p>
+      <h2>🎓 커리어넷 맞춤 학과 & 전국 개설 대학교 탐색기</h2>
+      <p class="muted">한국직업능력연구원 커리어넷 Open API를 통해 실시간으로 수신한 전공 정보입니다.<br>각 학과 카드를 클릭하면 <b>2022 개정 고교 추천과목</b>, <b>졸업 후 취업률/평균임금</b>, <b>전국 개설 대학교(홈페이지 바로가기)</b>를 바로 확인할 수 있습니다.</p>
+      
       <div id="majorListContainer" class="major-grid"></div>
+
+      <div class="actions" style="justify-content: center; margin-top: 32px;">
+        <button class="secondary" id="reset" style="padding: 14px 28px; font-size: 15px;">처음부터 다시 테스트하기 🔄</button>
+      </div>
     </div>
   </section>
 
@@ -338,7 +277,7 @@
         </div>
       </div>
 
-      <!-- 개설 대학교 정보 (신규 강화) -->
+      <!-- 개설 대학교 정보 -->
       <div class="modal-section">
         <h4>🏛️ 이 학과가 개설된 전국 대학교 (홈페이지 바로가기)</h4>
         <div id="modalUnivList" class="univ-tag-list"></div>
@@ -348,7 +287,7 @@
 
   <footer>
     <b>동국대학교 사범대학부속 선화여자고등학교</b> · 주니어 진로 탐색 PLAY<br>
-    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과 및 대학 개설정보를 실시간으로 연동합니다.
+    ※ 본 서비스는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과 및 대학 정보를 실시간으로 연동하여 제공합니다.
   </footer>
 </main>
 
@@ -357,6 +296,7 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
+  // 커리어넷 API 설정 (발급받으신 정식 API 키 적용)
   const CAREERNET_API = {
     apiKey: '5263b920846c6ea68c4ecb15049a998a',
     baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
@@ -384,34 +324,23 @@
   });
 
   const personas = {
-    'SW': { title: '세상을 코딩하는 디지털 모험가 💻', badge: '테크 & 이노베이션', desc: '새로운 기술과 아이디어로 세상의 불편함을 해결하는 실천형 개발자 부캐입니다!' },
-    'AI': { title: '미래를 설계하는 AI 아키텍트 🤖', badge: '미래 테크 리더', desc: '데이터와 알고리즘으로 스마트한 미래 세상을 이끌어갈 브레인입니다!' },
-    '사회': { title: '사람의 마음을 잇는 공감 캡틴 🤝', badge: '휴먼 & 커뮤니케이션', desc: '친구들의 마음을 읽고 함께할 때 가장 빛나는 따뜻한 리더형 부캐입니다!' },
-    '미디어': { title: '트렌드를 이끄는 감성 크리에이터 🎬', badge: '스토리텔러', desc: '생각과 이야기를 매력적인 영상과 콘텐츠로 세상에 알리는 이야기 마법사입니다!' },
-    '경영': { title: '반짝이는 아이디어 뱅크 기획자 💡', badge: '비즈니스 & 기획', desc: '새로운 프로젝트를 기획하고 효율적으로 팀을 이끄는 전략가형 부캐입니다!' },
-    '생명': { title: '생명의 비밀을 푸는 바이오 탐구자 🧬', badge: '라이프 사이언스', desc: '자연과 인체, 생명의 신비에 호기심을 갖고 깊이 파고드는 과학자형 부캐입니다!' },
-    '디자인': { title: '세상을 바꾸는 비주얼 아티스트 🎨', badge: '비주얼 & 디자인', desc: '풍부한 감성과 시각적 감각으로 매력적인 세상을 연출하는 예술가입니다!' },
-    'default': { title: '무한한 가능성의 다재다능 탐험가 ✨', badge: '올라운더', desc: '다양한 분야를 넘나들며 융합하는 호기심 많은 미래의 주역입니다!' }
-  };
-
-  const sunhwaClubs = {
-    'SW': { name: '코딩 & 알고리즘 연구반 [선화 테크랩]', desc: '웹 개발과 알고리즘을 탐구하는 동아리' },
-    'AI': { name: 'AI & 미래공학 동아리', desc: '인공지능과 데이터 분석을 배우는 동아리' },
-    '사회': { name: '선화 학생 자치회 및 모의의회반', desc: '사회 문제 해결과 토론을 진행하는 동아리' },
-    '미디어': { name: '선화 방송반 (SHBS) & 미디어콘텐츠반', desc: '영상 제작과 교내 방송을 주도하는 동아리' },
-    '경영': { name: '청소년 모의창업 & 마케팅 연구회', desc: '비즈니스 모델과 굿즈를 기획하는 동아리' },
-    '생명': { name: '선화 바이오 사이언스 실험반', desc: '첨단 과학실에서 생명·화학 실험을 하는 동아리' },
-    '디자인': { name: '선화 아트 & 비주얼 디자인 크루', desc: '포스터 및 캐릭터 굿즈를 디자인하는 동아리' },
-    'default': { name: '융합 진로 프로젝트 [선화 드리머]', desc: '꿈을 주도적으로 찾는 동아리' }
+    'SW': { title: '세상을 코딩하는 디지털 모험가 💻', badge: '테크 & 이노베이션', desc: '새로운 기술과 아이디어로 세상의 불편함을 해결하는 실천형 소프트웨어 개발자 부캐입니다!' },
+    'AI': { title: '미래를 설계하는 AI 아키텍트 🤖', badge: '미래 테크 리더', desc: '빅데이터와 지능형 알고리즘으로 스마트한 미래 세상을 이끌어갈 브레인입니다!' },
+    '사회': { title: '사람의 마음을 잇는 공감 캡틴 🤝', badge: '휴먼 & 커뮤니케이션', desc: '친구들의 마음을 읽고 함께 협력할 때 가장 빛나는 따뜻한 리더형 부캐입니다!' },
+    '미디어': { title: '트렌드를 이끄는 감성 크리에이터 🎬', badge: '스토리텔러', desc: '자신의 생각과 이야기를 매력적인 영상과 콘텐츠로 세상에 알리는 이야기 마법사입니다!' },
+    '경영': { title: '반짝이는 아이디어 뱅크 기획자 💡', badge: '비즈니스 & 기획', desc: '새로운 프로젝트를 기획하고 효율적인 전략을 세워 목표를 완성하는 기획자형 부캐입니다!' },
+    '생명': { title: '생명의 비밀을 푸는 바이오 탐구자 🧬', badge: '라이프 사이언스', desc: '자연과 인체, 생명 현상의 신비에 호기심을 갖고 깊이 파고드는 과학자형 부캐입니다!' },
+    '디자인': { title: '세상을 바꾸는 비주얼 아티스트 🎨', badge: '비주얼 & 디자인', desc: '풍부한 감성과 시각적 감각으로 매력적인 세상을 연출하는 창의적 예술가입니다!' },
+    'default': { title: '무한한 가능성의 다재다능 탐험가 ✨', badge: '올라운더', desc: '다양한 분야를 넘나들며 융합적인 사고로 문제를 해결하는 미래의 인재입니다!' }
   };
 
   const catSearchKeyword = {
-    'SW': '컴퓨터', 'AI': '인공지능', '사회': '사회', '미디어': '미디어',
-    '경영': '경영', '생명': '생명', '디자인': '디자인', '보건': '간호',
+    'SW': '컴퓨터', 'AI': '인공지능', '사회': '사회복지', '미디어': '미디어',
+    '경영': '경영', '생명': '생명공학', '디자인': '디자인', '보건': '간호',
     '교육': '교육', '법행정': '법학', '심리': '심리', '자연과학': '화학'
   };
 
-  // 10문항으로 대폭 확장된 밸런스 월드컵
+  // 10문항 진로 밸런스 질문
   const juniorQuestions = [
     ['🏝️ 무인도에 표류했을 때: 대나무로 도구와 쉘터 직접 제작', '공학', '🏕️ 팀원들 멘탈 챙기고 역할 배분해서 캠프 리드', '사회'],
     ['🎪 학교 축제 준비할 때: 기발한 부스 기획 및 홍보 포스터 디자인', '미디어', '📊 예산 관리하고 필요한 물품 꼼꼼히 체크', '경영'],
@@ -438,7 +367,7 @@
       step1: 'STEP 1 / 3 : 탐험 재료 5개 고르기',
       step1b: 'STEP 1-2 / 3 : 인생 핵심 3개 압축',
       step2: 'STEP 2 / 3 : 10문항 진로 밸런스 월드컵',
-      step3: 'STEP 3 / 3 : 미래 학생증 & 대학 탐색'
+      step3: 'STEP 3 / 3 : 맞춤 학과 & 대학 탐색'
     };
     $('#progress').style.width = pMap[id] + '%';
     $('#stepIndicator').textContent = tMap[id];
@@ -525,7 +454,7 @@
     try {
       const res = await fetch(targetUrl);
       if (res.ok) return await res.json();
-      throw new Error('Direct failed');
+      throw new Error('Direct fetch failed');
     } catch (err) {
       const proxyUrl = CAREERNET_API.corsProxy + encodeURIComponent(targetUrl);
       const res = await fetch(proxyUrl);
@@ -536,7 +465,7 @@
   // 커리어넷 학과 목록 검색 (MAJOR)
   async function fetchCareerNetMajors(searchWord) {
     const container = $('#majorListContainer');
-    container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">📡 커리어넷에서 개설 대학 및 학과 정보를 수신 중...</p>';
+    container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">📡 커리어넷에서 개설 대학 및 학과 정보를 실시간 수신 중...</p>';
 
     const apiUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(searchWord)}`;
 
@@ -545,25 +474,20 @@
       const items = data?.dataSearch?.content || [];
 
       if (!items.length) {
-        container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">관련 개설 학과 정보를 불러오지 못했습니다.</p>';
+        container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">개설 학과 정보를 불러오지 못했습니다.</p>';
         return;
       }
 
       container.replaceChildren();
-      items.slice(0, 6).forEach((item, idx) => {
-        // 첫 번째 학과명을 학생증 추천 전공에 반영
-        if (idx === 0) {
-          $('#idCardMajor').textContent = item.mClass || item.major;
-        }
-
+      items.slice(0, 6).forEach(item => {
         const card = document.createElement('div');
         card.className = 'major-card';
         card.innerHTML = `
           <div>
             <h4>${item.mClass || item.major} <span class="badge">${item.lClass || '계열'}</span></h4>
-            <p class="muted" style="font-size:12.5px; margin:4px 0 0;">세부전공: ${(item.facilName || item.mClass || '').slice(0, 42)}...</p>
+            <p class="muted" style="font-size:13px; margin:4px 0 0;">세부전공: ${(item.facilName || item.mClass || '').slice(0, 45)}...</p>
           </div>
-          <div style="margin-top:14px; font-size:12.5px; color:var(--primary); font-weight:700;">상세보기 (개설대학·2022과목) ↗</div>
+          <div style="margin-top:16px; font-size:13px; color:var(--primary); font-weight:700;">상세보기 (개설대학·고교과목) ↗</div>
         `;
         card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass || item.major, item.lClass));
         container.append(card);
@@ -592,7 +516,7 @@
       const content = data?.dataSearch?.content?.[0];
       if (!content) return;
 
-      $('#modalSummary').textContent = content.summary || '해당 전공의 학문적 기초와 진출 분야를 학습합니다.';
+      $('#modalSummary').textContent = content.summary || '해당 전공의 기초 이론과 진출 분야를 학습합니다.';
 
       // 2022 개정 교육과정 선택과목
       const sub2022 = content.relate_subject_2022 || [];
@@ -605,7 +529,7 @@
           subBox.append(p);
         });
       } else {
-        subBox.innerHTML = '<span class="muted">고교 기초 과목 및 진로 선택 과목을 충실히 이수하는 것이 중요합니다.</span>';
+        subBox.innerHTML = '<span class="muted">고교 기초 과목 및 진로 선택 과목을 성실히 이수하는 것이 유리합니다.</span>';
       }
 
       // 진로 탐색 활동
@@ -614,20 +538,17 @@
       if (acts.length) {
         actBox.innerHTML = acts.map(a => `<b>[${a.act_name.replace(/<[^>]*>?/gm, '')}]</b> ${a.act_description}`).join('<br>');
       } else {
-        actBox.textContent = '선화여고 전공 연계 동아리 및 교내 프로젝트에 참여해보세요.';
+        actBox.textContent = '교내 진로 동아리 및 학과 박람회 체험 활동에 참여해보세요.';
       }
 
       // 취업률 및 임금
       $('#modalEmployment').textContent = (content.employment || '65% 이상').replace(/<[^>]*>?/gm, '');
       $('#modalSalary').textContent = (content.salary || '상세 요강 참고').replace(/<[^>]*>?/gm, '');
 
-      // 개설 대학 목록 (university 노드 활용 강화)
+      // 개설 대학 목록 (university 노드)
       const univs = content.university || [];
       const univBox = $('#modalUnivList');
       if (univs.length) {
-        // 첫 번째 대학교를 미래 학생증 목표 대학으로 자동 연계
-        $('#idCardUniv').textContent = univs[0].schoolName;
-
         univs.forEach(u => {
           const a = document.createElement('a');
           a.className = 'univ-tag';
@@ -638,7 +559,7 @@
           univBox.append(a);
         });
       } else {
-        univBox.innerHTML = '<span class="muted">전국 주요 대학교에 개설되어 있습니다.</span>';
+        univBox.innerHTML = '<span class="muted">전국 주요 4년제 대학교에 개설되어 있습니다.</span>';
       }
     } catch (e) {
       $('#modalSummary').textContent = '상세 정보를 불러오는 중 오류가 발생했습니다.';
@@ -657,22 +578,13 @@
 
     let topCat = Object.keys(score).sort((a, b) => score[b] - score[a])[0] || 'SW';
     let persona = personas[topCat] || personas['default'];
-    let club = sunhwaClubs[topCat] || sunhwaClubs['default'];
-    let chosenObjects = final.map(i => materials[i]);
 
-    result = { topCat, persona, club, recipe: chosenObjects };
+    result = { topCat, persona };
 
-    // 1. 부캐 페르소나 카드
+    // 부캐 카드
     $('#personaType').textContent = persona.badge;
     $('#personaTitle').textContent = persona.title;
     $('#personaDesc').textContent = persona.desc;
-
-    // 2. 미래 학생증 (ID 카드) 데이터 연동
-    $('#idCardEmoji').textContent = chosenObjects[0].emoji;
-    $('#idCardRole').textContent = persona.badge;
-    $('#idCardClub').textContent = club.name.split(' [')[0];
-    $('#idCardMajor').textContent = '추천 전공 탐색 중...';
-    $('#idCardUniv').textContent = '전국 주요 명문대';
 
     show('step3');
 
@@ -681,39 +593,12 @@
     fetchCareerNetMajors(kw);
   }
 
-  // 미래 학생증 이미지 저장 함수
-  function downloadIdCardImage() {
-    const target = $('#captureIdCard');
-    const btn = $('#downloadCardBtn');
-    btn.textContent = '📸 미래 학생증 생성 중...';
-    btn.disabled = true;
-
-    html2canvas(target, {
-      scale: 2.5,
-      useCORS: true,
-      backgroundColor: null
-    }).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `선화_미래학생증_${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-
-      btn.textContent = '📸 미래 학생증 이미지 저장 (PNG)';
-      btn.disabled = false;
-      alert('🌸 나만의 미래 학생증 카드가 갤러리에 저장되었습니다!\n인스타그램 피드나 스토리에 올려 친구들에게 자랑해보세요.');
-    }).catch(err => {
-      btn.textContent = '📸 미래 학생증 이미지 저장 (PNG)';
-      btn.disabled = false;
-    });
-  }
-
-  // 이벤트 리스너 바인딩
+  // 이벤트 리스너
   $('#next1').addEventListener('click', () => { final = []; renderFinal(); show('step1b'); });
   $('#back1').addEventListener('click', () => show('step1'));
   $('#next2').addEventListener('click', () => { answers = []; question = 0; show('step2'); renderQuestion(); });
   $('#back2').addEventListener('click', () => { if (question > 0) { question--; renderQuestion(); } });
   $('#closeModalBtn').addEventListener('click', () => $('#majorModal').classList.add('hidden'));
-  $('#downloadCardBtn').addEventListener('click', downloadIdCardImage);
   $('#reset').addEventListener('click', () => {
     chosen = []; final = []; answers = []; question = 0; result = null;
     renderMaterials(); show('step1');
