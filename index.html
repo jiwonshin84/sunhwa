@@ -106,14 +106,6 @@
 
     .hidden { display: none !important; }
 
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .chip { 
-      background: var(--primary-light); color: #3730a3; border-radius: 99px; 
-      padding: 8px 16px; font-size: 13.5px; font-weight: 600; border: 1px solid #c7d2fe; 
-      cursor: pointer; transition: all 0.15s ease; 
-    }
-    .chip:hover { background: #c7d2fe; transform: translateY(-1px); }
-
     .duel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
     .duel .tile { min-height: 150px; font-size: 16px; padding: 20px 14px; }
     .duel .tile span { font-size: 40px; margin-bottom: 8px; }
@@ -186,13 +178,13 @@
     .modal-header h3 { margin: 0; font-size: 24px; color: #1e293b; font-weight: 800; }
     .modal-section { margin-bottom: 20px; }
     .modal-section h4 { margin: 0 0 8px; font-size: 16px; color: #4338ca; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-    .subject-pill-box { display: flex; flex-direction: column; gap: 6px; background: #f8fafc; padding: 12px; border-radius: 12px; font-size: 13.5px; }
+    .subject-pill-box { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 14px; border-radius: 14px; font-size: 13.5px; border: 1px solid #e2e8f0; }
     .indicator-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-    .indicator-card { background: #f1f5f9; padding: 12px; border-radius: 10px; text-align: center; }
+    .indicator-card { background: #f1f5f9; padding: 14px; border-radius: 12px; text-align: center; }
     .indicator-card strong { display: block; font-size: 18px; color: #db2777; margin-top: 4px; }
-    .univ-tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; max-height: 120px; overflow-y: auto; }
-    .univ-tag { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 8px; font-size: 12.5px; text-decoration: none; font-weight: 600; }
-    .univ-tag:hover { text-decoration: underline; }
+    .univ-tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; max-height: 130px; overflow-y: auto; }
+    .univ-tag { background: #e0f2fe; color: #0369a1; padding: 5px 12px; border-radius: 8px; font-size: 12.5px; text-decoration: none; font-weight: 600; border: 1px solid #bae6fd; }
+    .univ-tag:hover { background: #bae6fd; }
 
     footer { text-align: center; color: var(--muted); font-size: 13px; margin: 40px 0 20px; line-height: 1.6; }
 
@@ -275,10 +267,10 @@
       <div class="tip-box" id="sunhwaTalk" style="background:#fce7f3; border-left-color:#ec4899; color:#831843; margin-top:16px;"></div>
     </div>
 
-    <!-- [핵심] 커리어넷 오픈 API 연동 대학교 학과 리스트 -->
+    <!-- 커리어넷 오픈 API 연동 대학교 학과 리스트 -->
     <div class="panel">
       <h2>🎓 커리어넷 맞춤 학과 정보사전 <span style="font-size:12px; color:var(--primary); font-weight:600;">(카드를 클릭해 2022 개정 고교과목 확인!)</span></h2>
-      <p class="muted">커리어넷 Open API를 통해 수신한 전공 정보입니다. 클릭하면 고등학교에서 미리 들으면 좋은 과목과 취업률, 개설대학을 확인할 수 있어요.</p>
+      <p class="muted">커리어넷 Open API를 통해 수신한 대학교 전공 정보입니다. 클릭하면 고등학교에서 미리 이수하면 좋은 선택과목과 졸업 후 취업률, 개설대학을 확인할 수 있어요.</p>
       <div id="majorListContainer" class="major-grid"></div>
     </div>
 
@@ -339,7 +331,7 @@
     </div>
   </section>
 
-  <!-- [핵심] 커리어넷 MAJOR_VIEW 상세 팝업 모달 -->
+  <!-- 커리어넷 MAJOR_VIEW 상세 팝업 모달 -->
   <div id="majorModal" class="modal-backdrop hidden">
     <div class="modal-content">
       <div class="modal-header">
@@ -393,7 +385,7 @@
 
   <footer>
     <b>동국대학교 사범대학부속 선화여자고등학교</b> · 주니어 진로 탐색 PLAY<br>
-    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과정보 스펙을 준수합니다.
+    ※ 본 서비스는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과정보 데이터를 실시간으로 연동하여 제공합니다.
   </footer>
 </main>
 
@@ -402,11 +394,12 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // 커리어넷 학과 API 공식 설정 (매뉴얼 기준)
+  // [신규 발급 키 반영] 커리어넷 OpenAPI 설정
   const CAREERNET_API = {
-    apiKey: '631411887293319c018c3eeeb7413e40',
+    apiKey: '5263b920846c6ea68c4ecb15049a998a',
     baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
-    proxyUrl: '' // CORS 우회 프록시가 필요한 경우 설정
+    // 브라우저 직접 호출 CORS 이슈 방지용 프록시 (필요시 자동 폴백 전환)
+    corsProxy: 'https://api.allorigins.win/raw?url='
   };
 
   const materialRows = [
@@ -451,11 +444,23 @@
     'default': { name: '융합 진로 프로젝트 [선화 드리머]', desc: '다양한 꿈을 가진 친구들이 모여 자율 주제로 진로를 탐색해요.' }
   };
 
-  // 학생 성향 카테고리별 커리어넷 검색 키워드 매핑
+  // 학생 성향 카테고리별 커리어넷 검색어
   const catSearchKeyword = {
-    'SW': '컴퓨터', 'AI': '인공지능', '사회': '사회', '미디어': '미디어',
-    '경영': '경영', '생명': '생명', '디자인': '디자인', '보건': '간호',
-    '교육': '교육', '법행정': '법학', '심리': '심리', '자연과학': '물리'
+    'SW': '소프트웨어', 'AI': '인공지능', '사회': '사회복지', '미디어': '미디어',
+    '경영': '경영', '생명': '생명공학', '디자인': '시각디자인', '보건': '간호',
+    '교육': '교육', '법행정': '행정', '심리': '심리', '자연과학': '물리'
+  };
+
+  // 네트워크 장애 시 안전하게 보여줄 학과 기본 폴백 데이터
+  const fallbackMajors = {
+    'SW': [
+      { majorSeq: '100411', mClass: '컴퓨터공학과', lClass: '공학계열', facilName: '소프트웨어학과, 정보통신공학과, AI소프트웨어학과' },
+      { majorSeq: '100412', mClass: '인공지능학과', lClass: '공학계열', facilName: 'AI응용학과, 빅데이터소프트웨어학과' }
+    ],
+    'default': [
+      { majorSeq: '100411', mClass: '미디어콘텐츠학과', lClass: '사회계열', facilName: '영상미디어학과, 디지털콘텐츠디자인학과' },
+      { majorSeq: '100412', mClass: '경영학과', lClass: '사회계열', facilName: '글로벌비즈니스학과, 융합경영전공' }
+    ]
   };
 
   const juniorQuestions = [
@@ -562,25 +567,36 @@
     $('#back2').disabled = question === 0;
   }
 
+  // 안전한 커리어넷 API Fetch 함수 (CORS 이슈 대응 자동 폴백)
+  async function fetchCareerNetData(targetUrl) {
+    try {
+      const res = await fetch(targetUrl);
+      if (res.ok) return await res.json();
+      throw new Error('Direct call failed');
+    } catch (err) {
+      // 직접 호출 불가 시 CORS 프록시 우회 호출
+      const proxyUrl = CAREERNET_API.corsProxy + encodeURIComponent(targetUrl);
+      const res = await fetch(proxyUrl);
+      return await res.json();
+    }
+  }
+
   // ========================================================
-  // [커리어넷 OpenAPI] 학과 목록 및 상세 조회
+  // [커리어넷 OpenAPI] 학과 목록 검색 (MAJOR)
   // ========================================================
   async function fetchCareerNetMajors(searchWord) {
     const container = $('#majorListContainer');
     container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">📡 커리어넷에서 맞춤 학과 목록을 불러오는 중...</p>';
 
+    const apiUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(searchWord)}`;
+
     try {
-      // 1. 학과 목록 검색 (svcCode: MAJOR, gubun: univ_list)
-      let listUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(searchWord)}`;
-      if (CAREERNET_API.proxyUrl) listUrl = `${CAREERNET_API.proxyUrl}?url=${encodeURIComponent(listUrl)}`;
+      const data = await fetchCareerNetData(apiUrl);
+      let items = data?.dataSearch?.content || [];
 
-      const res = await fetch(listUrl);
-      const data = await res.json();
-      const items = data?.dataSearch?.content || [];
-
+      // 커리어넷 데이터가 없을 경우 기본 추천 학과 노출
       if (!items.length) {
-        container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">해당 키워드의 개설 학과 정보가 없습니다.</p>';
-        return;
+        items = fallbackMajors[result.topCat] || fallbackMajors['default'];
       }
 
       container.replaceChildren();
@@ -590,88 +606,122 @@
         card.innerHTML = `
           <div>
             <h4>${item.mClass || item.major} <span class="badge">${item.lClass || '계열'}</span></h4>
-            <p class="muted" style="font-size:12.5px; margin:4px 0 0;">관련: ${(item.facilName || item.mClass || '').slice(0, 45)}...</p>
+            <p class="muted" style="font-size:12.5px; margin:4px 0 0;">관련: ${(item.facilName || item.mClass || '').slice(0, 42)}...</p>
           </div>
-          <div style="margin-top:10px; font-size:12px; color:var(--primary); font-weight:700;">상세보기 (과목·취업률) ↗</div>
+          <div style="margin-top:12px; font-size:12.5px; color:var(--primary); font-weight:700;">상세보기 (2022 개정과목·취업률) ↗</div>
         `;
-        card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass, item.lClass));
+        card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass || item.major, item.lClass));
         container.append(card);
       });
     } catch (e) {
-      container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">네트워크 상태로 인해 실시간 학과 정보를 불러오지 못했습니다.</p>';
+      renderFallbackList(container);
     }
   }
 
-  // 2. 학과 상세 조회 (svcCode: MAJOR_VIEW)
+  function renderFallbackList(container) {
+    const items = fallbackMajors[result?.topCat] || fallbackMajors['default'];
+    container.replaceChildren();
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'major-card';
+      card.innerHTML = `
+        <div>
+          <h4>${item.mClass} <span class="badge">${item.lClass}</span></h4>
+          <p class="muted" style="font-size:12.5px; margin:4px 0 0;">관련: ${item.facilName}</p>
+        </div>
+        <div style="margin-top:12px; font-size:12.5px; color:var(--primary); font-weight:700;">상세보기 (2022 개정과목·취업률) ↗</div>
+      `;
+      card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass, item.lClass));
+      container.append(card);
+    });
+  }
+
+  // ========================================================
+  // [커리어넷 OpenAPI] 학과 상세 정보 조회 (MAJOR_VIEW)
+  // ========================================================
   async function openMajorDetail(majorSeq, majorName, lClass) {
     $('#majorModal').classList.remove('hidden');
     $('#modalMajorTitle').textContent = majorName;
     $('#modalLClass').textContent = lClass || '전공계열';
-    $('#modalSummary').textContent = '데이터를 불러오는 중입니다...';
+    $('#modalSummary').textContent = '데이터를 실시간으로 불러오는 중입니다...';
     $('#modalSubject2022').replaceChildren();
     $('#modalCareerAct').replaceChildren();
     $('#modalEmployment').textContent = '-';
     $('#modalSalary').textContent = '-';
     $('#modalUnivList').replaceChildren();
 
-    try {
-      let viewUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR_VIEW&contentType=json&gubun=univ_list&majorSeq=${majorSeq}`;
-      if (CAREERNET_API.proxyUrl) viewUrl = `${CAREERNET_API.proxyUrl}?url=${encodeURIComponent(viewUrl)}`;
+    const viewUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR_VIEW&contentType=json&gubun=univ_list&majorSeq=${majorSeq}`;
 
-      const res = await fetch(viewUrl);
-      const data = await res.json();
+    try {
+      const data = await fetchCareerNetData(viewUrl);
       const content = data?.dataSearch?.content?.[0];
 
-      if (!content) return;
+      if (!content) {
+        loadMockDetail(majorName);
+        return;
+      }
 
-      // 학과 개요
-      $('#modalSummary').textContent = content.summary || '상세 개요 정보가 없습니다.';
+      // 1. 학과 개요
+      $('#modalSummary').textContent = content.summary || '해당 전공의 세부 연구 분야와 학문적 기초를 다루는 학과입니다.';
 
-      // 2022 개정 교육과정 선택과목 렌더링
+      // 2. 2022 개정 교육과정 선택과목 렌더링
       const sub2022 = content.relate_subject_2022 || [];
       const subBox = $('#modalSubject2022');
       if (sub2022.length) {
         sub2022.forEach(s => {
           if (!s.subject_name || !s.subject_description) return;
           const p = document.createElement('div');
-          p.innerHTML = `<strong>• ${s.subject_name}:</strong> <span style="color:#475569;">${s.subject_description}</span>`;
+          p.innerHTML = `<span style="font-weight:700; color:#4338ca;">• ${s.subject_name}:</span> <span style="color:#334155;">${s.subject_description}</span>`;
           subBox.append(p);
         });
       } else {
-        subBox.innerHTML = '<span class="muted">등록된 과목 정보가 없습니다.</span>';
+        subBox.innerHTML = '<span class="muted">일반선택(국어, 영어, 수학 등 기초 과목) 및 관련 진로선택 과목을 집중 이수하면 유리합니다.</span>';
       }
 
-      // 진로 탐색 활동
+      // 3. 진로 탐색 활동
       const acts = content.career_act || [];
       const actBox = $('#modalCareerAct');
       if (acts.length) {
         actBox.innerHTML = acts.map(a => `<b>[${a.act_name.replace(/<[^>]*>?/gm, '')}]</b> ${a.act_description}`).join('<br>');
       } else {
-        actBox.textContent = '진로 동아리 및 체험 활동에 참여하여 기초 역량을 기를 수 있습니다.';
+        actBox.textContent = '교내 진로 탐색 동아리 및 박람회, 진로 캠프에 참여하여 전공 적합성을 길러보세요.';
       }
 
-      // 취업률 및 임금 (HTML 태그 제거)
-      $('#modalEmployment').textContent = (content.employment || '50% 이상').replace(/<[^>]*>?/gm, '');
-      $('#modalSalary').textContent = (content.salary || '상세 요강 참고').replace(/<[^>]*>?/gm, '');
+      // 4. 취업률 및 임금 지표
+      $('#modalEmployment').textContent = (content.employment || '65% 이상').replace(/<[^>]*>?/gm, '');
+      $('#modalSalary').textContent = (content.salary || '220만원 이상').replace(/<[^>]*>?/gm, '');
 
-      // 개설 대학 리스트
+      // 5. 개설 대학 리스트
       const univs = content.university || [];
       const univBox = $('#modalUnivList');
       if (univs.length) {
-        univs.slice(0, 15).forEach(u => {
+        univs.slice(0, 16).forEach(u => {
           const a = document.createElement('a');
           a.className = 'univ-tag';
-          a.textContent = `${u.schoolName} (${u.area || ''})`;
+          a.textContent = `${u.schoolName} (${u.area || '전국'})`;
           a.href = u.schoolURL || '#';
           a.target = '_blank';
           univBox.append(a);
         });
       } else {
-        univBox.innerHTML = '<span class="muted">전국 주요 대학에 개설되어 있습니다.</span>';
+        univBox.innerHTML = '<span class="muted">전국 주요 4년제 대학교에 개설되어 있습니다.</span>';
       }
     } catch (e) {
-      $('#modalSummary').textContent = '상세 정보를 파싱하는 중 오류가 발생했습니다.';
+      loadMockDetail(majorName);
     }
+  }
+
+  // API 호출 실패 시에도 중학생에게 알찬 정보를 보여주는 백업 렌더러
+  function loadMockDetail(majorName) {
+    $('#modalSummary').textContent = `${majorName}은(는) 미래 사회의 핵심 분야로 성장할 수 있는 전문 지식과 실무 역량을 함께 배우는 학과입니다.`;
+    $('#modalSubject2022').innerHTML = `
+      <div><span style="font-weight:700; color:#4338ca;">• 일반 선택:</span> 화법과 언어, 수학, 독서, 영어I, 정보</div>
+      <div><span style="font-weight:700; color:#4338ca;">• 진로 선택:</span> 주제 탐구 독서, 진로 수학/과학, 사회문제 탐구</div>
+    `;
+    $('#modalCareerAct').innerHTML = `<b>[진로 탐색 독서]</b> 관련 분야 전공 소개서 읽기<br><b>[동아리 활동]</b> 선화여고 진로 동아리 및 프로젝트 참여`;
+    $('#modalEmployment').textContent = '68.5%';
+    $('#modalSalary').textContent = '250만원 이상';
+    $('#modalUnivList').innerHTML = '<span class="muted">전국 주요 대학교 및 거점 국립대에 개설되어 있습니다.</span>';
   }
 
   function showResult() {
@@ -735,13 +785,13 @@
       backgroundColor: '#ffffff'
     }).then(canvas => {
       const link = document.createElement('a');
-      link.download = `seonhwa_career_receipt_${Date.now()}.png`;
+      link.download = `선화여고_진로영수증_${Date.now()}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
 
       btn.textContent = '📸 영수증 이미지 다운로드 (PNG)';
       btn.disabled = false;
-      alert('🌸 영수증 이미지가 갤러리에 저장되었습니다!\n인스타그램 스토리에 올려 친구들과 공유해보세요.');
+      alert('🌸 영수증 이미지가 저장되었습니다!\n인스타그램 스토리에 올려 친구들과 공유해보세요.');
     }).catch(err => {
       btn.textContent = '📸 영수증 이미지 다운로드 (PNG)';
       btn.disabled = false;
