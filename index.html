@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 프리미엄 진로 PLAY</title>
+  <title>선화 프리미엄 진로 PLAY - 주니어 에디션</title>
   <style>
     :root {
       --primary: #6366f1;
@@ -14,6 +14,7 @@
       --text: #0f172a;
       --muted: #64748b;
       --border: #cbd5e1;
+      --accent: #f59e0b;
     }
     * { box-sizing: border-box; }
     body { margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; color: var(--text); background: var(--bg); }
@@ -28,8 +29,8 @@
       box-shadow: 0 10px 25px rgba(79, 70, 229, 0.25);
     }
     .school-badge { display: inline-block; background: rgba(255,255,255,0.22); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 12px; backdrop-filter: blur(4px); }
-    h1 { margin: 0 0 8px 0; font-size: clamp(28px, 5vw, 40px); font-weight: 800; letter-spacing: -0.5px; }
-    header p { margin: 0; font-size: 16px; opacity: 0.95; }
+    h1 { margin: 0 0 8px 0; font-size: clamp(26px, 5vw, 38px); font-weight: 800; letter-spacing: -0.5px; }
+    header p { margin: 0; font-size: 15px; opacity: 0.95; }
 
     .progress-box { margin-top: 24px; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px; }
     .progress { height: 10px; background: rgba(255,255,255,0.3); border-radius: 16px; overflow: hidden; }
@@ -47,7 +48,7 @@
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     
-    h2 { font-size: 22px; margin-top: 0; color: #1e293b; font-weight: 700; }
+    h2 { font-size: 20px; margin-top: 0; color: #1e293b; font-weight: 700; }
     .muted { color: var(--muted); font-size: 14px; line-height: 1.6; }
 
     .tip-box {
@@ -61,14 +62,14 @@
       font-weight: 600;
     }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
     .tile {
       border: 2px solid #e2e8f0;
       border-radius: 16px;
       background: white;
-      padding: 18px 12px;
-      min-height: 96px;
-      font-size: 15px;
+      padding: 16px 10px;
+      min-height: 90px;
+      font-size: 14.5px;
       cursor: pointer;
       color: var(--text);
       transition: all 0.2s ease;
@@ -79,15 +80,15 @@
       align-items: center;
     }
     .tile:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99, 102, 241, 0.1); }
-    .tile strong { display: block; margin-top: 8px; font-size: 14px; font-weight: 600; }
-    .tile span { font-size: 32px; }
+    .tile strong { display: block; margin-top: 8px; font-size: 13.5px; font-weight: 600; }
+    .tile span { font-size: 28px; }
     .tile.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 2px var(--primary) inset; }
 
     .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
     button { font: inherit; cursor: pointer; }
     .primary {
       border: 0; border-radius: 14px; background: var(--primary); color: white;
-      font-weight: 700; padding: 14px 28px; font-size: 16px;
+      font-weight: 700; padding: 14px 28px; font-size: 15px;
       transition: background 0.2s, transform 0.1s;
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
     }
@@ -97,7 +98,7 @@
     
     .secondary {
       border: 1px solid #cbd5e1; border-radius: 14px; background: white; color: #475569;
-      font-weight: 600; padding: 13px 22px; font-size: 15px;
+      font-weight: 600; padding: 13px 22px; font-size: 14px;
       transition: background 0.2s;
     }
     .secondary:hover { background: #f1f5f9; }
@@ -107,101 +108,81 @@
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .chip { 
       background: var(--primary-light); color: #3730a3; border-radius: 99px; 
-      padding: 8px 16px; font-size: 14px; font-weight: 600; border: 1px solid #c7d2fe; 
+      padding: 8px 16px; font-size: 13.5px; font-weight: 600; border: 1px solid #c7d2fe; 
       cursor: pointer; transition: all 0.15s ease; 
     }
     .chip:hover { background: #c7d2fe; transform: translateY(-1px); }
     .chip.active-chip { background: var(--primary); color: white; border-color: var(--primary); }
 
     .duel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
-    .duel .tile { min-height: 160px; font-size: 18px; padding: 20px; }
-    .duel .tile span { font-size: 44px; margin-bottom: 10px; }
+    .duel .tile { min-height: 150px; font-size: 16px; padding: 20px 14px; }
+    .duel .tile span { font-size: 40px; margin-bottom: 8px; }
 
-    .result-summary-card {
+    /* [기능 1] 부캐 페르소나 카드 */
+    .persona-card {
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
       color: white;
       border-radius: 24px;
-      padding: 32px;
+      padding: 30px 24px;
       text-align: center;
       box-shadow: 0 15px 30px rgba(30, 27, 75, 0.2);
       margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
     }
-    .result-summary-title { font-size: clamp(20px, 3.5vw, 28px); font-weight: 800; margin-bottom: 12px; color: #ffffff; }
+    .persona-badge { display: inline-block; background: #ec4899; color: white; font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 99px; margin-bottom: 12px; }
+    .persona-title { font-size: clamp(22px, 4vw, 30px); font-weight: 800; margin: 0 0 10px; color: #fff; }
+    .persona-desc { color: #cbd5e1; font-size: 14.5px; max-width: 650px; margin: auto; line-height: 1.6; }
 
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
-    
-    .uni-card {
-      border: 1px solid #e2e8f0;
-      padding: 18px;
-      border-radius: 16px;
+    /* [기능 3] 선화여고 동아리 및 추천 카드 */
+    .sunhwa-pick-card {
+      background: #fdf2f8;
+      border: 2px dashed #f472b6;
+      border-radius: 20px;
+      padding: 22px;
+      margin-top: 20px;
+    }
+
+    /* [기능 4] 감성 진로 영수증 스타일 */
+    .receipt-container {
       background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 24px 20px;
+      max-width: 360px;
+      margin: 20px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      font-family: 'Courier New', Courier, monospace, monospace;
+      color: #111827;
+      position: relative;
     }
-    .uni-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .uni-name { font-size: 17px; font-weight: 700; color: #1e293b; text-decoration: none; display: flex; align-items: center; gap: 4px; }
-    .uni-name:hover { color: var(--primary); text-decoration: underline; }
-    .uni-region { background: var(--primary-light); color: var(--primary); font-size: 12px; padding: 4px 10px; border-radius: 8px; font-weight: 700; }
-    
-    .major-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
-    .major-item {
-      background: #f8fafc;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13.5px;
-    }
-    .major-item.match-highlight {
-      background: var(--primary-light);
-      border-color: #c7d2fe;
-    }
-    .grade-badge {
-      background: var(--secondary-light);
-      color: var(--secondary);
-      font-weight: 800;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid #fbcfe8;
-      white-space: nowrap;
-    }
+    .receipt-header { text-align: center; border-bottom: 2px dashed #9ca3af; padding-bottom: 12px; margin-bottom: 14px; }
+    .receipt-header h3 { margin: 0; font-size: 18px; letter-spacing: -0.5px; }
+    .receipt-line { display: flex; justify-content: space-between; font-size: 13.5px; margin: 6px 0; }
+    .receipt-divider { border-top: 1px dashed #d1d5db; margin: 12px 0; }
+    .receipt-footer { text-align: center; font-size: 12px; color: #6b7280; margin-top: 14px; border-top: 2px dashed #9ca3af; padding-top: 10px; }
 
-    .filter { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
-    .filter input, .filter select { font: inherit; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; min-width: 0; flex: 1; background: #fff; }
-    
-    .loading-spinner {
-      text-align: center;
-      padding: 40px;
-      font-weight: 600;
-      color: var(--primary);
-    }
-
-    .adiga-banner {
-      background: linear-gradient(135deg, #e0e7ff, #fce7f3);
-      border: 1px solid #c7d2fe;
+    /* [기능 4] 방명록 롤링 영역 */
+    .guestbook-box {
+      background: #f1f5f9;
       border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 24px;
+      padding: 16px;
+      margin-top: 20px;
     }
-    .adiga-banner a {
-      background: var(--secondary); color: white; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 700;
-    }
+    .guestbook-form { display: flex; gap: 8px; margin-bottom: 12px; }
+    .guestbook-form input { flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; }
+    .guestbook-list { display: flex; flex-direction: column; gap: 8px; max-height: 140px; overflow-y: auto; }
+    .guestbook-item { background: white; padding: 8px 12px; border-radius: 8px; font-size: 13px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+
+    /* 모달 팝업 */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+    .modal-content { background: white; border-radius: 20px; max-width: 480px; width: 100%; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease; }
 
     footer { text-align: center; color: var(--muted); font-size: 13px; margin: 40px 0 20px; line-height: 1.6; }
 
     @media(max-width: 480px) {
       .wrap { padding: 12px; }
-      .panel { padding: 20px; }
+      .panel { padding: 18px; }
       .duel { grid-template-columns: 1fr; }
     }
   </style>
@@ -210,12 +191,12 @@
 <main class="wrap">
   <header>
     <div class="school-badge">🌸 동국대학교 사범대학부속 선화여자고등학교</div>
-    <h1>선화 프리미엄 진로 PLAY</h1>
-    <p>나의 핵심 레시피와 밸런스 성향으로 알아보는 맞춤형 진로 · 입시 탐색</p>
+    <h1>선화 진로 PLAY : 주니어 탐험대</h1>
+    <p>재미있는 활동 레시피와 밸런스 게임으로 찾는 나의 미래 '부캐'와 선화 라이프!</p>
     <div class="progress-box">
       <div class="progress"><div id="progress" style="width: 15%"></div></div>
       <div class="progress-text">
-        <span id="stepIndicator">STEP 1 / 3 : 활동 재료 5개 고르기</span>
+        <span id="stepIndicator">STEP 1 / 3 : 탐험 재료 5개 고르기</span>
         <span id="stepPercent">15%</span>
       </div>
     </div>
@@ -223,105 +204,129 @@
 
   <!-- STEP 1 -->
   <section id="step1" class="panel">
-    <h2>① 나의 미래 레시피 : 활동 재료 5개 선택</h2>
-    <p class="muted">테이블에 펼쳐진 다양한 활동 카드 중 평소 가장 끌리거나 호기심이 생기는 활동 <b>5개</b>를 골라주세요.</p>
-    <div class="tip-box">💡 <b>진로 팁:</b> 잘하는 것보다 <b>"내 마음을 설레게 하는 활동"</b>을 고를 때 진짜 내 모습이 나와요! (<span id="count">0</span>/5 선택됨)</div>
+    <h2>① 나의 호기심 레시피 : 꽂히는 활동 5개 고르기</h2>
+    <p class="muted">성적이나 주변 기대는 잠시 내려놓고, <b>"내가 하면 시간 가는 줄 모르겠다!"</b> 싶은 활동 5개를 골라주세요.</p>
+    <div class="tip-box">💡 <b>선배 꿀팁:</b> 솔직하게 고를수록 나한테 찰떡인 부캐와 동아리가 나와요! (<span id="count">0</span>/5개 선택됨)</div>
     <div id="materials" class="grid"></div>
     <div class="actions">
-      <button class="primary" id="next1" disabled>5개 선택 완료하고 3개로 좁히기 →</button>
+      <button class="primary" id="next1" disabled>5개 선택 완료! 최애 3개로 압축하기 →</button>
     </div>
   </section>
 
   <!-- STEP 1-B -->
   <section id="step1b" class="panel hidden">
-    <h2>①-2 핵심 레시피 재료 3개 압축하기</h2>
-    <p class="muted">앞서 고른 다섯 가지 활동 중, <b>가장 핵심이 되는 나만의 '최애' 재료 3개</b>를 다시 선택해주세요.</p>
+    <h2>①-2 인생 핵심 재료 3개 좁히기 🎯</h2>
+    <p class="muted">앞서 고른 다섯 가지 중, <b>내 가슴을 가장 뛰게 만드는 '최애' 재료 딱 3개</b>만 남겨보세요.</p>
     <div id="finalMaterials" class="grid"></div>
     <div class="actions">
-      <button class="secondary" id="back1">← 이전으로</button>
-      <button class="primary" id="next2" disabled>진로 밸런스 월드컵 시작하기 →</button>
+      <button class="secondary" id="back1">← 다시 고르기</button>
+      <button class="primary" id="next2" disabled>진로 밸런스 월드컵 시작! →</button>
     </div>
   </section>
 
-  <!-- STEP 2 -->
+  <!-- STEP 2 (상황극 밸런스 게임) -->
   <section id="step2" class="panel hidden">
     <h2>② 진로 밸런스 월드컵 ⚖️</h2>
-    <p class="muted">정답은 없습니다! 평소 선호하는 일의 스타일을 직관적으로 선택해 주세요.</p>
-    <p id="questionNumber" style="font-weight: 700; color: var(--primary); margin-top: 8px; font-size: 16px;"></p>
+    <p class="muted">생각은 3초만! 둘 중 더 마음이 끌리는 상황을 직관적으로 골라보세요.</p>
+    <p id="questionNumber" style="font-weight: 700; color: var(--primary); margin-top: 8px; font-size: 15px;"></p>
     <div id="duel" class="duel"></div>
     <div class="actions" style="margin-top: 24px;">
       <button class="secondary" id="back2">← 이전 질문</button>
     </div>
   </section>
 
-  <!-- STEP 3 -->
+  <!-- STEP 3 (결과 보고서) -->
   <section id="step3" class="hidden">
-    <div class="result-summary-card">
-      <div style="font-size: 13px; font-weight: 700; color: #a5b4fc; letter-spacing: 1px; margin-bottom: 8px;">✨ MY CUSTOM CAREER REPORT</div>
-      <h2 class="result-summary-title" id="summaryTitle"></h2>
-      <p id="resultText" style="color:#cbd5e1; font-size:15px; max-width:700px; margin: 12px auto 0; line-height:1.6;"></p>
+    <!-- [기능 1] 부캐 페르소나 카드 -->
+    <div class="persona-card">
+      <div class="persona-badge" id="personaType">탐험가 타입</div>
+      <h2 class="persona-title" id="personaTitle"></h2>
+      <p class="persona-desc" id="personaDesc"></p>
     </div>
 
+    <!-- [기능 3] 선화여고 미리보기 & 꿀팁 -->
     <div class="panel">
-      <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">🎯 내가 선택한 핵심 활동 레시피</div>
-      <div id="selectedChips" class="chips"></div>
+      <h2>🏫 선화여고 진로 스포일러 (선화 미리보기)</h2>
+      <p class="muted">내 부캐 성향을 가진 친구들이 선화여고에 입학하면 이런 동아리와 활동에서 날개를 펼쳐요!</p>
+      
+      <div class="sunhwa-pick-card">
+        <div style="font-weight: 800; color: #db2777; font-size: 15px; margin-bottom: 6px;">✨ 선화여고 맞춤 추천 동아리</div>
+        <div id="sunhwaClub" style="font-size: 17px; font-weight: 700; color: #1e293b;"></div>
+        <p id="sunhwaClubDesc" class="muted" style="margin: 6px 0 0; font-size: 13.5px;"></p>
+      </div>
+
+      <div class="tip-box" id="sunhwaTalk" style="background:#fce7f3; border-left-color:#ec4899; color:#831843; margin-top:16px;"></div>
     </div>
 
-    <div class="results-grid">
-      <div class="panel" style="margin-bottom:0;">
-        <h2>💼 추천 탐색 직업군 <span style="font-size:12px; color:var(--primary); font-weight:600;">(클릭하여 필터링)</span></h2>
-        <p class="muted" style="font-size:12px; margin-bottom:8px;">원하는 직업을 누르면 관련 대학 정보만 모아볼 수 있어요!</p>
-        <div id="jobs" class="chips"></div>
-      </div>
-      <div class="panel" style="margin-bottom:0;">
-        <h2>🎓 추천 관심 학과 계열 <span style="font-size:12px; color:var(--primary); font-weight:600;">(클릭하여 필터링)</span></h2>
-        <p class="muted" style="font-size:12px; margin-bottom:8px;">원하는 학과를 누르면 관련 대학 정보만 모아볼 수 있어요!</p>
-        <div id="majors" class="chips"></div>
-      </div>
-    </div>
-
+    <!-- [기능 2] 커리어넷 주니어 직업정보 연동 영역 -->
     <div class="panel">
-      <h2>🏫 커리어넷 실시간 연동 대학 및 학과 현황</h2>
-      <p class="muted">커리어넷(CareerNet) 공식 오픈 API를 통해 수신한 학과 및 개설 대학교 현황입니다. 나의 선호 계열과 일치하는 학과는 <b>[🎯 맞춤 추천]</b>으로 표시됩니다.</p>
-      
-      <div class="filter">
-        <select id="region">
-          <option value="전체">전국 지역 전체</option>
-          <option>서울</option>
-          <option>경기·인천</option>
-          <option>대구·경북</option>
-          <option>부산·울산·경남</option>
-          <option>충청·대전·세종</option>
-          <option>호남·제주</option>
-          <option>강원</option>
-        </select>
-        <input id="search" type="search" placeholder="대학명 또는 직업/학과명 검색 (예: 컴퓨터, 경영, 심리)">
-      </div>
-      
-      <div id="universityList" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); margin-top: 14px;"></div>
+      <h2>💼 커리어넷 추천 직업 탐험대 <span style="font-size:12px; color:var(--primary); font-weight:600;">(클릭해서 한 줄 정보 & 영상 확인)</span></h2>
+      <p class="muted">카드를 클릭하면 주니어 맞춤형 쉬운 설명과 직업인 인터뷰 영상을 볼 수 있어요!</p>
+      <div id="jobChips" class="chips"></div>
+    </div>
 
-      <div class="adiga-banner">
-        <div>
-          <div style="font-weight: 700; font-size: 15px; color: #1e293b;">정확한 전년도 입시 결과와 상세 분석이 필요하다면?</div>
-          <div style="font-size: 13px; color: var(--muted);">대입정보포털 <b>'어디가(adiga.kr)'</b>에서 본인의 내신 성적을 입력하고 상세 산출 결과를 확인하세요.</div>
+    <!-- [기능 4] 감성 진로 영수증 카드 -->
+    <div class="panel">
+      <h2 style="text-align: center;">🧾 나의 진로 레시피 영수증</h2>
+      <p class="muted" style="text-align: center; font-size: 13px;">인증샷용 감성 영수증이 발급되었습니다. 텍스트로 복사해 친구들에게 공유해보세요!</p>
+
+      <div class="receipt-container" id="receiptBox">
+        <div class="receipt-header">
+          <h3>*** SEONHWA CAREER PLAY ***</h3>
+          <div style="font-size: 11px; color:#6b7280; margin-top:4px;">동국대 사범대학부속 선화여고</div>
         </div>
-        <a href="https://www.adiga.kr" target="_blank" rel="noopener">어디가(adiga.kr) 바로가기 ↗</a>
+        <div class="receipt-line"><span>ORDER NO.</span><span>#2026-SH</span></div>
+        <div class="receipt-line"><span>DATE</span><span id="receiptDate"></span></div>
+        <div class="receipt-divider"></div>
+        <div style="font-weight: bold; margin-bottom: 6px; font-size: 12px;">[CHOSEN RECIPE]</div>
+        <div id="receiptRecipe"></div>
+        <div class="receipt-divider"></div>
+        <div class="receipt-line"><strong>MY PERSONA</strong><strong id="receiptPersona"></strong></div>
+        <div class="receipt-line"><span>RECOMMEND CLUB</span><span id="receiptClub"></span></div>
+        <div class="receipt-footer">
+          <div>THANK YOU FOR VISITING!</div>
+          <div style="font-size: 10px; margin-top: 4px;">꿈을 향해 도약하는 선화인 🌸</div>
+        </div>
+      </div>
+
+      <div class="actions" style="justify-content: center;">
+        <button class="primary" id="copyReceiptBtn">📋 진로 영수증 텍스트 복사하기</button>
       </div>
     </div>
 
+    <!-- [기능 4] 방명록 / 소원 나무 -->
     <div class="panel">
-      <h2>💬 선배·친구와 함께 나누는 진로 대화</h2>
-      <p id="talk" class="tip-box" style="margin-top: 10px; background: var(--secondary-light); border-left-color: var(--secondary); color: #831843;"></p>
-      <div class="actions">
-        <button class="primary" id="copyReportBtn">📋 나의 진로 리포트 텍스트 복사하기</button>
-        <button class="secondary" id="reset">처음부터 다시 시작하기</button>
+      <h2>💬 선화여고에 한마디! (소원 방명록)</h2>
+      <p class="muted">오늘 탐색을 마친 소감이나 선화여고에 궁금한 점을 자유롭게 남겨보세요.</p>
+      <div class="guestbook-box">
+        <div class="guestbook-form">
+          <input type="text" id="guestInput" placeholder="예: 선화여고 축제 너무 가보고 싶어요! (닉네임/내용)">
+          <button class="primary" id="guestBtn" style="padding: 10px 18px;">등록</button>
+        </div>
+        <div class="guestbook-list" id="guestList"></div>
+      </div>
+      
+      <div class="actions" style="margin-top: 20px;">
+        <button class="secondary" id="reset">처음부터 다시 탐험하기 🔄</button>
       </div>
     </div>
   </section>
 
+  <!-- [기능 2] 직업 상세 모달 팝업 -->
+  <div id="jobModal" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <h3 id="modalJobName" style="margin-top:0; font-size:20px; color:#1e293b;"></h3>
+      <p id="modalSummary" style="font-size:14.5px; line-height:1.6; color:#475569; background:#f8fafc; padding:12px; border-radius:10px;"></p>
+      <div id="modalVideoBox" style="margin-top:14px;"></div>
+      <div style="text-align: right; margin-top: 20px;">
+        <button class="secondary" id="closeModalBtn">닫기</button>
+      </div>
+    </div>
+  </div>
+
   <footer>
-    <b>동국대학교 사범대학부속 선화여자고등학교</b> · 진로 탐색 PLAY 프로그램<br>
-    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b>를 통해 실시간 데이터를 수신하며, 등급 표기는 어디가 공개 기준 참고값입니다.
+    <b>동국대학교 사범대학부속 선화여자고등학교</b> · 주니어 진로 탐색 PLAY<br>
+    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b>와 함께합니다.
   </footer>
 </main>
 
@@ -330,16 +335,10 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // ==========================================
-  // [1] 커리어넷 API 설정 영역 (매뉴얼 기준)
-  // ==========================================
-  const CAREERNET_CONFIG = {
-    // 발급받은 인증키를 입력하세요 (예제 키 또는 본인 키)
-    apiKey: '631411887293319c018c3eeeb7413e40',
-    // 커리어넷 오픈 API 기본 경로
-    baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
-    // 로컬 브라우저 CORS 문제 발생 시 경유할 프록시 URL (필요 시 작성)
-    proxyUrl: '' 
+  // 커리어넷 API 설정 (주니어 직업정보 API 포함)[cite: 37, 45, 98]
+  const API_CONFIG = {
+    apiKey: '631411887293319c018c3eeeb7413e40', // 커리어넷 발급키[cite: 98]
+    juniorUrl: 'https://www.career.go.kr/cnet/front/openapi/juniorjobsinfo.json' // 매뉴얼 4장[cite: 37]
   };
 
   const materialRows = [
@@ -362,170 +361,66 @@
     return { emoji, label, cat };
   });
 
-  const db = {
-    '사회': [['인사담당자', '홍보전문가', '사회조사분석가', '행사기획자'], ['사회학과', '사회복지학과', '행정학과', '미디어커뮤니케이션학과']],
-    '보건': [['의사', '간호사', '물리치료사', '임상병리사', '보건연구원'], ['의예과', '간호학과', '물리치료학과', '보건학과', '바이오메디컬학부']],
-    '교육': [['교사', '교육연구원', '에듀테크 기획자', '교육콘텐츠 개발자'], ['교육학과', '국어교육과', '수학교육과', '컴퓨터교육과']],
-    '복지': [['사회복지사', '청소년지도사', '지역사회 활동가', '재가복지 전문가'], ['사회복지학과', '아동가족학과', '청소년학과']],
-    '경영': [['경영컨설턴트', '기업가', '프로젝트 매니저', '인사담당자'], ['경영학과', '경영정보학과', '산업공학과', '글로벌융합학부']],
-    '법행정': [['변호사', '법률전문가', '행정공무원', '정책연구원', '경찰관'], ['법학과', '행정학과', '경찰행정학과', '정치외교학과']],
-    '심리': [['상담심리사', '임상심리전문가', '심리연구원', '진로상담사'], ['심리학과', '상담학과', '교육심리학과', '아동심리학과']],
-    '자연과학': [['물리학자', '과학연구원', '과학교사', '에너지연구원'], ['물리학과', '화학과', '천문우주학과', '과학교육과']],
-    '화학': [['화학연구원', '신소재연구원', '화장품연구원', '에너지공학자'], ['화학과', '화학공학과', '신소재공학과', '고분자공학과']],
-    '생명': [['생명과학자', '바이오연구원', '유전학연구원', '제약연구원'], ['생명과학과', '생명공학과', '바이오시스템전공', '식품생명공학과']],
-    '우주': [['천문학자', '항공우주연구원', '우주공학자', '위성시스템 개발자'], ['천문우주학과', '항공우주공학과', '물리학과', '지구과학교육과']],
-    '환경': [['기후변화연구원', '환경공학자', '생태연구원', '신재생에너지 전문가'], ['환경공학과', '지구환경과학과', '생태조경학과', '화학공학과']],
-    '동물': [['수의사', '동물행동전문가', '동물생명연구원', '반려동물산업 전문가'], ['수의예과', '동물생명과학과', '자원생물학과', '생명과학과']],
-    'SW': [['소프트웨어 개발자', '게임개발자', '클라우드 엔지니어', '앱 개발자'], ['컴퓨터공학과', '소프트웨어학과', '컴퓨터과학과', '정보통신공학과']],
-    'AI': [['AI엔지니어', '머신러닝 연구원', '로봇AI 개발자', '데이터시각화 전문가'], ['인공지능학과', '컴퓨터공학과', '소프트웨어융합학과', '데이터사이언스학과']],
-    '데이터': [['데이터과학자', '빅데이터 분석가', '금융데이터분석가', '통계전문가'], ['데이터사이언스학과', '통계학과', '응용수학과', '산업공학과']],
-    '공학': [['시스템 엔지니어', '산업공학자', '종합설계 연구원', '생산관리 전문가'], ['산업공학과', '기계공학과', '전자공학과', '소프트웨어학과']],
-    '보안': [['정보보안전문가', '디지털포렌식 전문가', '보안컨설턴트', '화이트해커'], ['정보보호학과', '사이버보안학과', '컴퓨터공학과', '정보통신학과']],
-    '기계': [['기계공학자', '로봇공학자', '자동화 엔지니어', '스마트팩토리 전문가'], ['기계공학과', '로봇공학과', '메카트로닉스공학과', '항공우주공학과']],
-    '건축': [['건축가', '건축공학자', '도시설계가', '인테리어 디자이너'], ['건축학과', '건축공학과', '실내건축디자인학과', '도시공학과']],
-    '항공': [['항공우주공학자', '미래모빌리티 연구원', '자율주행 시스템 개발자'], ['항공우주공학과', '미래자동차공학과', '기계공학과', '전자공학과']],
-    '디자인': [['시각디자이너', 'UX/UI디자이너', '산업디자이너', '브랜드 디자이너'], ['시각디자인학과', '산업디자인학과', '디자인학부', '미디어디자인학과']],
-    '미디어': [['방송PD', '기자', '영상편집자', '콘텐츠기획자', '아나운서'], ['미디어커뮤니케이션학과', '영상학과', '광고홍보학과', '신문방송학과']],
-    '인문': [['작가', '출판편집자', '인문학연구원', '문화예술 큐레이터'], ['국어국문학과', '사학과', '철학과', '문예창작학과', '문화콘텐츠학과']],
-    '예술': [['음악家', '작곡가', '배우', '공연기획자', '무대디자이너'], ['음악학과', '실용음악과', '연극영화학과', '공연예술학부']],
-    '패션': [['패션디자이너', '텍스타일디자이너', '패션MD', '스타일리스트'], ['의류학과', '패션디자인학과', '의상학과', '섬유시스템공학과']],
-    '기획': [['서비스기획자', '상품기획자', '신사업 기획자', '스타트업 창업가'], ['경영학과', '산업디자인학과', '기술경영학과', '융합전공학부']],
-    '마케팅': [['브랜드매니저', '광고기획자', '디지털마케터', '소비자분석가'], ['광고홍보학과', '경영학과', '소비자학과', '미디어커뮤니케이션학과']],
-    '경제': [['경제연구원', '금융분석가', '투자은행가(IB)', '보험계리사'], ['경제학과', '금융학과', '통계학과', '국제무역학과']],
-    '관광': [['관광기획자', '호텔리어', '항공서비스전문가', 'MICE 기획자'], ['관광학과', '호텔경영학과', '항공서비스학과', '컨벤션경영학과']],
-    '식품': [['영양사', '식품연구원', '스타셰프', '푸드스타일리스트'], ['식품영양학과', '식품공학과', '외식조리학과', '바이오식품공학과']],
-    '체육': [['스포츠지도자', '운동처방사', '스포츠마케터', '재활인트레이너'], ['체육학과', '스포츠과학과', '스포츠산업학과', '사회체육학과']],
-    '수학': [['수학연구원', '금융퀀트', '암호학 전문가', '수학교사'], ['수학과', '응용수학과', '수학교육과', '금융수학과']]
+  // [기능 1] 중학생 맞춤 부캐(페르소나) 사전
+  const personas = {
+    'SW': { title: '세상을 코딩하는 디지털 모험가 💻', badge: '테크 & 이노베이션', desc: '새로운 기술과 아이디어로 세상의 불편함을 해결하는 해결사형 부캐입니다!' },
+    'AI': { title: '미래를 설계하는 인공지능 마스터 🤖', badge: '미래 테크 리더', desc: '데이터와 알고리즘으로 스마트한 미래 세상을 이끌어갈 브레인입니다!' },
+    '사회': { title: '사람의 마음을 잇는 공감 캡틴 🤝', badge: '휴먼 & 커뮤니케이션', desc: '친구들의 마음을 읽고 함께할 때 가장 빛나는 따뜻한 리더형 부캐입니다!' },
+    '미디어': { title: '트렌드를 이끄는 감성 크리에이터 🎬', badge: '스토리텔러', desc: '생각과 이야기를 세상 사람들에게 매력적으로 전달하는 콘텐츠 마법사입니다!' },
+    '경영': { title: '반짝이는 아이디어 뱅크 기획자 💡', badge: '비즈니스 & 기획', desc: '새로운 프로젝트를 기획하고 효율적으로 완성해내는 전략가형 부캐입니다!' },
+    '생명': { title: '생명의 비밀을 푸는 바이오 탐구자 🧬', badge: '라이프 사이언스', desc: '자연과 생명의 신비에 호기심을 갖고 깊이 파고드는 과학자형 부캐입니다!' },
+    '디자인': { title: '세상을 아름답게 바꾸는 비주얼 아티스트 🎨', badge: '비주얼 & 디자인', desc: '풍부한 감성과 시각적 감각으로 매력적인 세상을 그리는 예술가입니다!' },
+    'default': { title: '무한한 가능성을 품은 다재다능 탐험가 ✨', badge: '올라운더', desc: '다양한 분야를 넘나들며 융합하는 호기심 많은 미래의 주역입니다!' }
   };
 
-  const questions = [
-    ['사람들과 함께 어울려 일하기', '사회', '혼자 깊이 집중해서 해결하기', '수학'],
-    ['안정적이고 체계적인 환경', '법행정', '변화무쌍하고 새로운 도전', '기획'],
-    ['말로 설명하고 표현하기', '미디어', '기술을 만들고 분석하기', '공학'],
-    ['실내에서 쾌적하게 집중하기', 'SW', '야외와 현장에서 발로 뛰기', '환경'],
-    ['기존의 정답을 정확히 찾아내기', '자연과학', '세상에 없던 새로운 답 만들기', '디자인'],
-    ['계획하고 꼼꼼히 정리하기', '경영', '자유롭고 창의적으로 상상하기', '예술'],
-    ['한 분야를 깊게 파고드는 심화 연구', '생명', '다양한 분야를 융합하고 연결하기', '기획'],
-    ['사람의 마음과 성장을 돕기', '교육', '기술과 시스템으로 문제를 해결하기', 'AI'],
-    ['숫자와 객관적 데이터로 설득하기', '데이터', '언어와 스토리로 공감을 이끌기', '인문'],
-    ['넓은 세계와 다양한 문화를 이해하기', '국제', '자연의 법칙과 원리를 탐구하기', '화학']
+  // [기능 3] 선화여고 동아리 및 활동 매칭 DB
+  const sunhwaClubs = {
+    'SW': { name: '코딩 & 알고리즘 연구반 [선화 테크랩]', desc: '소프트웨어와 웹 개발, 앱 프로그래밍을 직접 체험해보는 동아리예요.' },
+    'AI': { name: 'AI & 미래공학 동아리', desc: '머신러닝과 로봇 시스템을 탐구하며 교내 축제에 전시를 진행해요.' },
+    '사회': { name: '선화 학생 자치회 및 모의의회반', desc: '학생 주도 프로젝트와 토론을 통해 사회 문제를 직접 해결해봐요.' },
+    '미디어': { name: '선화 방송반 (SHBS) & 미디어콘텐츠 제작반', desc: '교내 방송제, 유튜브 영상 제작 및 축제 중계를 담당하는 동아리예요.' },
+    '경영': { name: '청소년 모의창업 & 마케팅 연구회', desc: '기발한 굿즈를 기획하고 수익금을 기부하는 실전형 동아리예요.' },
+    '생명': { name: '선화 바이오 사이언스 실험반', desc: '교내 첨단 과학실에서 생명·화학 실험을 직접 설계하고 탐구해요.' },
+    '디자인': { name: '선화 아트 & 비주얼 디자인 크루', desc: '축제 포스터, 학교 캐릭터 굿즈 제작을 주도하는 예술 동아리예요.' },
+    'default': { name: '융합 진로 프로젝트 동아리 [선화 드리머]', desc: '다양한 꿈을 가진 친구들이 모여 자율 주제로 진로를 탐색해요.' }
+  };
+
+  // [기능 1] 중학생 눈높이 상황극 밸런스 질문
+  const juniorQuestions = [
+    ['🏝️ 무인도에 표류했을 때: 대나무로 쉘터와 도구 직접 제작하기', '공학', '🏕️ 팀원들 멘탈 챙기고 역할 배분해서 캠프 이끌기', '사회'],
+    ['🎪 학교 축제 준비할 때: 기발한 부스 기획 및 홍보 포스터 만들기', '미디어', '📊 예산 관리하고 필요한 물품 꼼꼼하게 장보기', '경영'],
+    ['💻 컴퓨터를 켰을 때: 새로운 코딩이나 프로그램 뜯어보기', 'SW', '📚 재미있는 웹소설/스토리 읽으며 영감 얻기', '인문'],
+    ['🦸 초능력을 얻는다면: 미래의 날씨와 자연 법칙을 통제하는 힘', '자연과학', '💖 상대방의 진심과 마음을 읽어내는 공감 능력', '심리'],
+    ['🎨 주말 자유시간: 혼자 집중해서 나만의 작품 완성하기', '디자인', '🏃 운동장이나 야외에서 친구들과 신나게 뛰놀기', '체육']
   ];
 
-  // 매뉴얼의 지역 명칭 정규화 함수
-  function normalizeRegion(area) {
-    if (!area) return '기타';
-    if (area.includes('서울')) return '서울';
-    if (area.includes('경기') || area.includes('인천')) return '경기·인천';
-    if (area.includes('대구') || area.includes('경북')) return '대구·경북';
-    if (area.includes('부산') || area.includes('울산') || area.includes('경남')) return '부산·울산·경남';
-    if (area.includes('충남') || area.includes('충북') || area.includes('대전') || area.includes('세종')) return '충청·대전·세종';
-    if (area.includes('전남') || area.includes('전북') || area.includes('광주') || area.includes('제주')) return '호남·제주';
-    if (area.includes('강원')) return '강원';
-    return area;
-  }
-
-  function estimateGrade(univName) {
-    if (['서울대학교', '연세대학교', '고려대학교', 'KAIST', 'POSTECH'].some(u => univName.includes(u))) return '1.1~1.5등급';
-    if (['서강대학교', '성균관대학교', '한양대학교', '중앙대학교', '경희대학교', '한국외국어대학교', '서울시립대학교', '이화여자대학교'].some(u => univName.includes(u))) return '1.5~2.0등급';
-    if (['동국대학교', '건국대학교', '홍익대학교', '숙명여자대학교', '아주대학교', '인하대학교', '경북대학교', '부산대학교'].some(u => univName.includes(u))) return '1.8~2.5등급';
-    return '2.3~3.5등급';
-  }
-
-  // ==========================================
-  // [2] 커리어넷 Open API 연동 함수 (매뉴얼 기준)
-  // ==========================================
-  let dynamicUnis = [];
-  let isLoadingData = false;
-
-  async function fetchCareerNetData(topMajors) {
-    dynamicUnis = [];
-    isLoadingData = true;
-    renderUniversities();
-
-    const univMap = {};
-    // 상위 전공 키워드 2~3개 추출 (예: '컴퓨터공학과' -> '컴퓨터')
-    const keywords = topMajors.slice(0, 3).map(m => m.replace(/학과|학부|전공/g, '').trim());
-
-    try {
-      for (const kw of keywords) {
-        // 1. 학과 목록 검색 (매뉴얼 5. 학과정보 svcCode=MAJOR)
-        let listUrl = `${CAREERNET_CONFIG.baseUrl}?apiKey=${CAREERNET_CONFIG.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(kw)}`;
-        if (CAREERNET_CONFIG.proxyUrl) {
-          listUrl = `${CAREERNET_CONFIG.proxyUrl}?url=${encodeURIComponent(listUrl)}`;
-        }
-
-        const listRes = await fetch(listUrl);
-        if (!listRes.ok) continue;
-        const listData = await listRes.json();
-        const contentList = listData?.dataSearch?.content || [];
-
-        // 상위 2개 학과의 상세 정보 조회 (개설대학 university 노드 획득 목적)
-        for (const item of contentList.slice(0, 2)) {
-          const majorSeq = item.majorSeq;
-          const majorTitle = item.mClass || kw;
-
-          // 2. 학과 상세 검색 (매뉴얼 6.2 svcCode=MAJOR_VIEW)
-          let viewUrl = `${CAREERNET_CONFIG.baseUrl}?apiKey=${CAREERNET_CONFIG.apiKey}&svcType=api&svcCode=MAJOR_VIEW&contentType=json&gubun=univ_list&majorSeq=${majorSeq}`;
-          if (CAREERNET_CONFIG.proxyUrl) {
-            viewUrl = `${CAREERNET_CONFIG.proxyUrl}?url=${encodeURIComponent(viewUrl)}`;
-          }
-
-          const viewRes = await fetch(viewUrl);
-          if (!viewRes.ok) continue;
-          const viewData = await viewRes.json();
-          const detail = viewData?.dataSearch?.content?.[0];
-          const universities = detail?.university || [];
-
-          universities.forEach(u => {
-            const schoolName = (u.schoolName || '').trim();
-            if (!schoolName) return;
-            const region = normalizeRegion(u.area);
-
-            if (!univMap[schoolName]) {
-              univMap[schoolName] = {
-                name: schoolName,
-                region: region,
-                schoolUrl: u.schoolURL || '',
-                majors: []
-              };
-            }
-
-            if (!univMap[schoolName].majors.some(m => m.name === majorTitle)) {
-              univMap[schoolName].majors.push({
-                name: majorTitle,
-                cat: kw,
-                grade: estimateGrade(schoolName)
-              });
-            }
-          });
-        }
-      }
-
-      dynamicUnis = Object.values(univMap);
-    } catch (err) {
-      console.warn('커리어넷 API 통신 에러:', err);
-    } finally {
-      isLoadingData = false;
-      renderUniversities();
-    }
-  }
+  // 추천 직업군 DB
+  const dbJobs = {
+    '사회': ['사회조사분석가', '행사기획자', '상담전문가'],
+    '보건': ['간호사', '물리치료사', '임상병리사'],
+    '교육': ['중고등학교교사', '교육콘텐츠개발자'],
+    '경영': ['기업기획자', '마케팅전문가', '경영컨설턴트'],
+    'SW': ['소프트웨어개발자', '앱개발자', '게임프로그래머'],
+    'AI': ['인공지능전문가', '빅데이터전문가'],
+    '미디어': ['영상크리에이터', '방송PD', '광고기획자'],
+    '생명': ['생명과학연구원', '바이오의약품전문가'],
+    '디자인': ['UX디자이너', '시각디자이너', '캐릭터디자이너']
+  };
 
   let chosen = [];
   let final = [];
   let answers = [];
   let question = 0;
   let result = null;
-  let selectedFilterKeyword = '';
 
   function show(id) {
     ['step1', 'step1b', 'step2', 'step3'].forEach(x => $('#' + x).classList.toggle('hidden', x !== id));
-    
     let pMap = { step1: 15, step1b: 35, step2: 65, step3: 100 };
     let tMap = {
-      step1: 'STEP 1 / 3 : 활동 재료 5개 고르기',
-      step1b: 'STEP 1-2 / 3 : 핵심 레시피 3개 압축',
+      step1: 'STEP 1 / 3 : 탐험 재료 5개 고르기',
+      step1b: 'STEP 1-2 / 3 : 인생 핵심 3개 압축',
       step2: 'STEP 2 / 3 : 진로 밸런스 월드컵',
-      step3: 'STEP 3 / 3 : 맞춤형 진로 & 입시 리포트'
+      step3: 'STEP 3 / 3 : 나의 부캐 & 진로 영수증'
     };
     $('#progress').style.width = pMap[id] + '%';
     $('#stepIndicator').textContent = tMap[id];
@@ -537,7 +432,6 @@
     let b = document.createElement('button');
     b.type = 'button';
     b.className = 'tile' + (selected ? ' selected' : '');
-    b.setAttribute('aria-pressed', String(selected));
     b.innerHTML = `<span>${m.emoji}</span><strong>${m.label}</strong>`;
     b.addEventListener('click', onClick);
     return b;
@@ -552,7 +446,7 @@
           chosen = chosen.filter(x => x !== i);
         } else {
           if (chosen.length >= 5) {
-            alert('활동 카드는 최대 5개까지만 고를 수 있어요!');
+            alert('탐험 카드는 딱 5개까지만 선택할 수 있어요!');
             return;
           }
           chosen.push(i);
@@ -573,7 +467,7 @@
           final = final.filter(x => x !== i);
         } else {
           if (final.length >= 3) {
-            alert('가장 중요한 핵심 재료는 3개만 골라주세요!');
+            alert('가장 가슴 뛰는 핵심 카드 3개만 남겨주세요!');
             return;
           }
           final.push(i);
@@ -585,19 +479,19 @@
   }
 
   function renderQuestion() {
-    if (question >= questions.length) {
+    if (question >= juniorQuestions.length) {
       showResult();
       return;
     }
-    $('#questionNumber').textContent = `[밸런스 질문 ${question + 1} / ${questions.length}]`;
-    let q = questions[question], c = $('#duel');
+    $('#questionNumber').textContent = `[밸런스 질문 ${question + 1} / ${juniorQuestions.length}]`;
+    let q = juniorQuestions[question], c = $('#duel');
     c.replaceChildren();
     
     [[q[0], q[1]], [q[2], q[3]]].forEach(([label, cat], side) => {
       let b = document.createElement('button');
       b.className = 'tile';
       b.type = 'button';
-      b.innerHTML = `<span>${side === 0 ? '💖' : '🌟'}</span><strong>${label}</strong>`;
+      b.innerHTML = `<span>${side === 0 ? '✨' : '🔥'}</span><strong>${label}</strong>`;
       b.addEventListener('click', () => {
         answers[question] = cat;
         question++;
@@ -608,26 +502,30 @@
     $('#back2').disabled = question === 0;
   }
 
-  function renderClickableChips(node, items) {
-    node.replaceChildren();
-    items.forEach(t => {
-      let e = document.createElement('span');
-      e.className = 'chip' + (selectedFilterKeyword === t ? ' active-chip' : '');
-      e.textContent = t;
-      e.title = '클릭하면 관련 대학만 모아볼 수 있어요!';
-      e.addEventListener('click', () => {
-        if (selectedFilterKeyword === t) {
-          selectedFilterKeyword = '';
-        } else {
-          selectedFilterKeyword = t;
+  // [기능 2] 커리어넷 주니어 직업 모달 띄우기
+  async function openJobDetail(jobName) {
+    $('#modalJobName').textContent = `🔍 ${jobName}`;
+    $('#modalSummary').textContent = '커리어넷 주니어 데이터베이스에서 정보를 수신하는 중...';
+    $('#modalVideoBox').innerHTML = '';
+    $('#jobModal').classList.remove('hidden');
+
+    try {
+      const url = `${API_CONFIG.juniorUrl}?apiKey=${API_CONFIG.apiKey}&searchJobNm=${encodeURIComponent(jobName)}&pageIndex=1`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const jobItem = data?.jobs?.[0];
+
+      if (jobItem) {
+        $('#modalSummary').innerHTML = `💡 <b>하는 일:</b> ${jobItem.job_summary || '정보를 불러올 수 없습니다.'}<br><br>📊 <b>흥미 유형:</b> 주니어 적성코드 ${jobItem.job_aptd_cd || '기본'}`;
+        if (jobItem.junior_seq) {
+          $('#modalVideoBox').innerHTML = `<a href="https://www.career.go.kr/cloud/w/interview/jobView?seq=${jobItem.junior_seq}" target="_blank" style="color:var(--primary); font-weight:bold; font-size:13.5px; text-decoration:underline;">📺 커리어넷 인터뷰 영상 바로보기 ↗</a>`;
         }
-        node.querySelectorAll('.chip').forEach(ch => {
-          ch.classList.toggle('active-chip', ch.textContent === selectedFilterKeyword);
-        });
-        renderUniversities();
-      });
-      node.append(e);
-    });
+      } else {
+        $('#modalSummary').textContent = `"${jobName}"에 대한 상세 정보를 탐색했습니다. 고등학교 진학 후 심화 탐구하기 좋은 매력적인 직업군입니다!`;
+      }
+    } catch (e) {
+      $('#modalSummary').textContent = `"${jobName}"은(는) 미래 유망 직업군으로, 선화여고 진로 동아리에서 더욱 깊이 있게 탐색할 수 있습니다!`;
+    }
   }
 
   function showResult() {
@@ -640,186 +538,103 @@
       score[c] = (score[c] || 0) + 1;
     });
 
-    let cats = Object.keys(score).sort((a, b) => score[b] - score[a]);
-    let topCats = cats.slice(0, 5);
-    let jobs = [...new Set(topCats.flatMap(c => db[c]?.[0] || []))].slice(0, 10);
-    let majors = [...new Set(topCats.flatMap(c => db[c]?.[1] || []))].slice(0, 8);
-    
-    result = {
-      cats: topCats,
-      allScores: score,
-      jobs,
-      majors,
-      recipe: final.map(i => materials[i].label)
-    };
+    let topCat = Object.keys(score).sort((a, b) => score[b] - score[a])[0] || 'default';
+    let persona = personas[topCat] || personas['default'];
+    let club = sunhwaClubs[topCat] || sunhwaClubs['default'];
+    let recipeLabels = final.map(i => materials[i].label);
 
-    $('#summaryTitle').textContent = `나의 주요 진로 성향: ${topCats.slice(0, 2).join(' × ')}`;
-    $('#resultText').textContent = `내가 고른 '나만의 미래 레시피'(${result.recipe.join(', ')})와 진로 밸런스 성향을 분석한 결과입니다. 아래 커리어넷 실시간 대학 및 학과 현황을 확인해보세요!`;
-    
-    let chipBox = $('#selectedChips');
+    result = { topCat, persona, club, recipe: recipeLabels };
+
+    // 1. 부캐 카드 렌더링
+    $('#personaType').textContent = persona.badge;
+    $('#personaTitle').textContent = persona.title;
+    $('#personaDesc').textContent = persona.desc;
+
+    // 3. 선화여고 꿀팁 렌더링
+    $('#sunhwaClub').textContent = club.name;
+    $('#sunhwaClubDesc').textContent = club.desc;
+    $('#sunhwaTalk').innerHTML = `💬 <b>선화 선배의 한마디:</b> "나도 중학교 때 <b>[${recipeLabels[0]}]</b> 활동을 제일 좋아했거든! 선화여고 와서 <b>${club.name}</b> 활동하면서 생활기록부도 알차게 채우고 진로를 확정했어. 선화에서 꼭 만나자!"`;
+
+    // 2. 직업 칩 렌더링
+    let jobList = dbJobs[topCat] || ['프로젝트기획자', '소프트웨어개발자', '미디어전문가'];
+    let chipBox = $('#jobChips');
     chipBox.replaceChildren();
-    result.recipe.forEach(t => {
-      let e = document.createElement('span');
-      e.className = 'chip';
-      e.textContent = t;
-      chipBox.append(e);
+    jobList.forEach(job => {
+      let span = document.createElement('span');
+      span.className = 'chip';
+      span.textContent = `💼 ${job}`;
+      span.addEventListener('click', () => openJobDetail(job));
+      chipBox.append(span);
     });
 
-    renderClickableChips($('#jobs'), jobs);
-    renderClickableChips($('#majors'), majors);
-
-    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "커리어넷 OpenAPI를 통해 추천 학과를 개설한 전국 대학교 현황을 실시간으로 가져왔어! 학교 링크를 클릭해 입학 요강을 점검해봐."`;
+    // 4. 감성 영수증 렌더링
+    const now = new Date();
+    $('#receiptDate').textContent = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+    $('#receiptRecipe').innerHTML = recipeLabels.map(r => `<div class="receipt-line"><span>• ${r}</span><span>1 EA</span></div>`).join('');
+    $('#receiptPersona').textContent = persona.title.split(' ')[0] + '...';
+    $('#receiptClub').textContent = club.name.split(' ')[0];
 
     show('step3');
-    fetchCareerNetData(majors);
   }
 
-  function renderUniversities() {
-    let region = $('#region').value;
-    let search = $('#search').value.trim().toLowerCase();
-    let box = $('#universityList');
-    box.replaceChildren();
-
-    if (isLoadingData) {
-      box.innerHTML = `<div class="loading-spinner">📡 한국직업능력연구원 커리어넷 Open API와 통신 중입니다...</div>`;
-      return;
-    }
-
-    let userCats = result ? result.cats : [];
-
-    let processedUnis = dynamicUnis.map(u => {
-      let sortedMajors = [...u.majors].sort((a, b) => {
-        let aIndex = userCats.indexOf(a.cat);
-        let bIndex = userCats.indexOf(b.cat);
-        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-        if (aIndex !== -1) return -1;
-        if (bIndex !== -1) return 1;
-        return 0;
-      });
-      return { ...u, majors: sortedMajors };
-    });
-
-    let list = processedUnis.filter(u => {
-      let matchRegion = (region === '전체' || u.region === region);
-      let uniText = (u.name + ' ' + u.majors.map(m=>m.name + ' ' + m.cat).join(' ')).toLowerCase();
-      
-      let matchSearch = !search || uniText.includes(search);
-      let matchClickFilter = !selectedFilterKeyword || uniText.includes(selectedFilterKeyword.replace(/학과|학부|전공/g, '').toLowerCase());
-
-      return matchRegion && matchSearch && matchClickFilter;
-    });
-
-    list.forEach(u => {
-      let card = document.createElement('div');
-      card.className = 'uni-card';
-
-      let header = document.createElement('div');
-      header.className = 'uni-header';
-      
-      let url = u.schoolUrl || `https://www.google.com/search?q=${encodeURIComponent(u.name + ' 입학처')}`;
-      let nameEl = document.createElement('a');
-      nameEl.className = 'uni-name';
-      nameEl.href = url;
-      nameEl.target = '_blank';
-      nameEl.rel = 'noopener noreferrer';
-      nameEl.innerHTML = `${u.name} <span style="font-size:12px; font-weight:normal; opacity:0.7;">홈페이지 ↗</span>`;
-
-      let regionEl = document.createElement('span');
-      regionEl.className = 'uni-region';
-      regionEl.textContent = u.region;
-
-      header.append(nameEl, regionEl);
-
-      let mList = document.createElement('div');
-      mList.className = 'major-list';
-
-      u.majors.forEach(m => {
-        let isMatch = userCats.includes(m.cat) || (result && result.majors.some(maj => maj.includes(m.name)));
-        let item = document.createElement('div');
-        item.className = 'major-item' + (isMatch ? ' match-highlight' : '');
-        
-        let badgeHtml = isMatch 
-          ? `<span style="display:flex; gap:6px; align-items:center;"><span style="background:var(--primary); color:white; font-size:11px; padding:2px 6px; border-radius:4px; font-weight:700;">🎯 맞춤 추천</span><span class="grade-badge">${m.grade}</span></span>`
-          : `<span class="grade-badge">${m.grade}</span>`;
-
-        item.innerHTML = `<span>📚 ${m.name}</span>${badgeHtml}`;
-        mList.append(item);
-      });
-
-      card.append(header, mList);
-      box.append(card);
-    });
-
-    if (!list.length && !isLoadingData) {
-      let p = document.createElement('p');
-      p.className = 'muted';
-      p.style.gridColumn = '1 / -1';
-      p.style.textAlign = 'center';
-      p.style.padding = '30px 0';
-      p.textContent = selectedFilterKeyword 
-        ? `"${selectedFilterKeyword}" 관련 개설 대학 정보가 없습니다. 필터를 해제하거나 다른 검색어를 입력해 보세요.` 
-        : '일치하는 실시간 개설 대학 데이터가 없습니다. (API 인증키 또는 네트워크 상태 확인)';
-      box.append(p);
-    }
-  }
-
-  function copyCareerReport() {
+  // [기능 4] 영수증 복사
+  function copyReceipt() {
     if (!result) return;
-    let reportText = `[🌸 선화여고 나의 진로 리포트]\n` +
-      `• 핵심 활동 레시피: ${result.recipe.join(' / ')}\n` +
-      `• 주요 진로 성향: ${result.cats.slice(0, 2).join(' & ')}\n` +
-      `• 추천 탐색 직업: ${result.jobs.slice(0, 5).join(', ')}\n` +
-      `• 추천 관심 학과: ${result.majors.slice(0, 4).join(', ')}\n\n` +
-      `"나만의 미래 레시피와 진로 탐색 결과를 확인했어요!"`;
+    const text = `==============================\n` +
+      `   🌸 선화여고 진로 PLAY 영수증\n` +
+      `==============================\n` +
+      `[나만의 핵심 레시피]\n` +
+      result.recipe.map(r => ` - ${r}`).join('\n') + `\n` +
+      `------------------------------\n` +
+      `[나의 부캐] ${result.persona.title}\n` +
+      `[추천 선화 동아리] ${result.club.name}\n` +
+      `==============================\n` +
+      `선화여고에서 나의 꿈을 펼쳐보세요! 🌸`;
 
-    navigator.clipboard.writeText(reportText).then(() => {
-      alert('📋 진로 리포트 내용이 클립보드에 복사되었습니다!\n카카오톡이나 패들렛 등에 붙여넣기 해보세요.');
-    }).catch(() => {
-      prompt('아래 텍스트를 직접 복사해 주세요:', reportText);
+    navigator.clipboard.writeText(text).then(() => {
+      alert('🧾 진로 영수증이 클립보드에 복사되었습니다! 친구들에게 공유해보세요.');
     });
   }
 
-  $('#next1').addEventListener('click', () => {
-    final = [];
-    renderFinal();
-    show('step1b');
+  // [기능 4] 방명록 간단 추가 기능
+  const initialGuests = [
+    { name: '예비선화인', msg: '동아리 너무 재미있어 보여요!! 꼭 갈게요' },
+    { name: '중3김OO', msg: '제 부캐가 딱 맞아서 신기해요 ㅋㅋㅋ' }
+  ];
+  function renderGuestbook() {
+    const list = $('#guestList');
+    list.replaceChildren();
+    initialGuests.forEach(g => {
+      const div = document.createElement('div');
+      div.className = 'guestbook-item';
+      div.innerHTML = `<strong>${g.name}</strong> <span>${g.msg}</span>`;
+      list.append(div);
+    });
+  }
+
+  $('#guestBtn').addEventListener('click', () => {
+    const val = $('#guestInput').value.trim();
+    if (!val) return;
+    initialGuests.unshift({ name: '방문중학생', msg: val });
+    $('#guestInput').value = '';
+    renderGuestbook();
   });
+
+  // 버튼 이벤트 바인딩
+  $('#next1').addEventListener('click', () => { final = []; renderFinal(); show('step1b'); });
   $('#back1').addEventListener('click', () => show('step1'));
-  
-  $('#next2').addEventListener('click', () => {
-    answers = [];
-    question = 0;
-    show('step2');
-    renderQuestion();
-  });
-  
-  $('#back2').addEventListener('click', () => {
-    if (question > 0) {
-      question--;
-      answers = answers.slice(0, question);
-      renderQuestion();
-    }
-  });
-
-  $('#region').addEventListener('change', renderUniversities);
-  $('#search').addEventListener('input', renderUniversities);
-  $('#copyReportBtn').addEventListener('click', copyCareerReport);
-  
+  $('#next2').addEventListener('click', () => { answers = []; question = 0; show('step2'); renderQuestion(); });
+  $('#back2').addEventListener('click', () => { if (question > 0) { question--; renderQuestion(); } });
+  $('#closeModalBtn').addEventListener('click', () => $('#jobModal').classList.add('hidden'));
+  $('#copyReceiptBtn').addEventListener('click', copyReceipt);
   $('#reset').addEventListener('click', () => {
-    chosen = [];
-    final = [];
-    answers = [];
-    question = 0;
-    result = null;
-    selectedFilterKeyword = '';
-    dynamicUnis = [];
-    $('#region').value = '전체';
-    $('#search').value = '';
-    renderMaterials();
-    show('step1');
+    chosen = []; final = []; answers = []; question = 0; result = null;
+    renderMaterials(); show('step1');
   });
 
+  // 초기화 실행
   renderMaterials();
+  renderGuestbook();
 })();
 </script>
 </body>
