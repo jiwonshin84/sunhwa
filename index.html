@@ -794,4 +794,122 @@
     });
 
     let list = processedUnis.filter(u => {
-      let matchRegion = (region
+      let matchRegion = (region === '전체' || u.region === region);
+      let uniText = (u.name + ' ' + u.majors.map(m=>m.name + ' ' + m.cat).join(' ')).toLowerCase();
+      
+      let matchSearch = !search || uniText.includes(search);
+      let matchClickFilter = !selectedFilterKeyword || uniText.includes(selectedFilterKeyword.replace(/학과|학부|전공/g, '').toLowerCase());
+
+      return matchRegion && matchSearch && matchClickFilter;
+    });
+
+    list.forEach(u => {
+      let card = document.createElement('div');
+      card.className = 'uni-card';
+
+      let header = document.createElement('div');
+      header.className = 'uni-header';
+      
+      let url = admissionUrls[u.name] || 'https://www.adiga.kr';
+      let nameEl = document.createElement('a');
+      nameEl.className = 'uni-name';
+      nameEl.href = url;
+      nameEl.target = '_blank';
+      nameEl.rel = 'noopener noreferrer';
+      nameEl.innerHTML = `${u.name} <span style="font-size:12px; font-weight:normal; opacity:0.7;">입학처 ↗</span>`;
+      nameEl.title = `${u.name} 공식 입학처 홈페이지로 이동합니다`;
+
+      let regionEl = document.createElement('span');
+      regionEl.className = 'uni-region';
+      regionEl.textContent = u.region;
+
+      header.append(nameEl, regionEl);
+
+      let mList = document.createElement('div');
+      mList.className = 'major-list';
+
+      u.majors.forEach(m => {
+        let isMatch = userCats.includes(m.cat);
+        let item = document.createElement('div');
+        item.className = 'major-item' + (isMatch ? ' match-highlight' : '');
+        
+        let badgeHtml = isMatch 
+          ? `<span style="display:flex; gap:6px; align-items:center;"><span style="background:var(--primary); color:white; font-size:11px; padding:2px 6px; border-radius:4px; font-weight:700;">🎯 맞춤 추천</span><span class="grade-badge">${m.grade}</span></span>`
+          : `<span class="grade-badge">${m.grade}</span>`;
+
+        item.innerHTML = `<span>📚 ${m.name}</span>${badgeHtml}`;
+        mList.append(item);
+      });
+
+      card.append(header, mList);
+      box.append(card);
+    });
+
+    if (!list.length) {
+      let p = document.createElement('p');
+      p.className = 'muted';
+      p.textContent = selectedFilterKeyword ? `"${selectedFilterKeyword}" 관련 개설 대학 정보가 없습니다. 필터를 해제하거나 다른 검색어를 입력해 보세요.` : '조건에 일치하는 대학 정보가 없습니다.';
+      box.append(p);
+    }
+  }
+
+  function copyCareerReport() {
+    if (!result) return;
+    let reportText = `[🌸 선화여고 나의 진로 리포트]\n` +
+      `• 핵심 활동 레시피: ${result.recipe.join(' / ')}\n` +
+      `• 주요 진로 성향: ${result.cats.slice(0, 2).join(' & ')}\n` +
+      `• 추천 탐색 직업: ${result.jobs.slice(0, 5).join(', ')}\n` +
+      `• 추천 관심 학과: ${result.majors.slice(0, 4).join(', ')}\n\n` +
+      `"나만의 미래 레시피와 진로 탐색 결과를 확인했어요!"`;
+
+    navigator.clipboard.writeText(reportText).then(() => {
+      alert('📋 진로 리포트 내용이 클립보드에 복사되었습니다!\n카카오톡이나 패들렛 등에 붙여넣기 해보세요.');
+    }).catch(() => {
+      prompt('아래 텍스트를 직접 복사해 주세요:', reportText);
+    });
+  }
+
+  $('#next1').addEventListener('click', () => {
+    final = [];
+    renderFinal();
+    show('step1b');
+  });
+  $('#back1').addEventListener('click', () => show('step1'));
+  
+  $('#next2').addEventListener('click', () => {
+    answers = [];
+    question = 0;
+    show('step2');
+    renderQuestion();
+  });
+  
+  $('#back2').addEventListener('click', () => {
+    if (question > 0) {
+      question--;
+      answers = answers.slice(0, question);
+      renderQuestion();
+    }
+  });
+
+  $('#region').addEventListener('change', renderUniversities);
+  $('#search').addEventListener('input', renderUniversities);
+  $('#copyReportBtn').addEventListener('click', copyCareerReport);
+  
+  $('#reset').addEventListener('click', () => {
+    chosen = [];
+    final = [];
+    answers = [];
+    question = 0;
+    result = null;
+    selectedFilterKeyword = '';
+    $('#region').value = '전체';
+    $('#search').value = '';
+    renderMaterials();
+    show('step1');
+  });
+
+  renderMaterials();
+})();
+</script>
+</body>
+</html>
