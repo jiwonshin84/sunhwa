@@ -50,7 +50,7 @@
       border-radius: 99px;
       background: white;
       padding: 9px 16px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       color: #334155;
       cursor: pointer;
@@ -68,17 +68,18 @@
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
     }
 
-    /* 검색창 */
-    .search-row { display: flex; gap: 8px; margin-top: 18px; }
+    /* 직접 검색창 */
+    .search-row { display: flex; gap: 8px; margin-top: 20px; }
     .search-row input {
       flex: 1; padding: 13px 18px; border: 1.5px solid #cbd5e1; border-radius: 14px;
       font: inherit; font-size: 14px; outline: none; transition: border 0.2s;
     }
     .search-row input:focus { border-color: var(--primary); }
     .search-row button {
-      background: #1e293b; color: white; border: none; padding: 0 20px;
+      background: #1e293b; color: white; border: none; padding: 0 22px;
       border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer;
     }
+    .search-row button:hover { background: #0f172a; }
 
     /* 결과 학과 카드 그리드 */
     .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
@@ -136,21 +137,42 @@
     <p class="muted">평소 마음이 끌리는 키워드를 눌러보세요. 선택한 관심사를 바탕으로 커리어넷 학과를 실시간 추천합니다.</p>
     
     <div class="chip-grid" id="interestGrid">
+      <!-- IT & 첨단 테크 -->
       <div class="chip" data-kw="컴퓨터">💻 코딩 & 프로그래밍</div>
       <div class="chip" data-kw="인공지능">🤖 인공지능 & 빅데이터</div>
-      <div class="chip" data-kw="간호">🩺 병원 & 환자 케어</div>
-      <div class="chip" data-kw="생명공학">🧬 유전자 & 신약개발</div>
-      <div class="chip" data-kw="기계">⚙️ 로봇 & 모빌리티</div>
-      <div class="chip" data-kw="디자인">🎨 그림 & 일러스트·웹툰</div>
-      <div class="chip" data-kw="미디어">🎬 영상 편집 & 방송제작</div>
-      <div class="chip" data-kw="경영">💡 마케팅 & 창업기획</div>
+      <div class="chip" data-kw="정보보안">🔐 사이버보안 & 화이트해커</div>
+      <div class="chip" data-kw="게임">🎮 게임 제작 & e스포츠</div>
+      <div class="chip" data-kw="기계">⚙️ 로봇 & 자율주행 모빌리티</div>
+
+      <!-- 의료·보건 & 바이오 -->
+      <div class="chip" data-kw="간호">🩺 병원 & 환자 케어(간호)</div>
+      <div class="chip" data-kw="약학">💊 신약개발 & 조제(약학)</div>
+      <div class="chip" data-kw="생명공학">🧬 유전자 & 바이오의약</div>
+      <div class="chip" data-kw="반려동물">🐾 반려동물 & 동물보건</div>
+
+      <!-- 예술·디자인 & 미디어 -->
+      <div class="chip" data-kw="디자인">🎨 그림·웹툰 & 캐릭터 일러스트</div>
+      <div class="chip" data-kw="미디어">🎬 유튜브 영상 & 방송 연출</div>
+      <div class="chip" data-kw="뷰티">💄 뷰티 메이크업 & K-화장품</div>
+      <div class="chip" data-kw="패션">👗 패션 디자인 & 스타일링</div>
+      <div class="chip" data-kw="실용음악">🎵 실용음악 & 작곡·무대연출</div>
+
+      <!-- 교육·상담 & 공공·사회 -->
       <div class="chip" data-kw="심리">🧠 마음 상담 & 심리치료</div>
-      <div class="chip" data-kw="교육">📚 친구 가르치기 & 멘토링</div>
-      <div class="chip" data-kw="건축">🏗️ 예쁜 건물 & 실내 인테리어</div>
+      <div class="chip" data-kw="교육">📚 학교 교사 & 수업 멘토링</div>
+      <div class="chip" data-kw="유아교육">👶 유치원 교사 & 아동보육</div>
+      <div class="chip" data-kw="경찰">👮 경찰 & 과학수사·프로파일링</div>
+      <div class="chip" data-kw="법학">⚖️ 공정한 판결 & 인권 변호</div>
+      <div class="chip" data-kw="사회복지">🤝 사회적 약자 복지 & 공익 나눔</div>
+
+      <!-- 비즈니스·서비스 & 라이프 -->
+      <div class="chip" data-kw="경영">💡 마케팅 광고 & 창업 기획</div>
       <div class="chip" data-kw="경제">📈 주식·투자 & 금융 흐름</div>
-      <div class="chip" data-kw="법학">⚖️ 공정한 판결 & 인권 지키기</div>
-      <div class="chip" data-kw="환경">🌿 숲과 동물 & 생태계 보호</div>
-      <div class="chip" data-kw="문학">✍️ 웹소설 & 글쓰기 창작</div>
+      <div class="chip" data-kw="항공">✈️ 항공승무원 & 공항 서비스</div>
+      <div class="chip" data-kw="식품영양">🍳 요리·베이킹 & 푸드스타일링</div>
+      <div class="chip" data-kw="건축">🏗️ 예쁜 건물 설계 & 실내 인테리어</div>
+      <div class="chip" data-kw="통번역">🌏 외국어 통번역 & 글로벌 교류</div>
+      <div class="chip" data-kw="문학">✍️ 웹소설 & 스토리텔링 창작</div>
       <div class="chip" data-kw="체육">🏃 운동 & 스포츠 과학</div>
     </div>
 
@@ -425,7 +447,7 @@
 
   $('#closeModalBtn').addEventListener('click', () => $('#majorModal').classList.add('hidden'));
 
-  // 첫 화면 접속 시 첫 번째 태그(코딩)를 기본 활성화하여 풍성하게 시작
+  // 첫 화면 접속 시 첫 번째 태그(코딩)를 기본 활성화
   document.querySelector('.chip').click();
 })();
 </script>
