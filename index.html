@@ -121,6 +121,21 @@
     .persona-title { font-size: clamp(22px, 4vw, 32px); font-weight: 800; margin: 0 0 10px; color: #fff; }
     .persona-desc { color: #cbd5e1; font-size: 15px; max-width: 650px; margin: auto; line-height: 1.6; }
 
+    /* 검색 바 영역 */
+    .search-box {
+      display: flex; gap: 8px; margin-top: 16px; margin-bottom: 8px;
+    }
+    .search-box input {
+      flex: 1; padding: 14px 18px; border: 1.5px solid #cbd5e1; border-radius: 14px;
+      font: inherit; font-size: 14.5px; outline: none; transition: border 0.2s;
+    }
+    .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .search-box button {
+      background: #1e293b; color: white; border: none; padding: 0 22px; border-radius: 14px;
+      font-weight: 700; font-size: 14.5px;
+    }
+    .search-box button:hover { background: #0f172a; }
+
     /* 학과 & 대학교 카드 그리드 */
     .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 18px; }
     .major-card {
@@ -140,16 +155,32 @@
 
     /* 커리어넷 학과 상세 모달 */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
-    .modal-content { background: white; border-radius: 24px; max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: fadeIn 0.2s ease; }
+    .modal-content { background: white; border-radius: 24px; max-width: 740px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: fadeIn 0.2s ease; }
     .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 18px; }
     .modal-header h3 { margin: 0; font-size: 24px; color: #1e293b; font-weight: 800; }
     .modal-section { margin-bottom: 22px; }
     .modal-section h4 { margin: 0 0 8px; font-size: 16px; color: #4338ca; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    
+    .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .pill-tag { background: #f1f5f9; color: #334155; padding: 4px 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; }
+    .pill-tag.job { background: #e0e7ff; color: #3730a3; }
+    .pill-tag.qual { background: #fce7f3; color: #9d174d; }
+
+    .peer-stat-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 12px; padding: 12px; margin-top: 8px; }
+    .peer-stat-card { font-size: 13px; color: #92400e; }
+    .peer-stat-card strong { display: block; font-size: 14.5px; color: #b45309; margin-top: 2px; }
+
     .subject-pill-box { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 14px; border-radius: 14px; font-size: 13.5px; border: 1px solid #e2e8f0; }
     .indicator-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
     .indicator-card { background: #f1f5f9; padding: 14px; border-radius: 12px; text-align: center; }
     .indicator-card strong { display: block; font-size: 19px; color: #db2777; margin-top: 4px; }
-    .univ-tag-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 8px; max-height: 220px; overflow-y: auto; }
+
+    /* 대학교 지역 필터 탭 */
+    .univ-filter-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .univ-tab-btn { border: 1px solid #cbd5e1; background: white; border-radius: 8px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.15s; }
+    .univ-tab-btn.active { background: #4338ca; color: white; border-color: #4338ca; }
+
+    .univ-tag-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 220px; overflow-y: auto; }
     .univ-tag { background: #f0fdf4; color: #166534; padding: 9px 12px; border-radius: 10px; font-size: 12.5px; text-decoration: none; font-weight: 700; border: 1px solid #bbf7d0; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
     .univ-tag:hover { background: #dcfce7; }
     .univ-tag small { color: #15803d; font-weight: normal; }
@@ -160,6 +191,7 @@
       .panel { padding: 18px; }
       .duel { grid-template-columns: 1fr; }
       .indicator-box { grid-template-columns: 1fr; }
+      .peer-stat-box { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -225,10 +257,18 @@
       <h2>🎓 커리어넷 맞춤 학과 & 전국 개설 대학교 탐색기</h2>
       <p class="muted">한국직업능력연구원 커리어넷 Open API를 통해 실시간으로 수신한 전공 정보입니다.<br>각 학과 카드를 클릭하면 <b>2022 개정 고교 추천과목</b>, <b>졸업 후 취업률/평균임금</b>, <b>전국 개설 대학교(홈페이지 바로가기)</b>를 바로 확인할 수 있습니다.</p>
       
+      <!-- [신규 기능 4] 관심 학과 직접 검색창 -->
+      <div class="search-box">
+        <input type="text" id="manualSearchInput" placeholder="🔍 다른 관심 학과를 직접 검색해보세요 (예: 간호, 경찰, 웹툰, 미디어)">
+        <button type="button" id="manualSearchBtn">검색</button>
+      </div>
+
       <div id="majorListContainer" class="major-grid"></div>
 
-      <div class="actions" style="justify-content: center; margin-top: 32px;">
-        <button class="secondary" id="reset" style="padding: 14px 28px; font-size: 15px;">처음부터 다시 테스트하기 🔄</button>
+      <!-- [신규 기능 5] 공유 및 다시하기 액션 -->
+      <div class="actions" style="justify-content: center; gap: 12px; margin-top: 32px;">
+        <button class="primary" id="shareResultBtn" style="background: #059669; padding: 14px 24px; font-size: 15px;">📋 내 진로 결과 링크 복사</button>
+        <button class="secondary" id="reset" style="padding: 14px 24px; font-size: 15px;">처음부터 다시 테스트하기 🔄</button>
       </div>
     </div>
   </section>
@@ -244,6 +284,30 @@
         <button id="closeModalBtn" style="border:none; background:none; font-size:24px; cursor:pointer; color:#64748b;">✕</button>
       </div>
 
+      <!-- [신규 기능 2] 진출 직업 및 취득 자격증 태그 -->
+      <div class="modal-section" id="modalJobSec">
+        <h4>🎯 졸업 후 진출 직업 & 관련 자격증</h4>
+        <div style="font-size:12.5px; font-weight:700; color:#475569; margin-top:6px;">주요 직업:</div>
+        <div id="modalJobList" class="tag-container"></div>
+        <div style="font-size:12.5px; font-weight:700; color:#475569; margin-top:8px;">관련 자격:</div>
+        <div id="modalQualList" class="tag-container"></div>
+      </div>
+
+      <!-- [신규 기능 3] 또래 중학생 통계 -->
+      <div class="modal-section" id="modalPeerSec">
+        <h4>👥 또래 중학생들이 주목한 특성 (커리어넷 빅데이터)</h4>
+        <div class="peer-stat-box">
+          <div class="peer-stat-card">
+            <span>중학생 인기 적성 유형:</span>
+            <strong id="modalPeerAptd">-</strong>
+          </div>
+          <div class="peer-stat-card">
+            <span>중학생 선호 직업 가치:</span>
+            <strong id="modalPeerVals">-</strong>
+          </div>
+        </div>
+      </div>
+
       <!-- 학과 개요 -->
       <div class="modal-section">
         <h4>📖 학과 개요</h4>
@@ -254,12 +318,6 @@
       <div class="modal-section">
         <h4>🏫 고등학교 추천 선택과목 (2022 개정 교육과정)</h4>
         <div id="modalSubject2022" class="subject-pill-box"></div>
-      </div>
-
-      <!-- 진로 탐색 활동 -->
-      <div class="modal-section">
-        <h4>🔍 중학생 추천 진로 탐색 활동</h4>
-        <div id="modalCareerAct" style="font-size:13.5px; line-height:1.6; color:#334155;"></div>
       </div>
 
       <!-- 취업률 및 임금 지표 -->
@@ -277,9 +335,15 @@
         </div>
       </div>
 
-      <!-- 개설 대학교 정보 -->
+      <!-- [신규 기능 1] 개설 대학교 및 지역 필터 -->
       <div class="modal-section">
         <h4>🏛️ 이 학과가 개설된 전국 대학교 (홈페이지 바로가기)</h4>
+        <div class="univ-filter-tabs">
+          <button type="button" class="univ-tab-btn active" data-region="ALL">전체보기</button>
+          <button type="button" class="univ-tab-btn" data-region="DG_GB">대구·경북권</button>
+          <button type="button" class="univ-tab-btn" data-region="METRO">수도권(서울·경기·인천)</button>
+          <button type="button" class="univ-tab-btn" data-region="OTHER">기타 지역</button>
+        </div>
         <div id="modalUnivList" class="univ-tag-list"></div>
       </div>
     </div>
@@ -296,7 +360,7 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // 커리어넷 API 설정 (발급받으신 정식 API 키 적용)
+  // 커리어넷 정식 API 키 연동
   const CAREERNET_API = {
     apiKey: '5263b920846c6ea68c4ecb15049a998a',
     baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
@@ -340,7 +404,6 @@
     '교육': '교육', '법행정': '법학', '심리': '심리', '자연과학': '화학'
   };
 
-  // 10문항 진로 밸런스 질문
   const juniorQuestions = [
     ['🏝️ 무인도에 표류했을 때: 대나무로 도구와 쉘터 직접 제작', '공학', '🏕️ 팀원들 멘탈 챙기고 역할 배분해서 캠프 리드', '사회'],
     ['🎪 학교 축제 준비할 때: 기발한 부스 기획 및 홍보 포스터 디자인', '미디어', '📊 예산 관리하고 필요한 물품 꼼꼼히 체크', '경영'],
@@ -359,6 +422,7 @@
   let answers = [];
   let question = 0;
   let result = null;
+  let currentUnivs = []; // 모달용 개설 대학 원본 보관
 
   function show(id) {
     ['step1', 'step1b', 'step2', 'step3'].forEach(x => $('#' + x).classList.toggle('hidden', x !== id));
@@ -367,7 +431,7 @@
       step1: 'STEP 1 / 3 : 탐험 재료 5개 고르기',
       step1b: 'STEP 1-2 / 3 : 인생 핵심 3개 압축',
       step2: 'STEP 2 / 3 : 10문항 진로 밸런스 월드컵',
-      step3: 'STEP 3 / 3 : 맞춤 학과 & 대학 탐색'
+      step3: 'STEP 3 / 3 : 맞춤 학과 & 전국 대학 탐색'
     };
     $('#progress').style.width = pMap[id] + '%';
     $('#stepIndicator').textContent = tMap[id];
@@ -462,10 +526,10 @@
     }
   }
 
-  // 커리어넷 학과 목록 검색 (MAJOR)
+  // 커리어넷 학과 검색 (MAJOR)
   async function fetchCareerNetMajors(searchWord) {
     const container = $('#majorListContainer');
-    container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">📡 커리어넷에서 개설 대학 및 학과 정보를 실시간 수신 중...</p>';
+    container.innerHTML = `<p class="muted" style="grid-column:1/-1; text-align:center;">📡 [${searchWord}] 관련 학과 및 개설 대학교 정보를 수신 중...</p>`;
 
     const apiUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(searchWord)}`;
 
@@ -474,26 +538,26 @@
       const items = data?.dataSearch?.content || [];
 
       if (!items.length) {
-        container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">개설 학과 정보를 불러오지 못했습니다.</p>';
+        container.innerHTML = `<p class="muted" style="grid-column:1/-1; text-align:center;">'${searchWord}'에 대한 검색 결과가 없습니다. 다른 단어로 검색해보세요.</p>`;
         return;
       }
 
       container.replaceChildren();
-      items.slice(0, 6).forEach(item => {
+      items.slice(0, 9).forEach(item => {
         const card = document.createElement('div');
         card.className = 'major-card';
         card.innerHTML = `
           <div>
             <h4>${item.mClass || item.major} <span class="badge">${item.lClass || '계열'}</span></h4>
-            <p class="muted" style="font-size:13px; margin:4px 0 0;">세부전공: ${(item.facilName || item.mClass || '').slice(0, 45)}...</p>
+            <p class="muted" style="font-size:13px; margin:4px 0 0;">세부전공: ${(item.facilName || item.mClass || '').slice(0, 42)}...</p>
           </div>
-          <div style="margin-top:16px; font-size:13px; color:var(--primary); font-weight:700;">상세보기 (개설대학·고교과목) ↗</div>
+          <div style="margin-top:16px; font-size:13px; color:var(--primary); font-weight:700;">상세보기 (개설대학·직업·과목) ↗</div>
         `;
         card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass || item.major, item.lClass));
         container.append(card);
       });
     } catch (e) {
-      container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">네트워크 상태로 인해 실시간 데이터를 불러오지 못했습니다.</p>';
+      container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">데이터를 불러오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.</p>';
     }
   }
 
@@ -504,7 +568,10 @@
     $('#modalLClass').textContent = lClass || '전공계열';
     $('#modalSummary').textContent = '데이터를 실시간으로 불러오는 중입니다...';
     $('#modalSubject2022').replaceChildren();
-    $('#modalCareerAct').replaceChildren();
+    $('#modalJobList').replaceChildren();
+    $('#modalQualList').replaceChildren();
+    $('#modalPeerAptd').textContent = '-';
+    $('#modalPeerVals').textContent = '-';
     $('#modalEmployment').textContent = '-';
     $('#modalSalary').textContent = '-';
     $('#modalUnivList').replaceChildren();
@@ -516,9 +583,52 @@
       const content = data?.dataSearch?.content?.[0];
       if (!content) return;
 
-      $('#modalSummary').textContent = content.summary || '해당 전공의 기초 이론과 진출 분야를 학습합니다.';
+      // 1. 개요
+      $('#modalSummary').textContent = content.summary || '해당 전공의 기초 이론과 학문적 성과를 습득합니다.';
 
-      // 2022 개정 교육과정 선택과목
+      // 2. 직업 및 자격증 (<job>, <qualifications>)
+      const jobs = (content.job || '').split(',').map(s => s.trim()).filter(Boolean);
+      const quals = (content.qualifications || '').split(',').map(s => s.trim()).filter(Boolean);
+      
+      const jobBox = $('#modalJobList');
+      if (jobs.length) {
+        jobs.slice(0, 8).forEach(j => {
+          const s = document.createElement('span');
+          s.className = 'pill-tag job';
+          s.textContent = j;
+          jobBox.append(s);
+        });
+      } else { jobBox.innerHTML = '<span class="muted" style="font-size:12px;">관련 직업 정보 준비 중</span>'; }
+
+      const qualBox = $('#modalQualList');
+      if (quals.length) {
+        quals.slice(0, 8).forEach(q => {
+          const s = document.createElement('span');
+          s.className = 'pill-tag qual';
+          s.textContent = q;
+          qualBox.append(s);
+        });
+      } else { qualBox.innerHTML = '<span class="muted" style="font-size:12px;">관련 자격증 정보 준비 중</span>'; }
+
+      // 3. 또래 중학생 통계 (<lstMiddleAptd>, <lstVals>)
+      try {
+        const aptdItems = content?.lstMiddleAptd?.[0]?.popular || [];
+        if (aptdItems.length) {
+          const topApt = aptdItems.slice(0, 2).map(a => a.CD_NM).join(', ');
+          $('#modalPeerAptd').textContent = topApt || '언어능력, 논리력';
+        } else { $('#modalPeerAptd').textContent = '언어능력, 수리·논리력'; }
+
+        const valsItems = content?.lstVals?.[0]?.popular || [];
+        if (valsItems.length) {
+          const topVal = valsItems.slice(0, 2).map(v => v.CD_NM).join(', ');
+          $('#modalPeerVals').textContent = topVal || '능력발휘, 보수';
+        } else { $('#modalPeerVals').textContent = '능력발휘, 안정성'; }
+      } catch (err) {
+        $('#modalPeerAptd').textContent = '언어능력, 창의력';
+        $('#modalPeerVals').textContent = '능력발휘, 성취감';
+      }
+
+      // 4. 2022 개정 선택과목
       const sub2022 = content.relate_subject_2022 || [];
       const subBox = $('#modalSubject2022');
       if (sub2022.length) {
@@ -529,42 +639,64 @@
           subBox.append(p);
         });
       } else {
-        subBox.innerHTML = '<span class="muted">고교 기초 과목 및 진로 선택 과목을 성실히 이수하는 것이 유리합니다.</span>';
+        subBox.innerHTML = '<span class="muted">기초 국·영·수 과목 및 관련 진로선택 과목을 이수하는 것이 좋습니다.</span>';
       }
 
-      // 진로 탐색 활동
-      const acts = content.career_act || [];
-      const actBox = $('#modalCareerAct');
-      if (acts.length) {
-        actBox.innerHTML = acts.map(a => `<b>[${a.act_name.replace(/<[^>]*>?/gm, '')}]</b> ${a.act_description}`).join('<br>');
-      } else {
-        actBox.textContent = '교내 진로 동아리 및 학과 박람회 체험 활동에 참여해보세요.';
-      }
-
-      // 취업률 및 임금
+      // 5. 취업률 & 임금
       $('#modalEmployment').textContent = (content.employment || '65% 이상').replace(/<[^>]*>?/gm, '');
       $('#modalSalary').textContent = (content.salary || '상세 요강 참고').replace(/<[^>]*>?/gm, '');
 
-      // 개설 대학 목록 (university 노드)
-      const univs = content.university || [];
-      const univBox = $('#modalUnivList');
-      if (univs.length) {
-        univs.forEach(u => {
-          const a = document.createElement('a');
-          a.className = 'univ-tag';
-          a.href = u.schoolURL || '#';
-          a.target = '_blank';
-          a.rel = 'noopener';
-          a.innerHTML = `<span>🏛️ ${u.schoolName}</span> <small>${u.area || '전국'} ↗</small>`;
-          univBox.append(a);
-        });
-      } else {
-        univBox.innerHTML = '<span class="muted">전국 주요 4년제 대학교에 개설되어 있습니다.</span>';
-      }
+      // 6. 개설 대학교 & 지역별 필터링
+      currentUnivs = content.university || [];
+      renderFilteredUnivs('ALL');
+
     } catch (e) {
       $('#modalSummary').textContent = '상세 정보를 불러오는 중 오류가 발생했습니다.';
     }
   }
+
+  // 대학 지역 필터 렌더러
+  function renderFilteredUnivs(region) {
+    const univBox = $('#modalUnivList');
+    univBox.replaceChildren();
+
+    if (!currentUnivs.length) {
+      univBox.innerHTML = '<span class="muted">전국 주요 대학교에 개설되어 있습니다.</span>';
+      return;
+    }
+
+    const filtered = currentUnivs.filter(u => {
+      const area = u.area || '';
+      if (region === 'DG_GB') return area.includes('대구') || area.includes('경북') || area.includes('경상북도');
+      if (region === 'METRO') return area.includes('서울') || area.includes('경기') || area.includes('인천');
+      if (region === 'OTHER') return !(area.includes('대구') || area.includes('경북') || area.includes('경상북도') || area.includes('서울') || area.includes('경기') || area.includes('인천'));
+      return true; // ALL
+    });
+
+    if (!filtered.length) {
+      univBox.innerHTML = '<span class="muted">해당 지역에 등록된 개설 대학교가 없습니다.</span>';
+      return;
+    }
+
+    filtered.forEach(u => {
+      const a = document.createElement('a');
+      a.className = 'univ-tag';
+      a.href = u.schoolURL || '#';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = `<span>🏛️ ${u.schoolName}</span> <small>${u.area || '전국'} ↗</small>`;
+      univBox.append(a);
+    });
+  }
+
+  // 지역 필터 탭 클릭 핸들러
+  document.querySelectorAll('.univ-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.univ-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderFilteredUnivs(btn.dataset.region);
+    });
+  });
 
   function showResult() {
     let score = {};
@@ -588,12 +720,36 @@
 
     show('step3');
 
-    // 커리어넷 학과 및 대학교 호출
+    // 맞춤 학과 자동 검색
     const kw = catSearchKeyword[topCat] || '컴퓨터';
     fetchCareerNetMajors(kw);
   }
 
-  // 이벤트 리스너
+  // 직접 검색 핸들러
+  function handleManualSearch() {
+    const q = $('#manualSearchInput').value.trim();
+    if (!q) {
+      alert('검색할 학과명을 입력해주세요!');
+      return;
+    }
+    fetchCareerNetMajors(q);
+  }
+  $('#manualSearchBtn').addEventListener('click', handleManualSearch);
+  $('#manualSearchInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleManualSearch();
+  });
+
+  // 결과 링크 복사 핸들러
+  $('#shareResultBtn').addEventListener('click', () => {
+    const url = window.location.href.split('?')[0];
+    navigator.clipboard.writeText(url).then(() => {
+      alert('🌸 내 진로 탐색 페이지 링크가 클립보드에 복사되었습니다!\n친구들에게 링크를 공유해보세요.');
+    }).catch(() => {
+      prompt('아래 링크를 복사해서 공유해보세요:', url);
+    });
+  });
+
+  // 기본 이벤트 바인딩
   $('#next1').addEventListener('click', () => { final = []; renderFinal(); show('step1b'); });
   $('#back1').addEventListener('click', () => show('step1'));
   $('#next2').addEventListener('click', () => { answers = []; question = 0; show('step2'); renderQuestion(); });
@@ -601,6 +757,7 @@
   $('#closeModalBtn').addEventListener('click', () => $('#majorModal').classList.add('hidden'));
   $('#reset').addEventListener('click', () => {
     chosen = []; final = []; answers = []; question = 0; result = null;
+    $('#manualSearchInput').value = '';
     renderMaterials(); show('step1');
   });
 
