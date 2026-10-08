@@ -3,365 +3,214 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 진로 PLAY - 맞춤 세부 월드컵 & 대학 탐험대</title>
+  <title>선화 진로 매칭 - 관심사로 찾는 맞춤 학과 & 대학</title>
   <style>
     :root {
-      --primary: #6366f1;
+      --primary: #4f46e5;
       --primary-light: #e0e7ff;
       --secondary: #ec4899;
       --secondary-light: #fce7f3;
       --bg: #f8fafc;
       --text: #0f172a;
       --muted: #64748b;
-      --border: #cbd5e1;
+      --border: #e2e8f0;
     }
     * { box-sizing: border-box; }
     body { margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; color: var(--text); background: var(--bg); }
-    .wrap { max-width: 960px; margin: auto; padding: 24px 16px; }
+    .wrap { max-width: 900px; margin: auto; padding: 24px 16px; }
 
     header {
       background: linear-gradient(135deg, #4f46e5 0%, #db2777 100%);
       color: white;
-      padding: 36px 28px;
-      border-radius: 28px;
+      padding: 32px 24px;
+      border-radius: 24px;
+      text-align: center;
       margin-bottom: 24px;
-      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.25);
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
     }
-    .school-badge { display: inline-block; background: rgba(255,255,255,0.22); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 12px; backdrop-filter: blur(4px); }
-    h1 { margin: 0 0 8px 0; font-size: clamp(24px, 5vw, 36px); font-weight: 800; letter-spacing: -0.5px; }
+    .badge { display: inline-block; background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 99px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+    h1 { margin: 0 0 8px; font-size: clamp(24px, 4.5vw, 32px); font-weight: 800; }
     header p { margin: 0; font-size: 15px; opacity: 0.95; }
 
-    .progress-box { margin-top: 24px; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px; }
-    .progress { height: 10px; background: rgba(255,255,255,0.3); border-radius: 16px; overflow: hidden; }
-    .progress > div { height: 100%; background: #ffffff; border-radius: 16px; transition: width 0.4s ease; }
-    .progress-text { font-size: 13px; margin-top: 8px; font-weight: 600; display: flex; justify-content: space-between; }
-
-    .panel {
+    .card {
       background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 24px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    
-    h2 { font-size: 20px; margin-top: 0; color: #1e293b; font-weight: 700; }
-    .muted { color: var(--muted); font-size: 14px; line-height: 1.6; }
-
-    .tip-box {
-      background: var(--primary-light);
-      border-left: 4px solid var(--primary);
-      padding: 14px 18px;
-      border-radius: 0 14px 14px 0;
-      font-size: 14px;
-      color: #312e81;
-      margin: 16px 0;
-      font-weight: 600;
-    }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
-    .tile {
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      background: white;
-      padding: 16px 10px;
-      min-height: 90px;
-      font-size: 14.5px;
-      cursor: pointer;
-      color: var(--text);
-      transition: all 0.2s ease;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .tile:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99, 102, 241, 0.1); }
-    .tile strong { display: block; margin-top: 8px; font-size: 13.5px; font-weight: 600; }
-    .tile span { font-size: 28px; }
-    .tile.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 2px var(--primary) inset; }
-
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
-    button { font: inherit; cursor: pointer; }
-    .primary {
-      border: 0; border-radius: 14px; background: var(--primary); color: white;
-      font-weight: 700; padding: 14px 28px; font-size: 15px;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
-    }
-    .primary:hover { background: #4f46e5; }
-    .primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-    
-    .secondary {
-      border: 1px solid #cbd5e1; border-radius: 14px; background: white; color: #475569;
-      font-weight: 600; padding: 13px 22px; font-size: 14px;
-      transition: background 0.2s;
-    }
-    .secondary:hover { background: #f1f5f9; }
-
-    .hidden { display: none !important; }
-
-    /* 밸런스 월드컵 UI */
-    .duel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
-    .duel-card {
-      border: 2px solid #e2e8f0;
+      border: 1px solid var(--border);
       border-radius: 20px;
-      background: white;
-      padding: 24px 16px;
-      min-height: 170px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      transition: all 0.25s ease;
-    }
-    .duel-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 24px rgba(99, 102, 241, 0.15); }
-    .duel-card .icon { font-size: 42px; margin-bottom: 12px; }
-    .duel-card .title { font-size: 16.5px; font-weight: 800; color: #1e293b; line-height: 1.4; }
-    .duel-card .tag { font-size: 12px; color: var(--primary); font-weight: 700; margin-top: 6px; }
-
-    .persona-card {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-      color: white;
-      border-radius: 24px;
-      padding: 32px 24px;
-      text-align: center;
-      box-shadow: 0 15px 30px rgba(30, 27, 75, 0.2);
+      padding: 24px;
       margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
     }
-    .persona-badge { display: inline-block; background: #ec4899; color: white; font-size: 13px; font-weight: 800; padding: 5px 14px; border-radius: 99px; margin-bottom: 12px; }
-    .persona-title { font-size: clamp(22px, 4vw, 32px); font-weight: 800; margin: 0 0 10px; color: #fff; }
-    .persona-desc { color: #cbd5e1; font-size: 15px; max-width: 650px; margin: auto; line-height: 1.6; }
+    h2 { font-size: 19px; margin-top: 0; margin-bottom: 6px; color: #1e293b; font-weight: 700; }
+    .muted { color: var(--muted); font-size: 13.5px; line-height: 1.5; margin-top: 0; }
 
-    /* 검색 바 */
-    .search-box { display: flex; gap: 8px; margin-top: 16px; margin-bottom: 8px; }
-    .search-box input {
-      flex: 1; padding: 14px 18px; border: 1.5px solid #cbd5e1; border-radius: 14px;
-      font: inherit; font-size: 14.5px; outline: none; transition: border 0.2s;
+    /* 관심사 태그 칩 그리드 */
+    .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 99px;
+      background: white;
+      padding: 9px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
     }
-    .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
-    .search-box button { background: #1e293b; color: white; border: none; padding: 0 22px; border-radius: 14px; font-weight: 700; font-size: 14.5px; }
-    .search-box button:hover { background: #0f172a; }
+    .chip:hover { border-color: var(--primary); background: #f8fafc; transform: translateY(-1px); }
+    .chip.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
 
-    /* 학과 & 대학교 카드 그리드 */
-    .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 18px; }
+    /* 검색창 */
+    .search-row { display: flex; gap: 8px; margin-top: 18px; }
+    .search-row input {
+      flex: 1; padding: 13px 18px; border: 1.5px solid #cbd5e1; border-radius: 14px;
+      font: inherit; font-size: 14px; outline: none; transition: border 0.2s;
+    }
+    .search-row input:focus { border-color: var(--primary); }
+    .search-row button {
+      background: #1e293b; color: white; border: none; padding: 0 20px;
+      border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer;
+    }
+
+    /* 결과 학과 카드 그리드 */
+    .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
     .major-card {
-      border: 1.5px solid #e2e8f0;
-      border-radius: 18px;
-      padding: 22px;
-      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      background: white;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
-    .major-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(99,102,241,0.12); }
-    .major-card h4 { margin: 0 0 8px 0; font-size: 18px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; }
-    .major-card .badge { background: #e0e7ff; color: #3730a3; font-size: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 700; }
+    .major-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.12); }
+    .major-card h4 { margin: 0 0 6px; font-size: 17px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; }
+    .major-card .badge { background: var(--primary-light); color: var(--primary); font-size: 11.5px; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+    .major-card .desc { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; line-height: 1.4; }
+    .major-card .btn-link { margin-top: 14px; font-size: 12.5px; color: var(--primary); font-weight: 700; }
 
-    /* 커리어넷 학과 상세 모달 */
+    /* 상세 모달 */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
-    .modal-content { background: white; border-radius: 24px; max-width: 740px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: fadeIn 0.2s ease; }
-    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 18px; }
-    .modal-header h3 { margin: 0; font-size: 24px; color: #1e293b; font-weight: 800; }
-    .modal-section { margin-bottom: 22px; }
-    .modal-section h4 { margin: 0 0 8px; font-size: 16px; color: #4338ca; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .modal-content { background: white; border-radius: 24px; max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 26px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; }
+    .modal-header h3 { margin: 4px 0 0; font-size: 22px; color: #1e293b; font-weight: 800; }
+    .modal-section { margin-bottom: 20px; }
+    .modal-section h4 { margin: 0 0 8px; font-size: 15px; color: var(--primary); font-weight: 700; }
     
-    .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .pill-tag { background: #f1f5f9; color: #334155; padding: 4px 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; }
-    .pill-tag.job { background: #e0e7ff; color: #3730a3; }
-    .pill-tag.qual { background: #fce7f3; color: #9d174d; }
-
-    .peer-stat-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 12px; padding: 12px; margin-top: 8px; }
-    .peer-stat-card { font-size: 13px; color: #92400e; }
-    .peer-stat-card strong { display: block; font-size: 14.5px; color: #b45309; margin-top: 2px; }
-
-    .subject-pill-box { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 14px; border-radius: 14px; font-size: 13.5px; border: 1px solid #e2e8f0; }
-    .indicator-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-    .indicator-card { background: #f1f5f9; padding: 14px; border-radius: 12px; text-align: center; }
-    .indicator-card strong { display: block; font-size: 19px; color: #db2777; margin-top: 4px; }
-
-    /* 대학교 지역 필터 탭 */
-    .univ-filter-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-    .univ-tab-btn { border: 1px solid #cbd5e1; background: white; border-radius: 8px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.15s; }
-    .univ-tab-btn.active { background: #4338ca; color: white; border-color: #4338ca; }
-
-    .univ-tag-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 220px; overflow-y: auto; }
-    .univ-tag { background: #f0fdf4; color: #166534; padding: 9px 12px; border-radius: 10px; font-size: 12.5px; text-decoration: none; font-weight: 700; border: 1px solid #bbf7d0; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
+    .pill-box { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill { background: #f1f5f9; color: #334155; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+    .subject-list { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.6; }
+    
+    .univ-filter-tabs { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+    .univ-tab-btn { border: 1px solid #cbd5e1; background: white; border-radius: 8px; padding: 5px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .univ-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .univ-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 200px; overflow-y: auto; }
+    .univ-tag { background: #f0fdf4; color: #166534; padding: 7px 10px; border-radius: 8px; font-size: 12px; text-decoration: none; font-weight: 700; border: 1px solid #bbf7d0; display: flex; justify-content: space-between; }
     .univ-tag:hover { background: #dcfce7; }
-    .univ-tag small { color: #15803d; font-weight: normal; }
 
-    footer { text-align: center; color: var(--muted); font-size: 13px; margin: 40px 0 20px; line-height: 1.6; }
-    @media(max-width: 480px) {
-      .wrap { padding: 12px; }
-      .panel { padding: 18px; }
-      .duel { grid-template-columns: 1fr; }
-      .indicator-box { grid-template-columns: 1fr; }
-      .peer-stat-box { grid-template-columns: 1fr; }
-    }
+    .hidden { display: none !important; }
+    footer { text-align: center; color: var(--muted); font-size: 12.5px; margin: 30px 0; line-height: 1.5; }
   </style>
 </head>
 <body>
 <main class="wrap">
   <header>
-    <div class="school-badge">🌸 동국대학교 사범대학부속 선화여자고등학교</div>
-    <h1>선화 진로 PLAY : 맞춤 세부 월드컵 & 대학 탐험대</h1>
-    <p>나의 관심 영역을 정밀하게 파고드는 맞춤형 세부 월드컵과 전국 대학교 탐색!</p>
-    <div class="progress-box">
-      <div class="progress"><div id="progress" style="width: 15%"></div></div>
-      <div class="progress-text">
-        <span id="stepIndicator">STEP 1 / 3 : 호기심 탐험 재료 5개 고르기</span>
-        <span id="stepPercent">15%</span>
-      </div>
-    </div>
+    <div class="badge">🌸 동국대학교 사범대학부속 선화여자고등학교</div>
+    <h1>선화 진로 매칭 : 관심사별 맞춤 학과 탐험</h1>
+    <p>내가 좋아하는 관심사를 콕콕 터치하면, 딱 맞는 대학교 학과가 실시간으로 펼쳐집니다!</p>
   </header>
 
-  <!-- STEP 1 -->
-  <section id="step1" class="panel">
-    <h2>① 나의 호기심 레시피 : 꽂히는 활동 5개 고르기</h2>
-    <p class="muted">성적이나 주변 시선은 잠시 잊고, <b>"내가 시간 가는 줄 모르고 신나게 할 활동"</b> 5개를 골라주세요.</p>
-    <div class="tip-box">💡 <b>진로 팁:</b> 1단계에서 고른 재료에 따라 2단계 세부 월드컵 대결 라인업이 완전히 달라집니다! (<span id="count">0</span>/5개 선택됨)</div>
-    <div id="materials" class="grid"></div>
-    <div class="actions">
-      <button class="primary" id="next1" disabled>5개 선택 완료! 최애 3개로 압축하기 →</button>
+  <!-- 관심사 선택 패널 -->
+  <section class="card">
+    <h2>1. 나의 관심사 선택 (1~3개 선택)</h2>
+    <p class="muted">평소 마음이 끌리는 키워드를 눌러보세요. 선택한 관심사를 바탕으로 커리어넷 학과를 실시간 추천합니다.</p>
+    
+    <div class="chip-grid" id="interestGrid">
+      <div class="chip" data-kw="컴퓨터">💻 코딩 & 프로그래밍</div>
+      <div class="chip" data-kw="인공지능">🤖 인공지능 & 빅데이터</div>
+      <div class="chip" data-kw="간호">🩺 병원 & 환자 케어</div>
+      <div class="chip" data-kw="생명공학">🧬 유전자 & 신약개발</div>
+      <div class="chip" data-kw="기계">⚙️ 로봇 & 모빌리티</div>
+      <div class="chip" data-kw="디자인">🎨 그림 & 일러스트·웹툰</div>
+      <div class="chip" data-kw="미디어">🎬 영상 편집 & 방송제작</div>
+      <div class="chip" data-kw="경영">💡 마케팅 & 창업기획</div>
+      <div class="chip" data-kw="심리">🧠 마음 상담 & 심리치료</div>
+      <div class="chip" data-kw="교육">📚 친구 가르치기 & 멘토링</div>
+      <div class="chip" data-kw="건축">🏗️ 예쁜 건물 & 실내 인테리어</div>
+      <div class="chip" data-kw="경제">📈 주식·투자 & 금융 흐름</div>
+      <div class="chip" data-kw="법학">⚖️ 공정한 판결 & 인권 지키기</div>
+      <div class="chip" data-kw="환경">🌿 숲과 동물 & 생태계 보호</div>
+      <div class="chip" data-kw="문학">✍️ 웹소설 & 글쓰기 창작</div>
+      <div class="chip" data-kw="체육">🏃 운동 & 스포츠 과학</div>
+    </div>
+
+    <!-- 직접 검색창 -->
+    <div class="search-row">
+      <input type="text" id="customInput" placeholder="🔍 목록에 없는 관심사나 학과명을 직접 검색해보세요 (예: 항공, 패션, 경찰, 웹툰)">
+      <button type="button" id="customBtn">검색</button>
     </div>
   </section>
 
-  <!-- STEP 1-B -->
-  <section id="step1b" class="panel hidden">
-    <h2>①-2 인생 핵심 재료 3개 좁히기 🎯</h2>
-    <p class="muted">앞서 고른 다섯 가지 중, <b>내 심장을 가장 뛰게 만드는 '최애' 재료 딱 3개</b>만 남겨보세요.</p>
-    <div id="finalMaterials" class="grid"></div>
-    <div class="actions">
-      <button class="secondary" id="back1">← 다시 고르기</button>
-      <button class="primary" id="next2" disabled>내 관심사 맞춤 세부 월드컵 생성하기! →</button>
-    </div>
+  <!-- 실시간 추천 학과 결과 패널 -->
+  <section class="card">
+    <h2>2. 맞춤 추천 학과 목록</h2>
+    <p class="muted" id="resultStatus">관심사를 선택하면 커리어넷(한국직업능력연구원) 데이터가 여기에 실시간으로 나타납니다.</p>
+    
+    <div id="majorGrid" class="major-grid"></div>
   </section>
 
-  <!-- STEP 2 (동적 생성 맞춤 세부 월드컵) -->
-  <section id="step2" class="panel hidden">
-    <h2>② 관심 영역 맞춤 세부 월드컵 ⚖️</h2>
-    <p class="muted" id="worldcupSubtitle">1단계 선택을 기반으로 추출된 심층 직업·학과 간의 1:1 대결입니다. 더 끌리는 쪽을 골라보세요!</p>
-    <p id="questionNumber" style="font-weight: 700; color: var(--primary); margin-top: 8px; font-size: 15px;"></p>
-    <div id="duel" class="duel"></div>
-    <div class="actions" style="margin-top: 24px;">
-      <button class="secondary" id="back2">← 이전 질문</button>
-    </div>
-  </section>
-
-  <!-- STEP 3 (결과: 부캐 분석 + 대학 및 학과 탐색 전용) -->
-  <section id="step3" class="hidden">
-    <div class="persona-card">
-      <div class="persona-badge" id="personaType">탐험가 타입</div>
-      <h2 class="persona-title" id="personaTitle"></h2>
-      <p class="persona-desc" id="personaDesc"></p>
-    </div>
-
-    <!-- 커리어넷 학과 및 개설대학 정보사전 -->
-    <div class="panel">
-      <h2>🎓 커리어넷 맞춤 학과 & 전국 개설 대학교 탐색기</h2>
-      <p class="muted">한국직업능력연구원 커리어넷 Open API를 통해 실시간으로 수신한 전공 정보입니다.<br>각 학과 카드를 클릭하면 <b>2022 개정 고교 추천과목</b>, <b>졸업 후 취업률/평균임금</b>, <b>전국 개설 대학교(홈페이지 바로가기)</b>를 바로 확인할 수 있습니다.</p>
-      
-      <!-- 관심 학과 직접 검색창 -->
-      <div class="search-box">
-        <input type="text" id="manualSearchInput" placeholder="🔍 다른 관심 학과를 직접 검색해보세요 (예: 간호, 경찰, 웹툰, 미디어)">
-        <button type="button" id="manualSearchBtn">검색</button>
-      </div>
-
-      <div id="majorListContainer" class="major-grid"></div>
-
-      <!-- 공유 및 다시하기 액션 -->
-      <div class="actions" style="justify-content: center; gap: 12px; margin-top: 32px;">
-        <button class="primary" id="shareResultBtn" style="background: #059669; padding: 14px 24px; font-size: 15px;">📋 내 진로 결과 링크 복사</button>
-        <button class="secondary" id="reset" style="padding: 14px 24px; font-size: 15px;">처음부터 다시 테스트하기 🔄</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 커리어넷 MAJOR_VIEW 상세 팝업 모달 -->
+  <!-- 커리어넷 학과 상세 모달 -->
   <div id="majorModal" class="modal-backdrop hidden">
     <div class="modal-content">
       <div class="modal-header">
         <div>
           <span id="modalLClass" style="background:#e0e7ff; color:#3730a3; font-size:12px; padding:3px 8px; border-radius:6px; font-weight:700;"></span>
-          <h3 id="modalMajorTitle" style="margin-top:6px;">학과명</h3>
+          <h3 id="modalMajorTitle">학과명</h3>
         </div>
         <button id="closeModalBtn" style="border:none; background:none; font-size:24px; cursor:pointer; color:#64748b;">✕</button>
       </div>
 
-      <!-- 진출 직업 및 취득 자격증 태그 -->
-      <div class="modal-section" id="modalJobSec">
-        <h4>🎯 졸업 후 진출 직업 & 관련 자격증</h4>
-        <div style="font-size:12.5px; font-weight:700; color:#475569; margin-top:6px;">주요 직업:</div>
-        <div id="modalJobList" class="tag-container"></div>
-        <div style="font-size:12.5px; font-weight:700; color:#475569; margin-top:8px;">관련 자격:</div>
-        <div id="modalQualList" class="tag-container"></div>
-      </div>
-
-      <!-- 또래 중학생 통계 -->
-      <div class="modal-section" id="modalPeerSec">
-        <h4>👥 또래 중학생들이 주목한 특성 (커리어넷 빅데이터)</h4>
-        <div class="peer-stat-box">
-          <div class="peer-stat-card">
-            <span>중학생 인기 적성 유형:</span>
-            <strong id="modalPeerAptd">-</strong>
-          </div>
-          <div class="peer-stat-card">
-            <span>중학생 선호 직업 가치:</span>
-            <strong id="modalPeerVals">-</strong>
-          </div>
-        </div>
-      </div>
-
-      <!-- 학과 개요 -->
       <div class="modal-section">
         <h4>📖 학과 개요</h4>
-        <p id="modalSummary" style="font-size:14px; line-height:1.6; color:#475569; margin:0;"></p>
+        <p id="modalSummary" style="font-size:13.5px; line-height:1.6; color:#475569; margin:0;"></p>
       </div>
 
-      <!-- 2022 개정 교육과정 고교 선택과목 -->
+      <div class="modal-section">
+        <h4>🎯 졸업 후 갖게 되는 주요 직업</h4>
+        <div id="modalJobList" class="pill-box"></div>
+      </div>
+
       <div class="modal-section">
         <h4>🏫 고등학교 추천 선택과목 (2022 개정 교육과정)</h4>
-        <div id="modalSubject2022" class="subject-pill-box"></div>
+        <div id="modalSubject" class="subject-list"></div>
       </div>
 
-      <!-- 취업률 및 임금 지표 -->
       <div class="modal-section">
-        <h4>📊 졸업 후 취업 지표</h4>
-        <div class="indicator-box">
-          <div class="indicator-card">
-            <span style="font-size:12px; color:#64748b;">평균 취업률</span>
-            <strong id="modalEmployment">-</strong>
-          </div>
-          <div class="indicator-card">
-            <span style="font-size:12px; color:#64748b;">졸업 후 첫 직장 월평균 임금</span>
-            <strong id="modalSalary">-</strong>
-          </div>
-        </div>
-      </div>
-
-      <!-- 개설 대학교 및 지역 필터 -->
-      <div class="modal-section">
-        <h4>🏛️ 이 학과가 개설된 전국 대학교 (홈페이지 바로가기)</h4>
+        <h4>🏛️ 개설 대학교 (홈페이지 바로가기)</h4>
         <div class="univ-filter-tabs">
-          <button type="button" class="univ-tab-btn active" data-region="ALL">전체보기</button>
-          <button type="button" class="univ-tab-btn" data-region="DG_GB">대구·경북권</button>
-          <button type="button" class="univ-tab-btn" data-region="METRO">수도권(서울·경기·인천)</button>
-          <button type="button" class="univ-tab-btn" data-region="OTHER">기타 지역</button>
+          <button type="button" class="univ-tab-btn active" data-region="ALL">전체</button>
+          <button type="button" class="univ-tab-btn" data-region="DG_GB">대구·경북</button>
+          <button type="button" class="univ-tab-btn" data-region="METRO">수도권</button>
+          <button type="button" class="univ-tab-btn" data-region="OTHER">기타</button>
         </div>
-        <div id="modalUnivList" class="univ-tag-list"></div>
+        <div id="modalUnivList" class="univ-list"></div>
       </div>
     </div>
   </div>
 
   <footer>
-    <b>동국대학교 사범대학부속 선화여자고등학교</b> · 주니어 진로 탐색 PLAY<br>
-    ※ 본 서비스는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과 및 대학 정보를 실시간으로 연동하여 제공합니다.
+    <b>동국대학교 사범대학부속 선화여자고등학교</b><br>
+    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과 및 대학 개설 정보를 실시간으로 연동합니다.
   </footer>
 </main>
 
@@ -370,396 +219,160 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // 커리어넷 정식 API 키 연동
+  // 커리어넷 정식 API 키 설정
   const CAREERNET_API = {
     apiKey: '5263b920846c6ea68c4ecb15049a998a',
     baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
     corsProxy: 'https://api.allorigins.win/raw?url='
   };
 
-  // 1단계 탐험 재료 (16대 세부 카테고리)
-  const materialRows = [
-    '💻|소프트웨어·웹 개발|SW', '🔐|정보보안·화이트해커|SW',
-    '🤖|인공지능·머신러닝|AI', '📊|빅데이터 통계분석|AI',
-    '⚙️|로봇공학·기계설계|공학', '🚗|모빌리티·드론항공|공학',
-    '🏗️|건축설계·도시재생|건축', '🏡|실내인테리어 연출|건축',
-    '🧬|유전자·바이오신약|바이오', '🧪|신소재·화학실험|자연과학',
-    '🌌|천문우주·물리법칙|자연과학', '🌿|생태보존·환경연구|자연과학',
-    '🩺|병원치료·임상간호|보건', '💊|의약품조제·약리연구|바이오',
-    '🧠|심리상담·마음치료|심리', '🤝|사회복지·공익나눔|사회복지',
-    '📚|학교교사·수업기획|교육', '🎒|청소년상담·진로코칭|교육',
-    '⚖️|법과정의·인권변호|법행정', '🏛️|국가정책·공공행정|법행정',
-    '💡|스타트업 창업·경영|경영', '📣|SNS마케팅·광고기획|경영',
-    '💰|주식투자·자산운용|금융', '📈|국제무역·경제분석|금융',
-    '🎬|영상연출·유튜브제작|미디어', '🎤|방송진행·기사취재|미디어',
-    '✍️|스토리텔링·웹소설|인문', '📖|역사철학·인류문화|인문',
-    '🌐|외국어통역·국제교류|인문', '🎨|일러스트·캐릭터디자인|디자인',
-    '👗|패션디자인·스타일링|디자인', '🎵|작곡프로듀싱·음향|예술체육',
-    '🏃|스포츠의학·전문트레이닝|예술체육', '🏆|e스포츠 전략·운영|SW'
-  ];
-
-  const materials = materialRows.map(v => {
-    const [emoji, label, cat] = v.split('|');
-    return { emoji, label, cat };
-  });
-
-  // 대분류 클러스터 정의 (1단계 결과 기반으로 그룹핑)
-  const clusterMap = {
-    'SW': 'TECH', 'AI': 'TECH', '공학': 'TECH', '건축': 'TECH',
-    '바이오': 'BIO_NATURAL', '자연과학': 'BIO_NATURAL', '보건': 'BIO_NATURAL',
-    '경영': 'SOCIETY_BIZ', '금융': 'SOCIETY_BIZ', '법행정': 'SOCIETY_BIZ', '사회복지': 'SOCIETY_BIZ', '교육': 'SOCIETY_BIZ',
-    '미디어': 'HUMAN_ART', '디자인': 'HUMAN_ART', '인문': 'HUMAN_ART', '심리': 'HUMAN_ART', '예술체육': 'HUMAN_ART'
-  };
-
-  // 영역별 세부 학과/직업 1:1 대결 풀 (방대한 세부 월드컵 문제 풀)
-  const detailWorldcupPools = {
-    // 1. 첨단 IT & 공학 세부 대결 풀
-    'TECH': [
-      { textA: '웹/앱 프론트엔드·풀스택 개발자', catA: 'SW', iconA: '💻', textB: '국가 기반망을 지키는 화이트해커·정보보안관', catB: 'SW', iconB: '🔐' },
-      { textA: '인간처럼 대화하고 추론하는 생성형 AI 연구원', catA: 'AI', iconA: '🤖', textB: '방대한 소비 패턴을 분석하는 빅데이터 사이언티스트', catB: 'AI', iconB: '📊' },
-      { textA: '재난 현장을 누비는 스마트 휴머노이드 로봇 설계', catA: '공학', iconA: '⚙️', textB: '하늘을 나는 도심 항공교통(UAM) 기체 엔지니어', catB: '공학', iconB: '🚗' },
-      { textA: '환경 친화적인 미래형 스마트 빌딩 건축가', catA: '건축', iconA: '🏗️', textB: '사용자의 동선과 심리를 극대화한 공간 인테리어 디렉터', catB: '건축', iconB: '🏡' },
-      { textA: '자율주행 자동차의 핵심 주행 알고리즘 프로그래밍', catA: 'SW', iconA: '🚗', textB: '모빌리티를 구동시키는 고효율 배터리·모터 하드웨어 개발', catB: '공학', iconB: '⚙️' },
-      { textA: '복잡한 금융 시스템을 지키는 블록체인 보안 전문가', catA: 'SW', iconA: '🛡️', textB: '인공지능의 윤리와 편향성을 검증하는 AI 윤리 컨설턴트', catB: 'AI', iconB: '🧠' },
-      { textA: '도시 전체의 전력망을 통제하는 스마트시티 플래너', catA: '건축', iconA: '🏙️', textB: '전 세계 게이머를 매료시키는 3D 게임 물리엔진 개발자', catB: 'SW', iconB: '🎮' }
-    ],
-    // 2. 바이오, 의약, 자연과학 세부 대결 풀
-    'BIO_NATURAL': [
-      { textA: '난치병 치료의 열쇠를 쥐는 유전자 가위 신약 연구원', catA: '바이오', iconA: '🧬', textB: '화자에게 꼭 맞는 최적의 항암제를 조제하는 임상 약사', catB: '바이오', iconB: '💊' },
-      { textA: '중환자실에서 위급 환자의 골든타임을 지키는 전문 간호사', catA: '보건', iconA: '🩺', textB: '질병의 원인을 세포 단위에서 추적하는 임상병리 전문가', catB: '보건', iconB: '🔬' },
-      { textA: '우주의 탄생과 블랙홀의 비밀을 규명하는 천체물리학자', catA: '자연과학', iconA: '🌌', textB: '지구온난화를 늦추는 친환경 탄소포집 신소재 화학자', catB: '자연과학', iconB: '🧪' },
-      { textA: '멸종위기 야생동물과 생태계를 복원하는 보존생물학자', catA: '자연과학', iconA: '🌿', textB: '미생물을 이용해 친환경 바이오 연료를 생산하는 생명공학자', catB: '바이오', iconB: '🧫' },
-      { textA: '재활 환자의 신체 기능을 회복시키는 전문 물리치료사', catA: '보건', iconA: '💪', textB: '신약 후보 물질의 체내 독성을 컴퓨터로 시뮬레이션하는 과학자', catB: '바이오', iconB: '💻' },
-      { textA: '우주 탐사선의 궤도를 정밀 계산하는 수리물리 연구원', catA: '자연과학', iconA: '🚀', textB: '수술실에서 의사와 완벽한 호흡을 맞추는 전담 수술간호사', catB: '보건', iconB: '🏥' }
-    ],
-    // 3. 비즈니스, 법, 사회, 교육 세부 대결 풀
-    'SOCIETY_BIZ': [
-      { textA: '시장의 판도를 바꿀 혁신 유니콘 스타트업 창업 CEO', catA: '경영', iconA: '💡', textB: '전 세계 증시와 원자재 흐름을 꿰뚫는 글로벌 펀드매니저', catB: '금융', iconB: '📈' },
-      { textA: 'Z세대의 감성을 저격하는 팝업스토어 마케팅 디렉터', catA: '경영', iconA: '📣', textB: '기업의 위기 상황에서 재무 리스크를 방어하는 회계사', catB: '금융', iconB: '💰' },
-      { textA: '사회적 약자의 권익을 변호하는 공익 인권 변호사', catA: '법행정', iconA: '⚖️', textB: '국민 모두가 체감하는 복지 정책을 입안하는 5급 공무원', catB: '법행정', iconB: '🏛️' },
-      { textA: '아이들의 호기심을 폭발시키는 미래형 스마트수업 교사', catA: '교육', iconA: '📚', textB: '방황하는 위기 청소년의 멘토가 되어주는 청소년상담사', catB: '교육', iconB: '🎒' },
-      { textA: '복지 사각지대 이웃을 직접 발굴하고 돕는 사회복지 전담관', catA: '사회복지', iconA: '🤝', textB: '공정거래와 시장 독점을 감시하는 공익 조사관', catB: '법행정', iconB: '🔍' },
-      { textA: 'ESG 친환경 가치를 실현하는 사회적 기업 총괄 매니저', catA: '경영', iconA: '🌱', textB: '글로벌 환율 전쟁 속에서 국가 외환보유고를 운용하는 경제학자', catB: '금융', iconB: '🌐' }
-    ],
-    // 4. 인문, 미디어, 예술, 디자인 세부 대결 풀
-    'HUMAN_ART': [
-      { textA: '천만 관객을 울리고 웃기는 블록버스터 영화/다큐 감독', catA: '미디어', iconA: '🎬', textB: '전 세계 독자들을 밤새우게 만드는 밀리언셀러 웹소설 작가', catB: '인문', iconB: '✍️' },
-      { textA: '글로벌 게임의 매력적인 메인 캐릭터 원화 일러스트레이터', catA: '디자인', iconA: '🎨', textB: '파리 패션위크 런웨이를 빛내는 오트쿠튀르 패션 디자이너', catB: '디자인', iconB: '👗' },
-      { textA: '마음의 트라우마를 심층 분석해 회복을 돕는 임상심리전문가', catA: '심리', iconA: '🧠', textB: '세계 정상회담에서 실시간 통역을 조율하는 국제회의 통역사', catB: '인문', iconB: '🌐' },
-      { textA: '빌보드 차트를 석권하는 K-POP 메인 프로듀서·작곡가', catA: '예술체육', iconA: '🎵', textB: '국가대표 선수의 기량을 극한으로 끌어올리는 스포츠 사이언티스트', catB: '예술체육', iconB: '🏃' },
-      { textA: '스마트폰 화면 속 인터랙션을 설계하는 글로벌 빅테크 UI/UX 디자이너', catA: '디자인', iconA: '📱', textB: '특종 보도로 세상을 뒤흔드는 탐사보도 전문 방송기자', catB: '미디어', iconB: '🎤' },
-      { textA: '잊혀진 역사의 유적을 발굴해 비밀을 밝히는 고고학 연구원', catA: '인문', iconA: '🏛️', textB: '범죄자의 무의식적 심리를 파헤치는 프로파일러', catB: '심리', iconB: '🕵️' }
-    ]
-  };
-
-  const personas = {
-    'SW': { title: '세상을 코딩하는 디지털 빌더 💻', badge: '테크 & 소프트웨어', desc: '논리적인 알고리즘과 소프트웨어로 세상의 불편함을 해결하는 혁신가형 부캐입니다!' },
-    'AI': { title: '미래를 예측하는 데이터 아키텍트 🤖', badge: 'AI & 빅데이터', desc: '방대한 데이터 속에서 패턴을 찾아내고 인공지능으로 미래를 시뮬레이션하는 브레인입니다!' },
-    '공학': { title: '물리적 한계를 뛰어넘는 메카닉 마스터 ⚙️', badge: '로봇 & 모빌리티 공학', desc: '정밀한 기계 구조와 하드웨어를 다루며 상상을 현실의 장치로 구현하는 엔지니어입니다!' },
-    '건축': { title: '공간에 생명을 불어넣는 공간 디렉터 🏗️', badge: '건축 & 공간디자인', desc: '사람들이 머무는 공간과 도시의 구조를 조화롭고 아름답게 설계하는 입체적 설계자입니다!' },
-    '바이오': { title: '생명의 암호를 해독하는 바이오 탐구자 🧬', badge: '생명과학 & 신약개발', desc: '세포와 유전자, 질병 치료의 메커니즘을 파고들며 인류의 건강한 미래를 여는 과학자입니다!' },
-    '자연과학': { title: '우주의 법칙을 밝히는 순수 탐구자 🌌', badge: '물리·화학·우주과학', desc: '눈에 보이지 않는 물질의 근원과 자연계의 절대 법칙을 논리적으로 파헤치는 연구원입니다!' },
-    '보건': { title: '따스한 손길로 생명을 살리는 힐러 🩺', badge: '간호 & 임상보건', desc: '전문적인 의료 지식과 깊은 공감력으로 아픈 사람들을 돌보고 사회의 건강을 지키는 수호자입니다!' },
-    '심리': { title: '마음의 상처를 치유하는 마인드 리더 🧠', badge: '심리학 & 인지과학', desc: '인간의 내면과 행동 양식을 깊이 관찰하고, 대화와 과학적 분석으로 마음을 보듬는 조력자입니다!' },
-    '사회복지': { title: '세상의 그늘을 밝히는 소셜 체인저 🤝', badge: '사회복지 & 공익활동', desc: '불평등과 사회적 문제를 좌시하지 않고 공동체의 온기를 되살리는 따뜻한 연대 리더입니다!' },
-    '교육': { title: '잠재력을 깨우는 러닝 디자이너 📚', badge: '교육학 & 인재양성', desc: '배움의 가치를 알고 다른 사람의 성장을 가장 기뻐하며 최적의 학습 경험을 이끄는 멘토입니다!' },
-    '법행정': { title: '정의와 공공성을 바로 세우는 룰메이커 ⚖️', badge: '법학 & 공공정책', desc: '공정한 기준과 사회적 규범을 연구하며 공공의 이익과 시민의 권리를 수호하는 법·행정가입니다!' },
-    '경영': { title: '트렌드를 선도하는 비즈니스 전략가 💡', badge: '경영전략 & 브랜딩', desc: '시장의 니즈를 한발 앞서 읽고 조직과 프로젝트를 성공으로 이끄는 타고난 기획자입니다!' },
-    '금융': { title: '세계 자본의 흐름을 읽는 머니 애널리스트 📈', badge: '경제학 & 금융공학', desc: '수치와 경제 지표를 꿰뚫어 보며 자원의 효율적 배분과 최적의 투자 가치를 찾아내는 금융인입니다!' },
-    '미디어': { title: '대중을 매료시키는 비주얼 스토리텔러 🎬', badge: '미디어영상 & 저널리즘', desc: '영상, 텍스트, 음향을 융합하여 대중의 시선을 사로잡고 메시지를 울림 있게 전하는 크리에이터입니다!' },
-    '인문': { title: '시대를 관통하는 통찰가 ✍️', badge: '문학 & 언어·역사철학', desc: '언어와 역사, 인간에 대한 깊은 사유를 바탕으로 본질을 꿰뚫는 지혜를 제시하는 사상가입니다!' },
-    '디자인': { title: '시각적 감각으로 매혹하는 비주얼 아티스트 🎨', badge: '시각디자인 & 인터랙션', desc: '직관적인 형태와 감각적인 색채로 세상의 모든 인터페이스와 아이템을 세련되게 변모시킵니다!' },
-    '예술체육': { title: '신체와 감성의 한계를 넘는 퍼포머 🏆', badge: '공연예술 & 스포츠과학', desc: '탁월한 신체 역량과 풍부한 예술적 표현력으로 사람들에게 카타르시스를 선사하는 플레이어입니다!' },
-    'default': { title: '다채로운 잠재력의 융합 개척자 ✨', badge: '융합인재', desc: '여러 분야의 지식을 자유자재로 연결하여 새로운 가치를 창출하는 올라운더입니다!' }
-  };
-
-  const catSearchKeyword = {
-    'SW': '소프트웨어', 'AI': '인공지능', '공학': '기계공학', '건축': '건축',
-    '바이오': '생명공학', '자연과학': '화학', '보건': '간호', '심리': '심리',
-    '사회복지': '사회복지', '교육': '교육', '법행정': '행정', '경영': '경영',
-    '금융': '경제', '미디어': '미디어', '인문': '국어국문', '디자인': '시각디자인',
-    '예술체육': '체육'
-  };
-
-  let chosen = [];
-  let final = [];
-  let answers = [];
-  let question = 0;
-  let dynamicQuestions = []; // 1단계 선택 기반으로 즉석 생성되는 세부 월드컵 문제 리스트
-  let result = null;
+  let selectedKeywords = [];
   let currentUnivs = [];
 
-  function show(id) {
-    ['step1', 'step1b', 'step2', 'step3'].forEach(x => $('#' + x).classList.toggle('hidden', x !== id));
-    let pMap = { step1: 15, step1b: 35, step2: 65, step3: 100 };
-    let tMap = {
-      step1: 'STEP 1 / 3 : 호기심 탐험 재료 5개 고르기',
-      step1b: 'STEP 1-2 / 3 : 핵심 3개 압축',
-      step2: 'STEP 2 / 3 : 맞춤형 세부 직업·학과 월드컵',
-      step3: 'STEP 3 / 3 : 맞춤 학과 & 전국 대학 탐색'
-    };
-    $('#progress').style.width = pMap[id] + '%';
-    $('#stepIndicator').textContent = tMap[id];
-    $('#stepPercent').textContent = pMap[id] + '%';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function makeTile(m, selected, onClick) {
-    let b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'tile' + (selected ? ' selected' : '');
-    b.setAttribute('aria-pressed', String(selected));
-    b.innerHTML = `<span>${m.emoji}</span><strong>${m.label}</strong>`;
-    b.addEventListener('click', onClick);
-    return b;
-  }
-
-  function renderMaterials() {
-    let c = $('#materials');
-    c.replaceChildren();
-    materials.forEach((m, i) => {
-      c.append(makeTile(m, chosen.includes(i), () => {
-        if (chosen.includes(i)) {
-          chosen = chosen.filter(x => x !== i);
-        } else {
-          if (chosen.length >= 5) {
-            alert('탐험 카드는 딱 5개까지만 선택할 수 있어요!');
-            return;
-          }
-          chosen.push(i);
+  // 1. 관심사 칩 클릭 이벤트
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const kw = chip.dataset.kw;
+      if (selectedKeywords.includes(kw)) {
+        selectedKeywords = selectedKeywords.filter(k => k !== kw);
+        chip.classList.remove('selected');
+      } else {
+        if (selectedKeywords.length >= 3) {
+          alert('관심사는 최대 3개까지 선택할 수 있어요!');
+          return;
         }
-        renderMaterials();
-      }));
+        selectedKeywords.push(kw);
+        chip.classList.add('selected');
+      }
+
+      if (selectedKeywords.length > 0) {
+        // 가장 최근에 선택한 관심사 키워드로 실시간 학과 탐색
+        fetchMajors(selectedKeywords[selectedKeywords.length - 1]);
+      } else {
+        $('#majorGrid').replaceChildren();
+        $('#resultStatus').textContent = '관심사를 선택하면 커리어넷 추천 학과가 여기에 실시간으로 나타납니다.';
+      }
     });
-    $('#count').textContent = chosen.length;
-    $('#next1').disabled = chosen.length !== 5;
-  }
+  });
 
-  function renderFinal() {
-    let c = $('#finalMaterials');
-    c.replaceChildren();
-    chosen.forEach(i => {
-      c.append(makeTile(materials[i], final.includes(i), () => {
-        if (final.includes(i)) {
-          final = final.filter(x => x !== i);
-        } else {
-          if (final.length >= 3) {
-            alert('가장 가슴 뛰는 핵심 카드 3개만 남겨주세요!');
-            return;
-          }
-          final.push(i);
-        }
-        renderFinal();
-      }));
-    });
-    $('#next2').disabled = final.length !== 3;
-  }
-
-  // [핵심] 1단계 선택 기반 동적 세부 월드컵 매치업 빌더
-  function buildDynamicWorldcup() {
-    // 1단계에서 고른 3개 재료의 클러스터 파악
-    const selectedCats = final.map(i => materials[i].cat);
-    const clusterVotes = {};
-    selectedCats.forEach(c => {
-      const cluster = clusterMap[c] || 'TECH';
-      clusterVotes[cluster] = (clusterVotes[cluster] || 0) + 1;
-    });
-
-    // 가장 표가 많은 메인 클러스터와 서브 클러스터 결정
-    const sortedClusters = Object.keys(clusterVotes).sort((a,b) => clusterVotes[b] - clusterVotes[a]);
-    const primaryCluster = sortedClusters[0] || 'TECH';
-    const secondaryCluster = sortedClusters[1] || (primaryCluster === 'TECH' ? 'BIO_NATURAL' : 'TECH');
-
-    // 메인 클러스터에서 4~5문항, 서브 클러스터에서 2~3문항 결합하여 총 7~8개 핀포인트 세부 대결 구성
-    const primaryPool = [...(detailWorldcupPools[primaryCluster] || [])];
-    const secondaryPool = [...(detailWorldcupPools[secondaryCluster] || [])];
-
-    // 랜덤 셔플
-    primaryPool.sort(() => 0.5 - Math.random());
-    secondaryPool.sort(() => 0.5 - Math.random());
-
-    dynamicQuestions = [
-      ...primaryPool.slice(0, 5),
-      ...secondaryPool.slice(0, 3)
-    ];
-
-    // 클러스터 안내 멘트
-    const clusterNames = {
-      'TECH': 'IT·소프트웨어 & 공학',
-      'BIO_NATURAL': '의약·바이오 & 자연과학',
-      'SOCIETY_BIZ': '경영·금융 & 공공사회',
-      'HUMAN_ART': '인문·미디어 & 디자인예술'
-    };
-    $('#worldcupSubtitle').innerHTML = `회원님의 1단계 호기심은 <b>[${clusterNames[primaryCluster]}]</b> 영역에 집중되어 있습니다.<br>해당 분야의 유망 직업·학과 간 세부 선호도를 겨루는 맞춤형 월드컵을 진행합니다!`;
-
-    answers = [];
-    question = 0;
-  }
-
-  function renderQuestion() {
-    if (question >= dynamicQuestions.length) {
-      showResult();
+  // 2. 직접 검색 처리
+  function handleCustomSearch() {
+    const q = $('#customInput').value.trim();
+    if (!q) {
+      alert('검색할 관심사나 학과명을 입력해주세요!');
       return;
     }
-    $('#questionNumber').textContent = `[맞춤 세부 월드컵 매치 ${question + 1} / ${dynamicQuestions.length}]`;
-    let q = dynamicQuestions[question], c = $('#duel');
-    c.replaceChildren();
-
-    const options = [
-      { text: q.textA, cat: q.catA, icon: q.iconA },
-      { text: q.textB, cat: q.catB, icon: q.iconB }
-    ];
-
-    options.forEach(opt => {
-      let card = document.createElement('div');
-      card.className = 'duel-card';
-      card.innerHTML = `
-        <div class="icon">${opt.icon}</div>
-        <div class="title">${opt.text}</div>
-        <div class="tag">#${opt.cat}</div>
-      `;
-      card.addEventListener('click', () => {
-        answers[question] = opt.cat;
-        question++;
-        renderQuestion();
-      });
-      c.append(card);
-    });
-
-    $('#back2').disabled = question === 0;
+    // 기존 태그 선택 해제
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    selectedKeywords = [];
+    fetchMajors(q);
   }
+  $('#customBtn').addEventListener('click', handleCustomSearch);
+  $('#customInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleCustomSearch();
+  });
 
-  async function fetchCareerNetData(targetUrl) {
+  // 안전한 커리어넷 API Fetch (CORS 프록시 폴백)
+  async function fetchApiData(url) {
     try {
-      const res = await fetch(targetUrl);
+      const res = await fetch(url);
       if (res.ok) return await res.json();
-      throw new Error('Direct fetch failed');
+      throw new Error('Direct failed');
     } catch (err) {
-      const proxyUrl = CAREERNET_API.corsProxy + encodeURIComponent(targetUrl);
-      const res = await fetch(proxyUrl);
+      const proxy = CAREERNET_API.corsProxy + encodeURIComponent(url);
+      const res = await fetch(proxy);
       return await res.json();
     }
   }
 
   // 커리어넷 학과 검색 (MAJOR)
-  async function fetchCareerNetMajors(searchWord) {
-    const container = $('#majorListContainer');
-    container.innerHTML = `<p class="muted" style="grid-column:1/-1; text-align:center;">📡 [${searchWord}] 관련 학과 및 개설 대학교 정보를 수신 중...</p>`;
+  async function fetchMajors(searchWord) {
+    const grid = $('#majorGrid');
+    $('#resultStatus').innerHTML = `🔍 <b>[${searchWord}]</b> 관련 추천 학과를 불러오는 중입니다...`;
+    grid.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">📡 데이터를 수신하고 있습니다...</p>';
 
     const apiUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(searchWord)}`;
 
     try {
-      const data = await fetchCareerNetData(apiUrl);
+      const data = await fetchApiData(apiUrl);
       const items = data?.dataSearch?.content || [];
 
       if (!items.length) {
-        container.innerHTML = `<p class="muted" style="grid-column:1/-1; text-align:center;">'${searchWord}'에 대한 검색 결과가 없습니다. 다른 단어로 검색해보세요.</p>`;
+        grid.replaceChildren();
+        $('#resultStatus').innerHTML = `⚠️ <b>[${searchWord}]</b>에 대한 학과 결과를 찾지 못했습니다. 다른 단어로 검색해보세요.`;
         return;
       }
 
-      container.replaceChildren();
-      items.slice(0, 9).forEach(item => {
+      $('#resultStatus').innerHTML = `🌸 <b>[${searchWord}]</b> 관심사와 어울리는 커리어넷 추천 학과입니다. (카드를 누르면 상세 정보 확인)`;
+      grid.replaceChildren();
+
+      items.slice(0, 8).forEach(item => {
         const card = document.createElement('div');
         card.className = 'major-card';
         card.innerHTML = `
           <div>
             <h4>${item.mClass || item.major} <span class="badge">${item.lClass || '계열'}</span></h4>
-            <p class="muted" style="font-size:13px; margin:4px 0 0;">세부전공: ${(item.facilName || item.mClass || '').slice(0, 42)}...</p>
+            <div class="desc">세부전공: ${(item.facilName || item.mClass || '').slice(0, 42)}...</div>
           </div>
-          <div style="margin-top:16px; font-size:13px; color:var(--primary); font-weight:700;">상세보기 (개설대학·직업·과목) ↗</div>
+          <div class="btn-link">대학·고교과목 상세보기 ↗</div>
         `;
         card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass || item.major, item.lClass));
-        container.append(card);
+        grid.append(card);
       });
     } catch (e) {
-      container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">데이터를 불러오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.</p>';
+      grid.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">네트워크 상태로 인해 실시간 데이터를 불러오지 못했습니다.</p>';
     }
   }
 
-  // 커리어넷 학과 상세 정보 (MAJOR_VIEW)
+  // 커리어넷 학과 상세 모달 열기 (MAJOR_VIEW)
   async function openMajorDetail(majorSeq, majorName, lClass) {
     $('#majorModal').classList.remove('hidden');
     $('#modalMajorTitle').textContent = majorName;
     $('#modalLClass').textContent = lClass || '전공계열';
     $('#modalSummary').textContent = '데이터를 실시간으로 불러오는 중입니다...';
-    $('#modalSubject2022').replaceChildren();
     $('#modalJobList').replaceChildren();
-    $('#modalQualList').replaceChildren();
-    $('#modalPeerAptd').textContent = '-';
-    $('#modalPeerVals').textContent = '-';
-    $('#modalEmployment').textContent = '-';
-    $('#modalSalary').textContent = '-';
+    $('#modalSubject').replaceChildren();
     $('#modalUnivList').replaceChildren();
 
     const viewUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR_VIEW&contentType=json&gubun=univ_list&majorSeq=${majorSeq}`;
 
     try {
-      const data = await fetchCareerNetData(viewUrl);
+      const data = await fetchApiData(viewUrl);
       const content = data?.dataSearch?.content?.[0];
       if (!content) return;
 
-      $('#modalSummary').textContent = content.summary || '해당 전공의 기초 이론과 학문적 성과를 습득합니다.';
+      // 개요
+      $('#modalSummary').textContent = content.summary || '해당 학과의 기초 이론과 전문 실무를 학습합니다.';
 
-      // 관련 직업 및 자격증
+      // 진출 직업
       const jobs = (content.job || '').split(',').map(s => s.trim()).filter(Boolean);
-      const quals = (content.qualifications || '').split(',').map(s => s.trim()).filter(Boolean);
-      
       const jobBox = $('#modalJobList');
       if (jobs.length) {
-        jobs.slice(0, 8).forEach(j => {
-          const s = document.createElement('span');
-          s.className = 'pill-tag job';
-          s.textContent = j;
-          jobBox.append(s);
-        });
-      } else { jobBox.innerHTML = '<span class="muted" style="font-size:12px;">관련 직업 정보 준비 중</span>'; }
-
-      const qualBox = $('#modalQualList');
-      if (quals.length) {
-        quals.slice(0, 8).forEach(q => {
-          const s = document.createElement('span');
-          s.className = 'pill-tag qual';
-          s.textContent = q;
-          qualBox.append(s);
-        });
-      } else { qualBox.innerHTML = '<span class="muted" style="font-size:12px;">관련 자격증 정보 준비 중</span>'; }
-
-      // 또래 중학생 통계
-      try {
-        const aptdItems = content?.lstMiddleAptd?.[0]?.popular || [];
-        if (aptdItems.length) {
-          const topApt = aptdItems.slice(0, 2).map(a => a.CD_NM).join(', ');
-          $('#modalPeerAptd').textContent = topApt || '언어능력, 논리력';
-        } else { $('#modalPeerAptd').textContent = '언어능력, 수리·논리력'; }
-
-        const valsItems = content?.lstVals?.[0]?.popular || [];
-        if (valsItems.length) {
-          const topVal = valsItems.slice(0, 2).map(v => v.CD_NM).join(', ');
-          $('#modalPeerVals').textContent = topVal || '능력발휘, 보수';
-        } else { $('#modalPeerVals').textContent = '능력발휘, 안정성'; }
-      } catch (err) {
-        $('#modalPeerAptd').textContent = '언어능력, 창의력';
-        $('#modalPeerVals').textContent = '능력발휘, 성취감';
-      }
-
-      // 2022 개정 과목
-      const sub2022 = content.relate_subject_2022 || [];
-      const subBox = $('#modalSubject2022');
-      if (sub2022.length) {
-        sub2022.forEach(s => {
-          if (!s.subject_name || !s.subject_description) return;
-          const p = document.createElement('div');
-          p.innerHTML = `<span style="font-weight:700; color:#4338ca;">• ${s.subject_name}:</span> <span style="color:#334155;">${s.subject_description}</span>`;
-          subBox.append(p);
+        jobs.slice(0, 10).forEach(j => {
+          const span = document.createElement('span');
+          span.className = 'pill';
+          span.textContent = j;
+          jobBox.append(span);
         });
       } else {
-        subBox.innerHTML = '<span class="muted">기초 국·영·수 과목 및 관련 진로선택 과목을 이수하는 것이 좋습니다.</span>';
+        jobBox.innerHTML = '<span class="muted" style="font-size:12px;">관련 직업 정보 준비 중</span>';
       }
 
-      $('#modalEmployment').textContent = (content.employment || '65% 이상').replace(/<[^>]*>?/gm, '');
-      $('#modalSalary').textContent = (content.salary || '상세 요강 참고').replace(/<[^>]*>?/gm, '');
+      // 2022 개정 고교 선택과목
+      const sub2022 = content.relate_subject_2022 || [];
+      const subBox = $('#modalSubject');
+      if (sub2022.length) {
+        sub2022.forEach(s => {
+          if (!s.subject_name) return;
+          const div = document.createElement('div');
+          div.innerHTML = `<b>• ${s.subject_name}:</b> <span style="color:#64748b;">${s.subject_description || '기초 역량 과목'}</span>`;
+          subBox.append(div);
+        });
+      } else {
+        subBox.innerHTML = '기초 과목(국·영·수) 및 관련 진로선택 과목을 성실히 이수하는 것이 좋습니다.';
+      }
 
-      // 개설 대학 필터링
+      // 개설 대학교
       currentUnivs = content.university || [];
       renderFilteredUnivs('ALL');
 
@@ -768,25 +381,26 @@
     }
   }
 
+  // 대학 지역 필터
   function renderFilteredUnivs(region) {
-    const univBox = $('#modalUnivList');
-    univBox.replaceChildren();
+    const box = $('#modalUnivList');
+    box.replaceChildren();
 
     if (!currentUnivs.length) {
-      univBox.innerHTML = '<span class="muted">전국 주요 대학교에 개설되어 있습니다.</span>';
+      box.innerHTML = '<span class="muted">전국 주요 대학교에 개설되어 있습니다.</span>';
       return;
     }
 
     const filtered = currentUnivs.filter(u => {
       const area = u.area || '';
-      if (region === 'DG_GB') return area.includes('대구') || area.includes('경북') || area.includes('경상북도');
+      if (region === 'DG_GB') return area.includes('대구') || area.includes('경북');
       if (region === 'METRO') return area.includes('서울') || area.includes('경기') || area.includes('인천');
-      if (region === 'OTHER') return !(area.includes('대구') || area.includes('경북') || area.includes('경상북도') || area.includes('서울') || area.includes('경기') || area.includes('인천'));
+      if (region === 'OTHER') return !(area.includes('대구') || area.includes('경북') || area.includes('서울') || area.includes('경기') || area.includes('인천'));
       return true;
     });
 
     if (!filtered.length) {
-      univBox.innerHTML = '<span class="muted">해당 지역에 등록된 개설 대학교가 없습니다.</span>';
+      box.innerHTML = '<span class="muted">해당 지역에 개설된 대학교가 없습니다.</span>';
       return;
     }
 
@@ -797,7 +411,7 @@
       a.target = '_blank';
       a.rel = 'noopener';
       a.innerHTML = `<span>🏛️ ${u.schoolName}</span> <small>${u.area || '전국'} ↗</small>`;
-      univBox.append(a);
+      box.append(a);
     });
   }
 
@@ -809,99 +423,10 @@
     });
   });
 
-  function renderResultView(cat) {
-    const targetCat = personas[cat] ? cat : 'SW';
-    const persona = personas[targetCat];
-    result = { topCat: targetCat, persona };
-
-    $('#personaType').textContent = persona.badge;
-    $('#personaTitle').textContent = persona.title;
-    $('#personaDesc').textContent = persona.desc;
-
-    const newUrl = `${window.location.origin}${window.location.pathname}?type=${targetCat}`;
-    window.history.replaceState({ path: newUrl }, '', newUrl);
-
-    show('step3');
-
-    const kw = catSearchKeyword[targetCat] || '소프트웨어';
-    fetchCareerNetMajors(kw);
-  }
-
-  function showResult() {
-    let score = {};
-    // 1단계 최종 재료에 +4점
-    final.forEach(i => {
-      let cat = materials[i].cat;
-      score[cat] = (score[cat] || 0) + 4;
-    });
-    // 맞춤 세부 월드컵 선택에 각 +2점
-    answers.forEach(c => {
-      score[c] = (score[c] || 0) + 2;
-    });
-
-    let topCat = Object.keys(score).sort((a, b) => score[b] - score[a])[0] || 'SW';
-    renderResultView(topCat);
-  }
-
-  // 결과 공유 버튼 핸들러
-  $('#shareResultBtn').addEventListener('click', () => {
-    const currentCat = result?.topCat || 'SW';
-    const shareUrl = `${window.location.origin}${window.location.pathname}?type=${currentCat}`;
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        alert(`🌸 내 진로 탐색 결과 최종 링크가 복사되었습니다!\n\n이 링크로 접속하면 번거로운 테스트 단계 없이 바로 나의 맞춤 결과 화면이 열립니다.\n\n[주소]\n${shareUrl}`);
-      }).catch(() => {
-        prompt('아래 링크를 복사하여 공유해보세요:', shareUrl);
-      });
-    } else {
-      prompt('아래 링크를 복사하여 공유해보세요:', shareUrl);
-    }
-  });
-
-  // 직접 검색
-  function handleManualSearch() {
-    const q = $('#manualSearchInput').value.trim();
-    if (!q) {
-      alert('검색할 학과명을 입력해주세요!');
-      return;
-    }
-    fetchCareerNetMajors(q);
-  }
-  $('#manualSearchBtn').addEventListener('click', handleManualSearch);
-  $('#manualSearchInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleManualSearch();
-  });
-
-  // 이벤트 바인딩
-  $('#next1').addEventListener('click', () => { final = []; renderFinal(); show('step1b'); });
-  $('#back1').addEventListener('click', () => show('step1'));
-  
-  // 1-B에서 2단계 넘어갈 때 동적 세부 월드컵 생성
-  $('#next2').addEventListener('click', () => {
-    buildDynamicWorldcup();
-    show('step2');
-    renderQuestion();
-  });
-
-  $('#back2').addEventListener('click', () => { if (question > 0) { question--; renderQuestion(); } });
   $('#closeModalBtn').addEventListener('click', () => $('#majorModal').classList.add('hidden'));
-  $('#reset').addEventListener('click', () => {
-    chosen = []; final = []; answers = []; question = 0; result = null;
-    $('#manualSearchInput').value = '';
-    window.history.replaceState({}, '', `${window.location.origin}${window.location.pathname}`);
-    renderMaterials(); show('step1');
-  });
 
-  // URL 파라미터 체크로 다이렉트 결과 오픈
-  const urlParams = new URLSearchParams(window.location.search);
-  const sharedType = urlParams.get('type');
-
-  if (sharedType && personas[sharedType]) {
-    renderResultView(sharedType);
-  } else {
-    renderMaterials();
-  }
+  // 첫 화면 접속 시 첫 번째 태그(코딩)를 기본 활성화하여 풍성하게 시작
+  document.querySelector('.chip').click();
 })();
 </script>
 </body>
