@@ -282,7 +282,7 @@
 
     <div class="panel">
       <h2>🏫 커리어넷 실시간 연동 대학 및 학과 현황</h2>
-      <p class="muted">커리어넷(CareerNet) 오픈 API를 통해 실시간 수집된 대학·학과 정보입니다. 내가 고른 활동과 성향 결과에 부합하는 학과는 <b>[🎯 맞춤 추천]</b>으로 상단에 표시됩니다.</p>
+      <p class="muted">커리어넷(CareerNet) 공식 오픈 API를 통해 수신한 학과 및 개설 대학교 현황입니다. 나의 선호 계열과 일치하는 학과는 <b>[🎯 맞춤 추천]</b>으로 표시됩니다.</p>
       
       <div class="filter">
         <select id="region">
@@ -295,7 +295,7 @@
           <option>호남·제주</option>
           <option>강원</option>
         </select>
-        <input id="search" type="search" placeholder="대학명 또는 직업/학과명 검색 (예: 컴퓨터, 경영, 간호)">
+        <input id="search" type="search" placeholder="대학명 또는 직업/학과명 검색 (예: 컴퓨터, 경영, 심리)">
       </div>
       
       <div id="universityList" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); margin-top: 14px;"></div>
@@ -321,7 +321,7 @@
 
   <footer>
     <b>동국대학교 사범대학부속 선화여자고등학교</b> · 진로 탐색 PLAY 프로그램<br>
-    ※ 본 페이지는 <b>커리어넷 오픈 API</b> 데이터를 바탕으로 동적 렌더링되며, 등급 수치는 '어디가' 일반 공개 지표를 참고한 예측 참고치입니다.
+    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b>를 통해 실시간 데이터를 수신하며, 등급 표기는 어디가 공개 기준 참고값입니다.
   </footer>
 </main>
 
@@ -331,12 +331,14 @@
   const $ = s => document.querySelector(s);
 
   // ==========================================
-  // [1] 커리어넷 API 설정 영역
+  // [1] 커리어넷 API 설정 영역 (매뉴얼 기준)
   // ==========================================
-  const API_CONFIG = {
-    // 발급받은 커리어넷 API 인증키를 입력하세요.
-    apiKey: 'YOUR_CAREERNET_API_KEY', 
-    // 브라우저 직접 호출 시 CORS가 발생하는 경우 자체 프록시 URL(예: 'http://localhost:3000/api/majors?searchTitle=')을 입력
+  const CAREERNET_CONFIG = {
+    // 발급받은 인증키를 입력하세요 (예제 키 또는 본인 키)
+    apiKey: '631411887293319c018c3eeeb7413e40',
+    // 커리어넷 오픈 API 기본 경로
+    baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
+    // 로컬 브라우저 CORS 문제 발생 시 경유할 프록시 URL (필요 시 작성)
     proxyUrl: '' 
   };
 
@@ -409,7 +411,7 @@
     ['넓은 세계와 다양한 문화를 이해하기', '국제', '자연의 법칙과 원리를 탐구하기', '화학']
   ];
 
-  // 커리어넷 지역명 -> 사이트 표준 지역명 변환 매핑
+  // 매뉴얼의 지역 명칭 정규화 함수
   function normalizeRegion(area) {
     if (!area) return '기타';
     if (area.includes('서울')) return '서울';
@@ -422,7 +424,6 @@
     return area;
   }
 
-  // 대학별 추정 등급 산출 보조 함수
   function estimateGrade(univName) {
     if (['서울대학교', '연세대학교', '고려대학교', 'KAIST', 'POSTECH'].some(u => univName.includes(u))) return '1.1~1.5등급';
     if (['서강대학교', '성균관대학교', '한양대학교', '중앙대학교', '경희대학교', '한국외국어대학교', '서울시립대학교', '이화여자대학교'].some(u => univName.includes(u))) return '1.5~2.0등급';
@@ -431,69 +432,78 @@
   }
 
   // ==========================================
-  // [2] 커리어넷 API 동적 호출 함수
+  // [2] 커리어넷 Open API 연동 함수 (매뉴얼 기준)
   // ==========================================
-  let dynamicUnis = []; // API를 통해 동적으로 채워질 대학/학과 리스트
+  let dynamicUnis = [];
   let isLoadingData = false;
 
-  async function fetchCareerNetMajors(searchKeywords) {
+  async function fetchCareerNetData(topMajors) {
     dynamicUnis = [];
     isLoadingData = true;
     renderUniversities();
 
-    // 상위 결과 계열에서 대표 키워드 2~3개 추출
-    const targetKeywords = searchKeywords.slice(0, 3);
-    const univMap = {}; // { '대학명': { region, name, majors: [] } }
+    const univMap = {};
+    // 상위 전공 키워드 2~3개 추출 (예: '컴퓨터공학과' -> '컴퓨터')
+    const keywords = topMajors.slice(0, 3).map(m => m.replace(/학과|학부|전공/g, '').trim());
 
     try {
-      for (const kw of targetKeywords) {
-        let apiUrl = '';
-        if (API_CONFIG.proxyUrl) {
-          apiUrl = `${API_CONFIG.proxyUrl}${encodeURIComponent(kw)}`;
-        } else {
-          apiUrl = `https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_CONFIG.apiKey}&svcType=api&svcCode=MAJOR_UV&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(kw)}`;
+      for (const kw of keywords) {
+        // 1. 학과 목록 검색 (매뉴얼 5. 학과정보 svcCode=MAJOR)
+        let listUrl = `${CAREERNET_CONFIG.baseUrl}?apiKey=${CAREERNET_CONFIG.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(kw)}`;
+        if (CAREERNET_CONFIG.proxyUrl) {
+          listUrl = `${CAREERNET_CONFIG.proxyUrl}?url=${encodeURIComponent(listUrl)}`;
         }
 
-        const res = await fetch(apiUrl);
-        if (!res.ok) continue;
-        const data = await res.json();
-        const content = data?.dataSearch?.content || [];
+        const listRes = await fetch(listUrl);
+        if (!listRes.ok) continue;
+        const listData = await listRes.json();
+        const contentList = listData?.dataSearch?.content || [];
 
-        content.forEach(item => {
-          const majorName = item.major || item.mClass || kw;
-          const cat = kw; // 카테고리 태그
-          const universities = item.university || [];
+        // 상위 2개 학과의 상세 정보 조회 (개설대학 university 노드 획득 목적)
+        for (const item of contentList.slice(0, 2)) {
+          const majorSeq = item.majorSeq;
+          const majorTitle = item.mClass || kw;
+
+          // 2. 학과 상세 검색 (매뉴얼 6.2 svcCode=MAJOR_VIEW)
+          let viewUrl = `${CAREERNET_CONFIG.baseUrl}?apiKey=${CAREERNET_CONFIG.apiKey}&svcType=api&svcCode=MAJOR_VIEW&contentType=json&gubun=univ_list&majorSeq=${majorSeq}`;
+          if (CAREERNET_CONFIG.proxyUrl) {
+            viewUrl = `${CAREERNET_CONFIG.proxyUrl}?url=${encodeURIComponent(viewUrl)}`;
+          }
+
+          const viewRes = await fetch(viewUrl);
+          if (!viewRes.ok) continue;
+          const viewData = await viewRes.json();
+          const detail = viewData?.dataSearch?.content?.[0];
+          const universities = detail?.university || [];
 
           universities.forEach(u => {
-            const uName = u.schoolName;
+            const schoolName = (u.schoolName || '').trim();
+            if (!schoolName) return;
             const region = normalizeRegion(u.area);
 
-            if (!univMap[uName]) {
-              univMap[uName] = {
-                name: uName,
+            if (!univMap[schoolName]) {
+              univMap[schoolName] = {
+                name: schoolName,
                 region: region,
+                schoolUrl: u.schoolURL || '',
                 majors: []
               };
             }
 
-            // 중복 학과 방지
-            if (!univMap[uName].majors.some(m => m.name === majorName)) {
-              univMap[uName].majors.push({
-                name: majorName,
-                cat: cat,
-                grade: estimateGrade(uName)
+            if (!univMap[schoolName].majors.some(m => m.name === majorTitle)) {
+              univMap[schoolName].majors.push({
+                name: majorTitle,
+                cat: kw,
+                grade: estimateGrade(schoolName)
               });
             }
           });
-        });
+        }
       }
 
       dynamicUnis = Object.values(univMap);
-
     } catch (err) {
-      console.warn('커리어넷 API 직접 호출 실패 또는 네트워크 오류:', err);
-      // API 통신 실패 시 표시할 안내 문구
-      dynamicUnis = [];
+      console.warn('커리어넷 API 통신 에러:', err);
     } finally {
       isLoadingData = false;
       renderUniversities();
@@ -644,7 +654,7 @@
     };
 
     $('#summaryTitle').textContent = `나의 주요 진로 성향: ${topCats.slice(0, 2).join(' × ')}`;
-    $('#resultText').textContent = `내가 고른 '나만의 미래 레시피'(${result.recipe.join(', ')})와 진로 밸런스 성향을 분석한 결과입니다. 커리어넷 API를 통해 실시간 연동된 학과와 대학 입시 정보를 확인해보세요!`;
+    $('#resultText').textContent = `내가 고른 '나만의 미래 레시피'(${result.recipe.join(', ')})와 진로 밸런스 성향을 분석한 결과입니다. 아래 커리어넷 실시간 대학 및 학과 현황을 확인해보세요!`;
     
     let chipBox = $('#selectedChips');
     chipBox.replaceChildren();
@@ -658,12 +668,10 @@
     renderClickableChips($('#jobs'), jobs);
     renderClickableChips($('#majors'), majors);
 
-    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "커리어넷 실시간 API 데이터를 분석해 상위 성향에 가장 부합하는 대학과 학과를 <b>[🎯 맞춤 추천]</b>으로 불러왔어! 학교 이름을 클릭해 입학처 요강도 확인해봐."`;
+    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "커리어넷 OpenAPI를 통해 추천 학과를 개설한 전국 대학교 현황을 실시간으로 가져왔어! 학교 링크를 클릭해 입학 요강을 점검해봐."`;
 
     show('step3');
-
-    // [중요] 추천 전공 키워드를 바탕으로 커리어넷 API 동적 호출
-    fetchCareerNetMajors(majors);
+    fetchCareerNetData(majors);
   }
 
   function renderUniversities() {
@@ -673,7 +681,7 @@
     box.replaceChildren();
 
     if (isLoadingData) {
-      box.innerHTML = `<div class="loading-spinner">📡 커리어넷 오픈 API로부터 실시간 대학 및 학과 정보를 수신하고 있습니다...</div>`;
+      box.innerHTML = `<div class="loading-spinner">📡 한국직업능력연구원 커리어넷 Open API와 통신 중입니다...</div>`;
       return;
     }
 
@@ -708,15 +716,13 @@
       let header = document.createElement('div');
       header.className = 'uni-header';
       
-      // 구글 검색 또는 대학 공식 입학처 링크로 유도
-      let url = `https://www.google.com/search?q=${encodeURIComponent(u.name + ' 입학처')}`;
+      let url = u.schoolUrl || `https://www.google.com/search?q=${encodeURIComponent(u.name + ' 입학처')}`;
       let nameEl = document.createElement('a');
       nameEl.className = 'uni-name';
       nameEl.href = url;
       nameEl.target = '_blank';
       nameEl.rel = 'noopener noreferrer';
-      nameEl.innerHTML = `${u.name} <span style="font-size:12px; font-weight:normal; opacity:0.7;">입학처 ↗</span>`;
-      nameEl.title = `${u.name} 입학처 검색 바로가기`;
+      nameEl.innerHTML = `${u.name} <span style="font-size:12px; font-weight:normal; opacity:0.7;">홈페이지 ↗</span>`;
 
       let regionEl = document.createElement('span');
       regionEl.className = 'uni-region';
@@ -751,8 +757,8 @@
       p.style.textAlign = 'center';
       p.style.padding = '30px 0';
       p.textContent = selectedFilterKeyword 
-        ? `"${selectedFilterKeyword}" 관련 개설 대학 정보가 없습니다. 다른 검색어나 필터를 선택해 보세요.` 
-        : '조건에 일치하는 실시간 대학 데이터가 없습니다. (API 키 확인 필요)';
+        ? `"${selectedFilterKeyword}" 관련 개설 대학 정보가 없습니다. 필터를 해제하거나 다른 검색어를 입력해 보세요.` 
+        : '일치하는 실시간 개설 대학 데이터가 없습니다. (API 인증키 또는 네트워크 상태 확인)';
       box.append(p);
     }
   }
