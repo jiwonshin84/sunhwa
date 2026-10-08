@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 프리미엄 진로 PLAY</title>
+  <title>선화 진로 PLAY</title>
   <style>
     :root {
       --primary: #6366f1;
@@ -79,6 +79,10 @@
       align-items: center;
     }
     .tile:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99, 102, 241, 0.1); }
+    .tile:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
     .tile strong { display: block; margin-top: 8px; font-size: 14px; font-weight: 600; }
     .tile span { font-size: 32px; }
     .tile.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 2px var(--primary) inset; }
@@ -413,7 +417,6 @@
     '강원대학교': 'https://admission.kangwon.ac.kr'
   };
 
-  // 각 대학별로 카테고리(cat) 정보가 포함된 학과 데이터베이스
   const unis = [
     {
       region: '서울', name: '서울대학교',
@@ -701,7 +704,6 @@
       });
       c.append(b);
     });
-    $('#back2').disabled = question === 0;
   }
 
   function renderClickableChips(node, items) {
@@ -776,12 +778,9 @@
     let box = $('#universityList');
     box.replaceChildren();
 
-    // 사용자의 결과 카테고리 목록 (결과가 없으면 빈 배열)
     let userCats = result ? result.cats : [];
 
-    // 대학별로 매칭되는 학과가 있거나 검색어/필터에 부합하는지 확인 후 정렬
     let processedUnis = unis.map(u => {
-      // 각 학과에 대해 사용자 결과 카테고리와 일치하는지 여부 점수 부여
       let sortedMajors = [...u.majors].sort((a, b) => {
         let aIndex = userCats.indexOf(a.cat);
         let bIndex = userCats.indexOf(b.cat);
@@ -874,7 +873,12 @@
     renderFinal();
     show('step1b');
   });
-  $('#back1').addEventListener('click', () => show('step1'));
+
+  // [수정] STEP 1-2에서 '이전으로'를 누르면 3개 고른 내역(final)을 초기화
+  $('#back1').addEventListener('click', () => {
+    final = [];
+    show('step1');
+  });
   
   $('#next2').addEventListener('click', () => {
     answers = [];
@@ -882,12 +886,15 @@
     show('step2');
     renderQuestion();
   });
-  
+
+  // [수정] STEP 2 월드컵 1번 질문에서 '이전 질문' 클릭 시 STEP 1-2로 복귀 처리
   $('#back2').addEventListener('click', () => {
     if (question > 0) {
       question--;
       answers = answers.slice(0, question);
       renderQuestion();
+    } else {
+      show('step1b');
     }
   });
 
