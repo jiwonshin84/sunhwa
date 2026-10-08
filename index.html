@@ -156,6 +156,10 @@
       align-items: center;
       font-size: 13.5px;
     }
+    .major-item.match-highlight {
+      background: var(--primary-light);
+      border-color: #c7d2fe;
+    }
     .grade-badge {
       background: var(--secondary-light);
       color: var(--secondary);
@@ -270,8 +274,8 @@
     </div>
 
     <div class="panel">
-      <h2>🏫 주요 대학 학과 개설 현황 및 입학처 바로가기</h2>
-      <p class="muted">학교 이름을 클릭하면 해당 대학교 공식 <b>입학처 홈페이지</b>로 이동합니다. 학과별 합격 참고 등급대를 확인하세요.</p>
+      <h2>🏫 내 레시피 맞춤 대학 및 학과 입시 현황</h2>
+      <p class="muted">내가 고른 활동과 성향 결과에 부합하는 학과가 <b>[🎯 맞춤 추천]</b>으로 상단에 표시됩니다. 학교 이름을 누르면 공식 입학처로 이동합니다.</p>
       
       <div class="filter">
         <select id="region">
@@ -364,7 +368,7 @@
     '디자인': [['시각디자이너', 'UX/UI디자이너', '산업디자이너', '브랜드 디자이너'], ['시각디자인학과', '산업디자인학과', '디자인학부', '미디어디자인학과']],
     '미디어': [['방송PD', '기자', '영상편집자', '콘텐츠기획자', '아나운서'], ['미디어커뮤니케이션학과', '영상학과', '광고홍보학과', '신문방송학과']],
     '인문': [['작가', '출판편집자', '인문학연구원', '문화예술 큐레이터'], ['국어국문학과', '사학과', '철학과', '문예창작학과', '문화콘텐츠학과']],
-    '예술': [['음악가', '작곡가', '배우', '공연기획자', '무대디자이너'], ['음악학과', '실용음악과', '연극영화학과', '공연예술학부']],
+    '예술': [['음악家', '작곡가', '배우', '공연기획자', '무대디자이너'], ['음악학과', '실용음악과', '연극영화학과', '공연예술학부']],
     '패션': [['패션디자이너', '텍스타일디자이너', '패션MD', '스타일리스트'], ['의류학과', '패션디자인학과', '의상학과', '섬유시스템공학과']],
     '기획': [['서비스기획자', '상품기획자', '신사업 기획자', '스타트업 창업가'], ['경영학과', '산업디자인학과', '기술경영학과', '융합전공학부']],
     '마케팅': [['브랜드매니저', '광고기획자', '디지털마케터', '소비자분석가'], ['광고홍보학과', '경영학과', '소비자학과', '미디어커뮤니케이션학과']],
@@ -409,32 +413,198 @@
     '강원대학교': 'https://admission.kangwon.ac.kr'
   };
 
+  // 각 대학별로 카테고리(cat) 정보가 포함된 학과 데이터베이스
   const unis = [
-    ['서울', '서울대학교', '컴퓨터공학부:1.1~1.4등급,통계학과:1.2~1.5등급,경제학부:1.1~1.3등급,심리학과:1.2~1.5등급,생명과학부:1.3~1.6등급'],
-    ['서울', '연세대학교', '컴퓨터과학과:1.3~1.6등급,인공지능학과:1.4~1.7등급,경영학과:1.3~1.6등급,심리학과:1.4~1.8등급,생명공학과:1.4~1.7등급'],
-    ['서울', '고려대학교', '컴퓨터학과:1.3~1.6등급,데이터과학과:1.4~1.7등급,미디어학부:1.3~1.6등급,심리학부:1.4~1.8등급,생명과학부:1.5~1.9등급'],
-    ['서울', '동국대학교', 'AI소프트웨어융합학부:1.8~2.3등급,미디어커뮤니케이션학전공:1.7~2.2등급,경찰행정학부:1.5~1.9등급,경영학과:1.8~2.4등급'],
-    ['서울', '이화여자대학교', '간호학부:1.5~1.9등급,심리학과:1.6~2.1등급,교육학과:1.7~2.2등급,인공지능학과:1.6~2.1등급'],
-    ['서울', '한양대학교', '컴퓨터소프트웨어학부:1.4~1.7등급,기계공학부:1.5~1.9등급,산업공학과:1.6~2.1등급,경영학부:1.6~2.1등급'],
-    ['서울', '홍익대학교', '건축학부:1.7~2.3등급,시각디자인전공:1.6~2.2등급,컴퓨터공학과:1.8~2.4등급,경영학부:1.9~2.5등급'],
-    ['경기·인천', '아주대학교', '소프트웨어학과:1.9~2.5등급,전자공학과:2.0~2.6등급,심리학과:2.1~2.7등급,경영학과:2.2~2.8등급'],
-    ['경기·인천', '인하대학교', '컴퓨터공학과:1.9~2.5등급,항공우주공학과:1.8~2.4등급,기계공학과:2.1~2.7등급,미디어커뮤니케이션학과:2.0~2.6등급'],
-    ['경기·인천', '가천대학교', '컴퓨터공학과:2.1~2.8등급,간호학과:1.8~2.4등급,경영학과:2.4~3.1등급,AI소프트웨어학부:2.0~2.7등급'],
-    ['대구·경북', '경북대학교', '컴퓨터학부:2.0~2.7등급,전자공학부:2.1~2.8등급,경영학부:2.3~3.0등급,간호학과:1.9~2.5등급,행정학부:2.1~2.8등급'],
-    ['대구·경북', '영남대학교', '컴퓨터공학과:2.8~3.6등급,기계공학부:3.0~3.8등급,경영학과:3.1~3.9등급,식품영양학과:3.2~4.0등급'],
-    ['대구·경북', 'POSTECH', '컴퓨터공학과:1.2~1.5등급,기계공학과:1.3~1.6등급,생명과학과:1.3~1.6등급,화학공학과:1.2~1.5등급'],
-    ['부산·울산·경남', '부산대학교', '정보컴퓨터공학부:2.1~2.8등급,기계공학부:2.2~2.9등급,경영학과:2.4~3.2등급,심리학과:2.3~3.0등급'],
-    ['충청·대전·세종', 'KAIST', '전산학부:1.1~1.3등급,전기및전자공학부:1.1~1.4등급,기계공학과:1.2~1.4등급,생명과학과:1.2~1.5등급'],
-    ['충청·대전·세종', '충남대학교', '컴퓨터융합학부:2.3~3.0등급,심리학과:2.4~3.1등급,경영학부:2.6~3.3등급,간호학과:2.0~2.6등급'],
-    ['호남·제주', '전남대학교', '경영학부:2.5~3.3등급,간호학과:2.1~2.8등급,컴퓨터사이언스학과:2.4~3.1등급'],
-    ['강원', '강원대학교', '컴퓨터공학과:2.7~3.5등급,산림과학과:3.2~4.1등급,경영학과:3.0~3.8등급,간호학과:2.3~3.0등급']
-  ].map(([region, name, rawMajors]) => {
-    let majors = rawMajors.split(',').map(m => {
-      let [name, grade] = m.split(':');
-      return { name, grade: grade || '참고용' };
-    });
-    return { region, name, majors };
-  });
+    {
+      region: '서울', name: '서울대학교',
+      majors: [
+        { name: '컴퓨터공학부', cat: 'SW', grade: '1.1~1.4등급' },
+        { name: '통계학과', cat: '데이터', grade: '1.2~1.5등급' },
+        { name: '경제학부', cat: '경제', grade: '1.1~1.3등급' },
+        { name: '심리학과', cat: '심리', grade: '1.2~1.5등급' },
+        { name: '생명과학부', cat: '생명', grade: '1.3~1.6등급' },
+        { name: '경영학과', cat: '경영', grade: '1.1~1.4등급' },
+        { name: '사회학과', cat: '사회', grade: '1.2~1.5등급' },
+        { name: '국어국문학과', cat: '인문', grade: '1.3~1.6등급' },
+        { name: '수학과', cat: '수학', grade: '1.1~1.4등급' }
+      ]
+    },
+    {
+      region: '서울', name: '연세대학교',
+      majors: [
+        { name: '컴퓨터과학과', cat: 'SW', grade: '1.3~1.6등급' },
+        { name: '인공지능학과', cat: 'AI', grade: '1.4~1.7등급' },
+        { name: '경영학과', cat: '경영', grade: '1.3~1.6등급' },
+        { name: '심리학과', cat: '심리', grade: '1.4~1.8등급' },
+        { name: '생명공학과', cat: '생명', grade: '1.4~1.7등급' },
+        { name: '행정학과', cat: '법행정', grade: '1.3~1.6등급' },
+        { name: '교육학부', cat: '교육', grade: '1.4~1.7등급' }
+      ]
+    },
+    {
+      region: '서울', name: '고려대학교',
+      majors: [
+        { name: '컴퓨터학과', cat: 'SW', grade: '1.3~1.6등급' },
+        { name: '데이터과학과', cat: '데이터', grade: '1.4~1.7등급' },
+        { name: '미디어학부', cat: '미디어', grade: '1.3~1.6등급' },
+        { name: '심리학부', cat: '심리', grade: '1.4~1.8등급' },
+        { name: '생명과학부', cat: '생명', grade: '1.5~1.9등급' },
+        { name: '보건정책관리학부', cat: '보건', grade: '1.4~1.8등급' },
+        { name: '건축학과', cat: '건축', grade: '1.5~1.9등급' }
+      ]
+    },
+    {
+      region: '서울', name: '동국대학교',
+      majors: [
+        { name: 'AI소프트웨어융합학부', cat: 'AI', grade: '1.8~2.3등급' },
+        { name: '미디어커뮤니케이션학전공', cat: '미디어', grade: '1.7~2.2등급' },
+        { name: '경찰행정학부', cat: '법행정', grade: '1.5~1.9등급' },
+        { name: '경영학과', cat: '경영', grade: '1.8~2.4등급' },
+        { name: '사회복지학과', cat: '복지', grade: '1.9~2.5등급' },
+        { name: '식품생명공학과', cat: '식품', grade: '1.9~2.5등급' },
+        { name: '국어교육과', cat: '교육', grade: '1.7~2.2등급' }
+      ]
+    },
+    {
+      region: '서울', name: '이화여자대학교',
+      majors: [
+        { name: '간호학부', cat: '보건', grade: '1.5~1.9등급' },
+        { name: '심리학과', cat: '심리', grade: '1.6~2.1등급' },
+        { name: '교육학과', cat: '교육', grade: '1.7~2.2등급' },
+        { name: '인공지능학과', cat: 'AI', grade: '1.6~2.1등급' },
+        { name: '사회복지학과', cat: '복지', grade: '1.8~2.3등급' },
+        { name: '의류학과', cat: '패션', grade: '1.9~2.5등급' }
+      ]
+    },
+    {
+      region: '서울', name: '한양대학교',
+      majors: [
+        { name: '컴퓨터소프트웨어학부', cat: 'SW', grade: '1.4~1.7등급' },
+        { name: '기계공학부', cat: '기계', grade: '1.5~1.9등급' },
+        { name: '산업공학과', cat: '공학', grade: '1.6~2.1등급' },
+        { name: '경영학부', cat: '경영', grade: '1.6~2.1등급' },
+        { name: '건축학부', cat: '건축', grade: '1.6~2.2등급' },
+        { name: '파이낸스경영학과', cat: '경제', grade: '1.4~1.7등급' }
+      ]
+    },
+    {
+      region: '서울', name: '홍익대학교',
+      majors: [
+        { name: '건축학부', cat: '건축', grade: '1.7~2.3등급' },
+        { name: '시각디자인전공', cat: '디자인', grade: '1.6~2.2등급' },
+        { name: '컴퓨터공학과', cat: 'SW', grade: '1.8~2.4등급' },
+        { name: '경영학부', cat: '경영', grade: '1.9~2.5등급' },
+        { name: '국어교육과', cat: '교육', grade: '1.8~2.3등급' }
+      ]
+    },
+    {
+      region: '경기·인천', name: '아주대학교',
+      majors: [
+        { name: '소프트웨어학과', cat: 'SW', grade: '1.9~2.5등급' },
+        { name: '전자공학과', cat: '공학', grade: '2.0~2.6등급' },
+        { name: '심리학과', cat: '심리', grade: '2.1~2.7등급' },
+        { name: '경영학과', cat: '경영', grade: '2.2~2.8등급' },
+        { name: '간호학과', cat: '보건', grade: '1.8~2.3등급' }
+      ]
+    },
+    {
+      region: '경기·인천', name: '인하대학교',
+      majors: [
+        { name: '컴퓨터공학과', cat: 'SW', grade: '1.9~2.5등급' },
+        { name: '항공우주공학과', cat: '항공', grade: '1.8~2.4등급' },
+        { name: '기계공학과', cat: '기계', grade: '2.1~2.7등급' },
+        { name: '미디어커뮤니케이션학과', cat: '미디어', grade: '2.0~2.6등급' },
+        { name: '아동심리학과', cat: '심리', grade: '2.2~2.9등급' }
+      ]
+    },
+    {
+      region: '경기·인천', name: '가천대학교',
+      majors: [
+        { name: '컴퓨터공학과', cat: 'SW', grade: '2.1~2.8등급' },
+        { name: '간호학과', cat: '보건', grade: '1.8~2.4등급' },
+        { name: '경영학과', cat: '경영', grade: '2.4~3.1등급' },
+        { name: 'AI소프트웨어학부', cat: 'AI', grade: '2.0~2.7등급' },
+        { name: '경찰행정학과', cat: '법행정', grade: '2.2~2.9등급' }
+      ]
+    },
+    {
+      region: '대구·경북', name: '경북대학교',
+      majors: [
+        { name: '컴퓨터학부', cat: 'SW', grade: '2.0~2.7등급' },
+        { name: '전자공학부', cat: '공학', grade: '2.1~2.8등급' },
+        { name: '경영학부', cat: '경영', grade: '2.3~3.0등급' },
+        { name: '간호학과', cat: '보건', grade: '1.9~2.5등급' },
+        { name: '행정학부', cat: '법행정', grade: '2.1~2.8등급' },
+        { name: '심리학과', cat: '심리', grade: '2.2~2.9등급' }
+      ]
+    },
+    {
+      region: '대구·경북', name: '영남대학교',
+      majors: [
+        { name: '컴퓨터공학과', cat: 'SW', grade: '2.8~3.6등급' },
+        { name: '기계공학부', cat: '기계', grade: '3.0~3.8등급' },
+        { name: '경영학과', cat: '경영', grade: '3.1~3.9등급' },
+        { name: '식품영양학과', cat: '식품', grade: '3.2~4.0등급' },
+        { name: '심리학과', cat: '심리', grade: '3.0~3.9등급' }
+      ]
+    },
+    {
+      region: '대구·경북', name: 'POSTECH',
+      majors: [
+        { name: '컴퓨터공학과', cat: 'SW', grade: '1.2~1.5등급' },
+        { name: '기계공학과', cat: '기계', grade: '1.3~1.6등급' },
+        { name: '생명과학과', cat: '생명', grade: '1.3~1.6등급' },
+        { name: '화학공학과', cat: '화학', grade: '1.2~1.5등급' }
+      ]
+    },
+    {
+      region: '부산·울산·경남', name: '부산대학교',
+      majors: [
+        { name: '정보컴퓨터공학부', cat: 'SW', grade: '2.1~2.8등급' },
+        { name: '기계공학부', cat: '기계', grade: '2.2~2.9등급' },
+        { name: '경영학과', cat: '경영', grade: '2.4~3.2등급' },
+        { name: '심리학과', cat: '심리', grade: '2.3~3.0등급' },
+        { name: '관광컨벤션학과', cat: '관광', grade: '2.5~3.3등급' }
+      ]
+    },
+    {
+      region: '충청·대전·세종', name: 'KAIST',
+      majors: [
+        { name: '전산학부', cat: 'SW', grade: '1.1~1.3등급' },
+        { name: '전기및전자공학부', cat: '공학', grade: '1.1~1.4등급' },
+        { name: '기계공학과', cat: '기계', grade: '1.2~1.4등급' },
+        { name: '생명과학과', cat: '생명', grade: '1.2~1.5등급' }
+      ]
+    },
+    {
+      region: '충청·대전·세종', name: '충남대학교',
+      majors: [
+        { name: '컴퓨터융합학부', cat: 'SW', grade: '2.3~3.0등급' },
+        { name: '심리학과', cat: '심리', grade: '2.4~3.1등급' },
+        { name: '경영학부', cat: '경영', grade: '2.6~3.3등급' },
+        { name: '간호학과', cat: '보건', grade: '2.0~2.6등급' },
+        { name: '행정학부', cat: '법행정', grade: '2.3~3.0등급' }
+      ]
+    },
+    {
+      region: '호남·제주', name: '전남대학교',
+      majors: [
+        { name: '경영학부', cat: '경영', grade: '2.5~3.3등급' },
+        { name: '간호학과', cat: '보건', grade: '2.1~2.8등급' },
+        { name: '컴퓨터사이언스학과', cat: 'SW', grade: '2.4~3.1등급' },
+        { name: '심리학과', cat: '심리', grade: '2.6~3.4등급' }
+      ]
+    },
+    {
+      region: '강원', name: '강원대학교',
+      majors: [
+        { name: '컴퓨터공학과', cat: 'SW', grade: '2.7~3.5등급' },
+        { name: '경영학과', cat: '경영', grade: '3.0~3.8등급' },
+        { name: '간호학과', cat: '보건', grade: '2.3~3.0등급' },
+        { name: '관광경영학과', cat: '관광', grade: '3.1~4.0등급' }
+      ]
+    }
+  ];
 
   let chosen = [];
   let final = [];
@@ -566,19 +736,21 @@
       score[c] = (score[c] || 0) + 1;
     });
 
-    let cats = Object.keys(score).sort((a, b) => score[b] - score[a]).slice(0, 5);
-    let jobs = [...new Set(cats.flatMap(c => db[c]?.[0] || []))].slice(0, 10);
-    let majors = [...new Set(cats.flatMap(c => db[c]?.[1] || []))].slice(0, 8);
+    let cats = Object.keys(score).sort((a, b) => score[b] - score[a]);
+    let topCats = cats.slice(0, 5);
+    let jobs = [...new Set(topCats.flatMap(c => db[c]?.[0] || []))].slice(0, 10);
+    let majors = [...new Set(topCats.flatMap(c => db[c]?.[1] || []))].slice(0, 8);
     
     result = {
-      cats,
+      cats: topCats,
+      allScores: score,
       jobs,
       majors,
       recipe: final.map(i => materials[i].label)
     };
 
-    $('#summaryTitle').textContent = `나의 주요 진로 성향: ${cats.slice(0, 2).join(' × ')}`;
-    $('#resultText').textContent = `내가 고른 '나만의 미래 레시피'(${result.recipe.join(', ')})와 진로 밸런스 성향을 분석한 결과입니다. 아래 추천 직업이나 학과를 클릭하면 관련 대학 입시 정보를 바로 모아볼 수 있습니다!`;
+    $('#summaryTitle').textContent = `나의 주요 진로 성향: ${topCats.slice(0, 2).join(' × ')}`;
+    $('#resultText').textContent = `내가 고른 '나만의 미래 레시피'(${result.recipe.join(', ')})와 진로 밸런스 성향을 분석한 결과입니다. 아래 맞춤 학과 및 대학 입시 정보를 확인해보세요!`;
     
     let chipBox = $('#selectedChips');
     chipBox.replaceChildren();
@@ -592,7 +764,7 @@
     renderClickableChips($('#jobs'), jobs);
     renderClickableChips($('#majors'), majors);
 
-    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "나는 오늘 <b>${result.recipe[0]}</b>과(와) <b>${result.recipe[1]}</b> 조합이 가장 끌린다고 나왔어! 하단의 <b>[나의 진로 리포트 텍스트 복사하기]</b>를 눌러 친구들이나 선생님께 결과를 공유해봐!"`;
+    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "나의 레시피 분석 결과에 가장 잘 맞는 대학 학과들이 상단에 <b>[🎯 맞춤 추천]</b>으로 정렬되었어! 입시처 링크를 눌러 꼼꼼히 확인해봐."`;
 
     renderUniversities();
     show('step3');
@@ -604,118 +776,22 @@
     let box = $('#universityList');
     box.replaceChildren();
 
-    let list = unis.filter(u => {
-      let matchRegion = (region === '전체' || u.region === region);
-      let uniText = (u.name + ' ' + u.majors.map(m=>m.name).join(' ')).toLowerCase();
-      
-      let matchSearch = !search || uniText.includes(search);
-      let matchClickFilter = !selectedFilterKeyword || uniText.includes(selectedFilterKeyword.replace(/학과|학부|전공/g, '').toLowerCase());
+    // 사용자의 결과 카테고리 목록 (결과가 없으면 빈 배열)
+    let userCats = result ? result.cats : [];
 
-      return matchRegion && matchSearch && matchClickFilter;
-    });
-
-    list.forEach(u => {
-      let card = document.createElement('div');
-      card.className = 'uni-card';
-
-      let header = document.createElement('div');
-      header.className = 'uni-header';
-      
-      let url = admissionUrls[u.name] || 'https://www.adiga.kr';
-      let nameEl = document.createElement('a');
-      nameEl.className = 'uni-name';
-      nameEl.href = url;
-      nameEl.target = '_blank';
-      nameEl.rel = 'noopener noreferrer';
-      nameEl.innerHTML = `${u.name} <span style="font-size:12px; font-weight:normal; opacity:0.7;">입학처 ↗</span>`;
-      nameEl.title = `${u.name} 공식 입학처 홈페이지로 이동합니다`;
-
-      let regionEl = document.createElement('span');
-      regionEl.className = 'uni-region';
-      regionEl.textContent = u.region;
-
-      header.append(nameEl, regionEl);
-
-      let mList = document.createElement('div');
-      mList.className = 'major-list';
-
-      u.majors.forEach(m => {
-        let item = document.createElement('div');
-        item.className = 'major-item';
-        item.innerHTML = `<span>📚 ${m.name}</span><span class="grade-badge">${m.grade}</span>`;
-        mList.append(item);
+    // 대학별로 매칭되는 학과가 있거나 검색어/필터에 부합하는지 확인 후 정렬
+    let processedUnis = unis.map(u => {
+      // 각 학과에 대해 사용자 결과 카테고리와 일치하는지 여부 점수 부여
+      let sortedMajors = [...u.majors].sort((a, b) => {
+        let aIndex = userCats.indexOf(a.cat);
+        let bIndex = userCats.indexOf(b.cat);
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+        if (aIndex !== -1) return -1;
+        if (bIndex !== -1) return 1;
+        return 0;
       });
-
-      card.append(header, mList);
-      box.append(card);
+      return { ...u, majors: sortedMajors };
     });
 
-    if (!list.length) {
-      let p = document.createElement('p');
-      p.className = 'muted';
-      p.textContent = selectedFilterKeyword ? `"${selectedFilterKeyword}" 관련 개설 대학 정보가 없습니다. 필터를 해제하거나 다른 검색어를 입력해 보세요.` : '조건에 일치하는 대학 정보가 없습니다.';
-      box.append(p);
-    }
-  }
-
-  // 진로 리포트 텍스트 클립보드 복사 기능
-  function copyCareerReport() {
-    if (!result) return;
-    let reportText = `[🌸 선화여고 나의 진로 리포트]\n` +
-      `• 핵심 활동 레시피: ${result.recipe.join(' / ')}\n` +
-      `• 주요 진로 성향: ${result.cats.slice(0, 2).join(' & ')}\n` +
-      `• 추천 탐색 직업: ${result.jobs.slice(0, 5).join(', ')}\n` +
-      `• 추천 관심 학과: ${result.majors.slice(0, 4).join(', ')}\n\n` +
-      `"나만의 미래 레시피와 진로 탐색 결과를 확인했어요!"`;
-
-    navigator.clipboard.writeText(reportText).then(() => {
-      alert('📋 진로 리포트 내용이 클립보드에 복사되었습니다!\n카카오톡이나 패들렛 등에 붙여넣기 해보세요.');
-    }).catch(() => {
-      prompt('아래 텍스트를 직접 복사해 주세요:', reportText);
-    });
-  }
-
-  $('#next1').addEventListener('click', () => {
-    final = [];
-    renderFinal();
-    show('step1b');
-  });
-  $('#back1').addEventListener('click', () => show('step1'));
-  
-  $('#next2').addEventListener('click', () => {
-    answers = [];
-    question = 0;
-    show('step2');
-    renderQuestion();
-  });
-  
-  $('#back2').addEventListener('click', () => {
-    if (question > 0) {
-      question--;
-      answers = answers.slice(0, question);
-      renderQuestion();
-    }
-  });
-
-  $('#region').addEventListener('change', renderUniversities);
-  $('#search').addEventListener('input', renderUniversities);
-  $('#copyReportBtn').addEventListener('click', copyCareerReport);
-  
-  $('#reset').addEventListener('click', () => {
-    chosen = [];
-    final = [];
-    answers = [];
-    question = 0;
-    result = null;
-    selectedFilterKeyword = '';
-    $('#region').value = '전체';
-    $('#search').value = '';
-    renderMaterials();
-    show('step1');
-  });
-
-  renderMaterials();
-})();
-</script>
-</body>
-</html>
+    let list = processedUnis.filter(u => {
+      let matchRegion = (region
