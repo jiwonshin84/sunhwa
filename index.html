@@ -302,7 +302,8 @@
       <h2>💬 선배·친구와 함께 나누는 진로 대화</h2>
       <p id="talk" class="tip-box" style="margin-top: 10px; background: var(--secondary-light); border-left-color: var(--secondary); color: #831843;"></p>
       <div class="actions">
-        <button class="primary" id="reset">처음부터 다시 시작하기</button>
+        <button class="primary" id="copyReportBtn">📋 나의 진로 리포트 텍스트 복사하기</button>
+        <button class="secondary" id="reset">처음부터 다시 시작하기</button>
       </div>
     </div>
   </section>
@@ -387,7 +388,6 @@
     ['넓은 세계와 다양한 문화를 이해하기', '국제', '자연의 법칙과 원리를 탐구하기', '화학']
   ];
 
-  // 각 대학별 공식 입학처 URL 매핑 데이터
   const admissionUrls = {
     '서울대학교': 'https://admission.snu.ac.kr',
     '연세대학교': 'https://admission.yonsei.ac.kr',
@@ -592,7 +592,7 @@
     renderClickableChips($('#jobs'), jobs);
     renderClickableChips($('#majors'), majors);
 
-    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "나는 오늘 <b>${result.recipe[0]}</b>과(와) <b>${result.recipe[1]}</b> 조합이 가장 끌린다고 나왔어! 관심 있는 대학 이름을 클릭하면 공식 입학처로 바로 이동하니 입시요강을 꼼꼼히 살펴보자!"`;
+    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "나는 오늘 <b>${result.recipe[0]}</b>과(와) <b>${result.recipe[1]}</b> 조합이 가장 끌린다고 나왔어! 하단의 <b>[나의 진로 리포트 텍스트 복사하기]</b>를 눌러 친구들이나 선생님께 결과를 공유해봐!"`;
 
     renderUniversities();
     show('step3');
@@ -621,7 +621,6 @@
       let header = document.createElement('div');
       header.className = 'uni-header';
       
-      // 대학 이름 클릭 시 해당 대학 공식 입학처 페이지로 이동하는 링크 생성
       let url = admissionUrls[u.name] || 'https://www.adiga.kr';
       let nameEl = document.createElement('a');
       nameEl.className = 'uni-name';
@@ -659,6 +658,23 @@
     }
   }
 
+  // 진로 리포트 텍스트 클립보드 복사 기능
+  function copyCareerReport() {
+    if (!result) return;
+    let reportText = `[🌸 선화여고 나의 진로 리포트]\n` +
+      `• 핵심 활동 레시피: ${result.recipe.join(' / ')}\n` +
+      `• 주요 진로 성향: ${result.cats.slice(0, 2).join(' & ')}\n` +
+      `• 추천 탐색 직업: ${result.jobs.slice(0, 5).join(', ')}\n` +
+      `• 추천 관심 학과: ${result.majors.slice(0, 4).join(', ')}\n\n` +
+      `"나만의 미래 레시피와 진로 탐색 결과를 확인했어요!"`;
+
+    navigator.clipboard.writeText(reportText).then(() => {
+      alert('📋 진로 리포트 내용이 클립보드에 복사되었습니다!\n카카오톡이나 패들렛 등에 붙여넣기 해보세요.');
+    }).catch(() => {
+      prompt('아래 텍스트를 직접 복사해 주세요:', reportText);
+    });
+  }
+
   $('#next1').addEventListener('click', () => {
     final = [];
     renderFinal();
@@ -683,6 +699,7 @@
 
   $('#region').addEventListener('change', renderUniversities);
   $('#search').addEventListener('input', renderUniversities);
+  $('#copyReportBtn').addEventListener('click', copyCareerReport);
   
   $('#reset').addEventListener('click', () => {
     chosen = [];
