@@ -1,922 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 진로 PLAY</title>
+  <meta charset="UTF-8">
+  <title>진로 리포트 인스타 카드 생성기</title>
   <style>
-    :root {
-      --primary: #6366f1;
-      --primary-light: #e0e7ff;
-      --secondary: #ec4899;
-      --secondary-light: #fce7f3;
-      --bg: #f8fafc;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #cbd5e1;
+    /* 숨겨진 캔버스 (필요시 화면에 보여줄 수도 있습니다) */
+    #reportCanvas {
+      display: none;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; color: var(--text); background: var(--bg); }
-    .wrap { max-width: 960px; margin: auto; padding: 24px 16px; }
-
-    header {
-      background: linear-gradient(135deg, #4f46e5 0%, #db2777 100%);
-      color: white;
-      padding: 36px 28px;
-      border-radius: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.25);
-    }
-    .school-badge { display: inline-block; background: rgba(255,255,255,0.22); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 12px; backdrop-filter: blur(4px); }
-    h1 { margin: 0 0 8px 0; font-size: clamp(28px, 5vw, 40px); font-weight: 800; letter-spacing: -0.5px; }
-    header p { margin: 0; font-size: 16px; opacity: 0.95; }
-
-    .progress-box { margin-top: 24px; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px; }
-    .progress { height: 10px; background: rgba(255,255,255,0.3); border-radius: 16px; overflow: hidden; }
-    .progress > div { height: 100%; background: #ffffff; border-radius: 16px; transition: width 0.4s ease; }
-    .progress-text { font-size: 13px; margin-top: 8px; font-weight: 600; display: flex; justify-content: space-between; }
-
-    .panel {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 24px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    
-    h2 { font-size: 22px; margin-top: 0; color: #1e293b; font-weight: 700; }
-    .muted { color: var(--muted); font-size: 14px; line-height: 1.6; }
-
-    .tip-box {
-      background: var(--primary-light);
-      border-left: 4px solid var(--primary);
-      padding: 14px 18px;
-      border-radius: 0 14px 14px 0;
-      font-size: 14px;
-      color: #312e81;
-      margin: 16px 0;
-      font-weight: 600;
-    }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
-    .tile {
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      background: white;
-      padding: 18px 12px;
-      min-height: 96px;
-      font-size: 15px;
+    .share-btn {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      border: none;
+      border-radius: 25px;
       cursor: pointer;
-      color: var(--text);
-      transition: all 0.2s ease;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
     }
-    .tile:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99, 102, 241, 0.1); }
-    .tile:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible {
-      outline: 3px solid var(--primary);
-      outline-offset: 2px;
-    }
-    .tile strong { display: block; margin-top: 8px; font-size: 14px; font-weight: 600; }
-    .tile span { font-size: 32px; }
-    .tile.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 2px var(--primary) inset; }
-
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
-    button { font: inherit; cursor: pointer; }
-    .primary {
-      border: 0; border-radius: 14px; background: var(--primary); color: white;
-      font-weight: 700; padding: 14px 28px; font-size: 16px;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
-    }
-    .primary:hover { background: #4f46e5; }
-    .primary:active { transform: scale(0.98); }
-    .primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-    
-    .secondary {
-      border: 1px solid #cbd5e1; border-radius: 14px; background: white; color: #475569;
-      font-weight: 600; padding: 13px 22px; font-size: 15px;
-      transition: background 0.2s;
-    }
-    .secondary:hover { background: #f1f5f9; }
-
-    .hidden { display: none !important; }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .chip { 
-      background: var(--primary-light); color: #3730a3; border-radius: 99px; 
-      padding: 8px 16px; font-size: 14px; font-weight: 600; border: 1px solid #c7d2fe; 
-      cursor: pointer; transition: all 0.15s ease; 
-    }
-    .chip:hover { background: #c7d2fe; transform: translateY(-1px); }
-    .chip.active-chip { background: var(--primary); color: white; border-color: var(--primary); }
-
-    .duel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
-    .duel .tile { min-height: 160px; font-size: 18px; padding: 20px; }
-    .duel .tile span { font-size: 44px; margin-bottom: 10px; }
-
-    .result-summary-card {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-      color: white;
-      border-radius: 24px;
-      padding: 32px;
-      text-align: center;
-      box-shadow: 0 15px 30px rgba(30, 27, 75, 0.2);
-      margin-bottom: 24px;
-    }
-    .result-summary-title { font-size: clamp(20px, 3.5vw, 28px); font-weight: 800; margin-bottom: 12px; color: #ffffff; }
-
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
-    
-    .uni-card {
-      border: 1px solid #e2e8f0;
-      padding: 18px;
-      border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .uni-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .uni-name { font-size: 17px; font-weight: 700; color: #1e293b; text-decoration: none; display: flex; align-items: center; gap: 4px; }
-    .uni-name:hover { color: var(--primary); text-decoration: underline; }
-    .uni-region { background: var(--primary-light); color: var(--primary); font-size: 12px; padding: 4px 10px; border-radius: 8px; font-weight: 700; }
-    
-    .major-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
-    .major-item {
-      background: #f8fafc;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13.5px;
-    }
-    .major-item.match-highlight {
-      background: var(--primary-light);
-      border-color: #c7d2fe;
-    }
-    .grade-badge {
-      background: var(--secondary-light);
-      color: var(--secondary);
-      font-weight: 800;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid #fbcfe8;
-      white-space: nowrap;
-    }
-
-    .filter { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
-    .filter input, .filter select { font: inherit; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; min-width: 0; flex: 1; background: #fff; }
-    
-    .adiga-banner {
-      background: linear-gradient(135deg, #e0e7ff, #fce7f3);
-      border: 1px solid #c7d2fe;
-      border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 24px;
-    }
-    .adiga-banner a {
-      background: var(--secondary); color: white; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 700;
-    }
-
-    footer { text-align: center; color: var(--muted); font-size: 13px; margin: 40px 0 20px; line-height: 1.6; }
-
-    @media(max-width: 480px) {
-      .wrap { padding: 12px; }
-      .panel { padding: 20px; }
-      .duel { grid-template-columns: 1fr; }
+    .share-btn:hover {
+      transform: scale(1.03);
     }
   </style>
 </head>
 <body>
-<main class="wrap">
-  <header>
-    <div class="school-badge">🌸 동국대학교 사범대학부속 선화여자고등학교</div>
-    <h1>선화 진로 PLAY</h1>
-    <p>나의 핵심 레시피와 밸런스 성향으로 알아보는 맞춤형 진로 · 입시 탐색</p>
-    <div class="progress-box">
-      <div class="progress"><div id="progress" style="width: 15%"></div></div>
-      <div class="progress-text">
-        <span id="stepIndicator">STEP 1 / 3 : 활동 재료 5개 고르기</span>
-        <span id="stepPercent">15%</span>
-      </div>
-    </div>
-  </header>
 
-  <!-- STEP 1 -->
-  <section id="step1" class="panel">
-    <h2>① 나의 미래 레시피 : 활동 재료 5개 선택</h2>
-    <p class="muted">테이블에 펼쳐진 다양한 활동 카드 중 평소 가장 끌리거나 호기심이 생기는 활동 <b>5개</b>를 골라주세요.</p>
-    <div class="tip-box">💡 <b>진로 팁:</b> 잘하는 것보다 <b>"내 마음을 설레게 하는 활동"</b>을 고를 때 진짜 내 모습이 나와요! (<span id="count">0</span>/5 선택됨)</div>
-    <div id="materials" class="grid"></div>
-    <div class="actions">
-      <button class="primary" id="next1" disabled>5개 선택 완료하고 3개로 좁히기 →</button>
-    </div>
-  </section>
+  <!-- 리포트 결과 공유 버튼 -->
+  <button class="share-btn" onclick="generateAndShareReport()">
+    📸 인스타그램용 카드 이미지 다운로드
+  </button>
 
-  <!-- STEP 1-B -->
-  <section id="step1b" class="panel hidden">
-    <h2>①-2 핵심 레시피 재료 3개 압축하기</h2>
-    <p class="muted">앞서 고른 다섯 가지 활동 중, <b>가장 핵심이 되는 나만의 '최애' 재료 3개</b>를 다시 선택해주세요.</p>
-    <div id="finalMaterials" class="grid"></div>
-    <div class="actions">
-      <button class="secondary" id="back1">← 이전으로</button>
-      <button class="primary" id="next2" disabled>진로 밸런스 월드컵 시작하기 →</button>
-    </div>
-  </section>
+  <canvas id="reportCanvas" width="1080" height="1350"></canvas>
 
-  <!-- STEP 2 -->
-  <section id="step2" class="panel hidden">
-    <h2>② 진로 밸런스 월드컵 ⚖️</h2>
-    <p class="muted">정답은 없습니다! 평소 선호하는 일의 스타일을 직관적으로 선택해 주세요.</p>
-    <p id="questionNumber" style="font-weight: 700; color: var(--primary); margin-top: 8px; font-size: 16px;"></p>
-    <div id="duel" class="duel"></div>
-    <div class="actions" style="margin-top: 24px;">
-      <button class="secondary" id="back2">← 이전 질문</button>
-    </div>
-  </section>
+  <script>
+    function generateAndShareReport() {
+      const canvas = document.getElementById('reportCanvas');
+      const ctx = canvas.getContext('2d');
 
-  <!-- STEP 3 -->
-  <section id="step3" class="hidden">
-    <div class="result-summary-card">
-      <div style="font-size: 13px; font-weight: 700; color: #a5b4fc; letter-spacing: 1px; margin-bottom: 8px;">✨ MY CUSTOM CAREER REPORT</div>
-      <h2 class="result-summary-title" id="summaryTitle"></h2>
-      <p id="resultText" style="color:#cbd5e1; font-size:15px; max-width:700px; margin: 12px auto 0; line-height:1.6;"></p>
-    </div>
+      // 1. 배경 그리기 (트렌디한 그라데이션)
+      const gradient = ctx.createLinearGradient(0, 0, 1080, 1350);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1080, 1350);
 
-    <div class="panel">
-      <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">🎯 내가 선택한 핵심 활동 레시피</div>
-      <div id="selectedChips" class="chips"></div>
-    </div>
+      // 2. 중앙 백그라운드 카드 영역
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.roundRect(80, 120, 920, 1110, 40);
+      ctx.fill();
 
-    <div class="results-grid">
-      <div class="panel" style="margin-bottom:0;">
-        <h2>💼 추천 탐색 직업군 <span style="font-size:12px; color:var(--primary); font-weight:600;">(클릭하여 필터링)</span></h2>
-        <p class="muted" style="font-size:12px; margin-bottom:8px;">원하는 직업을 누르면 관련 대학 정보만 모아볼 수 있어요!</p>
-        <div id="jobs" class="chips"></div>
-      </div>
-      <div class="panel" style="margin-bottom:0;">
-        <h2>🎓 추천 관심 학과 계열 <span style="font-size:12px; color:var(--primary); font-weight:600;">(클릭하여 필터링)</span></h2>
-        <p class="muted" style="font-size:12px; margin-bottom:8px;">원하는 학과를 누르면 관련 대학 정보만 모아볼 수 있어요!</p>
-        <div id="majors" class="chips"></div>
-      </div>
-    </div>
+      // 3. 텍스트 및 콘텐츠 배치
+      // 상단 타이틀
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = 'bold 52px "Pretendard", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('나의 진로 탐색 리포트', 540, 240);
 
-    <div class="panel">
-      <h2>🏫 내 레시피 맞춤 대학 및 학과 입시 현황</h2>
-      <p class="muted">내가 고른 활동과 성향 결과에 부합하는 학과가 <b>[🎯 맞춤 추천]</b>으로 상단에 표시됩니다. 학교 이름을 누르면 공식 입학처로 이동합니다.</p>
-      
-      <div class="filter">
-        <select id="region">
-          <option value="전체">전국 지역 전체</option>
-          <option>서울</option>
-          <option>경기·인천</option>
-          <option>대구·경북</option>
-          <option>부산·울산·경남</option>
-          <option>충청·대전·세종</option>
-          <option>호남·제주</option>
-          <option>강원</option>
-        </select>
-        <input id="search" type="search" placeholder="대학명 또는 직업/학과명 검색 (예: 컴퓨터, 경영, 간호)">
-      </div>
-      
-      <div id="universityList" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); margin-top: 14px;"></div>
+      // 서브 프로필/사용자 이름
+      ctx.fillStyle = '#666666';
+      ctx.font = '36px "Pretendard", sans-serif';
+      ctx.fillText('홍길동 님의 핵심 추천 직무', 540, 310);
 
-      <div class="adiga-banner">
-        <div>
-          <div style="font-weight: 700; font-size: 15px; color: #1e293b;">정확한 전년도 입시 결과와 상세 분석이 필요하다면?</div>
-          <div style="font-size: 13px; color: var(--muted);">대입정보포털 <b>'어디가(adiga.kr)'</b>에서 본인의 내신 성적을 입력하고 상세 산출 결과를 확인하세요.</div>
-        </div>
-        <a href="https://www.adiga.kr" target="_blank" rel="noopener">어디가(adiga.kr) 바로가기 ↗</a>
-      </div>
-    </div>
+      // 메인 결과 요약 (예: 추천 직업)
+      ctx.fillStyle = '#764ba2';
+      ctx.font = 'bold 72px "Pretendard", sans-serif';
+      ctx.fillText('✨ UX/UI 디자이너 ✨', 540, 480);
 
-    <div class="panel">
-      <h2>💬 선배·친구와 함께 나누는 진로 대화</h2>
-      <p id="talk" class="tip-box" style="margin-top: 10px; background: var(--secondary-light); border-left-color: var(--secondary); color: #831843;"></p>
-      <div class="actions">
-        <button class="primary" id="copyReportBtn">📋 나의 진로 리포트 텍스트 복사하기</button>
-        <button class="secondary" id="reset">처음부터 다시 시작하기</button>
-      </div>
-    </div>
-  </section>
+      // 핵심 역량 키워드 태그
+      drawTag(ctx, '창의적 문제해결', 260, 600);
+      drawTag(ctx, '공감 능력', 540, 600);
+      drawTag(ctx, '시각적 기획', 820, 600);
 
-  <footer>
-    <b>동국대학교 사범대학부속 선화여자고등학교</b> · 진로 탐색 PLAY 프로그램<br>
-    ※ 본 웹페이지의 내신 등급대는 '어디가' 일반 공개 데이터를 바탕으로 한 참고용 수치이며, 실제 입시 결과는 전형 유형 및 연도별로 달라질 수 있습니다.
-  </footer>
-</main>
+      // 리포트 상세 내용
+      ctx.fillStyle = '#333333';
+      ctx.font = '32px "Pretendard", sans-serif';
+      ctx.textAlign = 'left';
 
-<script>
-(()=>{
-  'use strict';
-  const $ = s => document.querySelector(s);
+      const lines = [
+        '• 사용자 경험 분석 및 디자인 감각이 뛰어남',
+        '• 타인의 니즈를 파악하는 공감 역량 우수',
+        '• 디지털 환경에서의 비주얼 표현 선호'
+      ];
 
-  const materialRows = [
-    '🤝|사람 만나기|사회', '🗣️|대화하고 소통하기|사회', '💗|누군가 돌보기|보건', '📚|공부 가르치기|교육', 
-    '🌍|나눔 및 봉사하기|복지', '👥|팀과 리더십 이끌기|경영', '⚖️|공정하게 판단하기|법행정', '🧠|고민 상담해주기|심리', 
-    '🔬|깊이 있게 탐구하기|자연과학', '🧪|실험하고 관찰하기|화학', '🧬|생명 현상 연구하기|생명', '🌌|우주와 미지 세계|우주', 
-    '🌿|자연과 식물 관찰|환경', '🐾|동물 보호·돌보기|동물', '🌎|환경 문제 해결하기|환경', '🩺|건강 및 의학 살피기|보건', 
-    '💻|컴퓨터 프로그래밍|SW', '🤖|AI와 로봇 만들기|AI', '📊|데이터 분석·통계|데이터', '🧩|복잡한 문제 해결하기|공학', 
-    '🔐|정보 보안·수사하기|보안', '⚙️|기계와 장치 다루기|기계', '🏗️|건축물 구조 설계|건축', '🚗|모빌리티·항공 제작|항공', 
-    '🎨|그림 및 시각 디자인|디자인', '🎬|영상 편집·콘텐츠 제작|미디어', '🎤|말하고 대중 앞에 표현|미디어', '✍️|글쓰기 및 문학|인문', 
-    '🎵|음악 작곡·연주|예술', '💃|공연 및 연기 활동|예술', '📷|사진 및 영상 촬영|미디어', '👗|패션 및 스타일링|패션', 
-    '💡|새로운 아이디어 기획|기획', '📣|광고 및 브랜드 마케팅|마케팅', '💰|돈·경제 흐름 읽기|경제', '📈|창업 및 사업 운영|경영', 
-    '🛍️|상품 기획·유통|마케팅', '✈️|여행 일정 기획하기|관광', '🍳|요리 및 푸드 제작|식품', '🏃|운동 및 신체 활동|체육', 
-    '🏆|경쟁과 도전 즐기기|체육', '🏛️|역사 속 인물·사건 탐구|인문', '🌐|외국어 배우고 사용|국제', '🌏|다른 문화 교류하기|국제', 
-    '➗|수학적 논리 풀기|수학', '📖|책 읽고 깊이 생각하기|인문'
-  ];
-
-  const materials = materialRows.map(v => {
-    const [emoji, label, cat] = v.split('|');
-    return { emoji, label, cat };
-  });
-
-  const db = {
-    '사회': [['인사담당자', '홍보전문가', '사회조사분석가', '행사기획자'], ['사회학과', '사회복지학과', '행정학과', '미디어커뮤니케이션학과']],
-    '보건': [['의사', '간호사', '물리치료사', '임상병리사', '보건연구원'], ['의예과', '간호학과', '물리치료학과', '보건학과', '바이오메디컬학부']],
-    '교육': [['교사', '교육연구원', '에듀테크 기획자', '교육콘텐츠 개발자'], ['교육학과', '국어교육과', '수학교육과', '컴퓨터교육과']],
-    '복지': [['사회복지사', '청소년지도사', '지역사회 활동가', '재가복지 전문가'], ['사회복지학과', '아동가족학과', '청소년학과']],
-    '경영': [['경영컨설턴트', '기업가', '프로젝트 매니저', '인사담당자'], ['경영학과', '경영정보학과', '산업공학과', '글로벌융합학부']],
-    '법행정': [['변호사', '법률전문가', '행정공무원', '정책연구원', '경찰관'], ['법학과', '행정학과', '경찰행정학과', '정치외교학과']],
-    '심리': [['상담심리사', '임상심리전문가', '심리연구원', '진로상담사'], ['심리학과', '상담학과', '교육심리학과', '아동심리학과']],
-    '자연과학': [['물리학자', '과학연구원', '과학교사', '에너지연구원'], ['물리학과', '화학과', '천문우주학과', '과학교육과']],
-    '화학': [['화학연구원', '신소재연구원', '화장품연구원', '에너지공학자'], ['화학과', '화학공학과', '신소재공학과', '고분자공학과']],
-    '생명': [['생명과학자', '바이오연구원', '유전학연구원', '제약연구원'], ['생명과학과', '생명공학과', '바이오시스템전공', '식품생명공학과']],
-    '우주': [['천문학자', '항공우주연구원', '우주공학자', '위성시스템 개발자'], ['천문우주학과', '항공우주공학과', '물리학과', '지구과학교육과']],
-    '환경': [['기후변화연구원', '환경공학자', '생태연구원', '신재생에너지 전문가'], ['환경공학과', '지구환경과학과', '생태조경학과', '화학공학과']],
-    '동물': [['수의사', '동물행동전문가', '동물생명연구원', '반려동물산업 전문가'], ['수의예과', '동물생명과학과', '자원생물학과', '생명과학과']],
-    'SW': [['소프트웨어 개발자', '게임개발자', '클라우드 엔지니어', '앱 개발자'], ['컴퓨터공학과', '소프트웨어학과', '컴퓨터과학과', '정보통신공학과']],
-    'AI': [['AI엔지니어', '머신러닝 연구원', '로봇AI 개발자', '데이터시각화 전문가'], ['인공지능학과', '컴퓨터공학과', '소프트웨어융합학과', '데이터사이언스학과']],
-    '데이터': [['데이터과학자', '빅데이터 분석가', '금융데이터분석가', '통계전문가'], ['데이터사이언스학과', '통계학과', '응용수학과', '산업공학과']],
-    '공학': [['시스템 엔지니어', '산업공학자', '종합설계 연구원', '생산관리 전문가'], ['산업공학과', '기계공학과', '전자공학과', '소프트웨어학과']],
-    '보안': [['정보보안전문가', '디지털포렌식 전문가', '보안컨설턴트', '화이트해커'], ['정보보호학과', '사이버보안학과', '컴퓨터공학과', '정보통신학과']],
-    '기계': [['기계공학자', '로봇공학자', '자동화 엔지니어', '스마트팩토리 전문가'], ['기계공학과', '로봇공학과', '메카트로닉스공학과', '항공우주공학과']],
-    '건축': [['건축가', '건축공학자', '도시설계가', '인테리어 디자이너'], ['건축학과', '건축공학과', '실내건축디자인학과', '도시공학과']],
-    '항공': [['항공우주공학자', '미래모빌리티 연구원', '자율주행 시스템 개발자'], ['항공우주공학과', '미래자동차공학과', '기계공학과', '전자공학과']],
-    '디자인': [['시각디자이너', 'UX/UI디자이너', '산업디자이너', '브랜드 디자이너'], ['시각디자인학과', '산업디자인학과', '디자인학부', '미디어디자인학과']],
-    '미디어': [['방송PD', '기자', '영상편집자', '콘텐츠기획자', '아나운서'], ['미디어커뮤니케이션학과', '영상학과', '광고홍보학과', '신문방송학과']],
-    '인문': [['작가', '출판편집자', '인문학연구원', '문화예술 큐레이터'], ['국어국문학과', '사학과', '철학과', '문예창작학과', '문화콘텐츠학과']],
-    '예술': [['음악家', '작곡가', '배우', '공연기획자', '무대디자이너'], ['음악학과', '실용음악과', '연극영화학과', '공연예술학부']],
-    '패션': [['패션디자이너', '텍스타일디자이너', '패션MD', '스타일리스트'], ['의류학과', '패션디자인학과', '의상학과', '섬유시스템공학과']],
-    '기획': [['서비스기획자', '상품기획자', '신사업 기획자', '스타트업 창업가'], ['경영학과', '산업디자인학과', '기술경영학과', '융합전공학부']],
-    '마케팅': [['브랜드매니저', '광고기획자', '디지털마케터', '소비자분석가'], ['광고홍보학과', '경영학과', '소비자학과', '미디어커뮤니케이션학과']],
-    '경제': [['경제연구원', '금융분석가', '투자은행가(IB)', '보험계리사'], ['경제학과', '금융학과', '통계학과', '국제무역학과']],
-    '관광': [['관광기획자', '호텔리어', '항공서비스전문가', 'MICE 기획자'], ['관광학과', '호텔경영학과', '항공서비스학과', '컨벤션경영학과']],
-    '식품': [['영양사', '식품연구원', '스타셰프', '푸드스타일리스트'], ['식품영양학과', '식품공학과', '외식조리학과', '바이오식품공학과']],
-    '체육': [['스포츠지도자', '운동처방사', '스포츠마케터', '재활인트레이너'], ['체육학과', '스포츠과학과', '스포츠산업학과', '사회체육학과']],
-    '수학': [['수학연구원', '금융퀀트', '암호학 전문가', '수학교사'], ['수학과', '응용수학과', '수학교육과', '금융수학과']]
-  };
-
-  const questions = [
-    ['사람들과 함께 어울려 일하기', '사회', '혼자 깊이 집중해서 해결하기', '수학'],
-    ['안정적이고 체계적인 환경', '법행정', '변화무쌍하고 새로운 도전', '기획'],
-    ['말로 설명하고 표현하기', '미디어', '기술을 만들고 분석하기', '공학'],
-    ['실내에서 쾌적하게 집중하기', 'SW', '야외와 현장에서 발로 뛰기', '환경'],
-    ['기존의 정답을 정확히 찾아내기', '자연과학', '세상에 없던 새로운 답 만들기', '디자인'],
-    ['계획하고 꼼꼼히 정리하기', '경영', '자유롭고 창의적으로 상상하기', '예술'],
-    ['한 분야를 깊게 파고드는 심화 연구', '생명', '다양한 분야를 융합하고 연결하기', '기획'],
-    ['사람의 마음과 성장을 돕기', '교육', '기술과 시스템으로 문제를 해결하기', 'AI'],
-    ['숫자와 객관적 데이터로 설득하기', '데이터', '언어와 스토리로 공감을 이끌기', '인문'],
-    ['넓은 세계와 다양한 문화를 이해하기', '국제', '자연의 법칙과 원리를 탐구하기', '화학']
-  ];
-
-  const admissionUrls = {
-    '서울대학교': 'https://admission.snu.ac.kr',
-    '연세대학교': 'https://admission.yonsei.ac.kr',
-    '고려대학교': 'https://oku.korea.ac.kr',
-    '동국대학교': 'https://ipsi.dongguk.edu',
-    '이화여자대학교': 'https://admission.ewha.ac.kr',
-    '한양대학교': 'https://go.hanyang.ac.kr',
-    '홍익대학교': 'https://admission.hongik.ac.kr',
-    '아주대학교': 'https://www.ajou.ac.kr/ein/index.do',
-    '인하대학교': 'https://admission.inha.ac.kr',
-    '가천대학교': 'https://admission.gachon.ac.kr',
-    '경북대학교': 'https://ipsi1.knu.ac.kr',
-    '영남대학교': 'https://enter.yu.ac.kr',
-    'POSTECH': 'https://admission.postech.ac.kr',
-    '부산대학교': 'https://go.pusan.ac.kr',
-    'KAIST': 'https://admission.kaist.ac.kr',
-    '충남대학교': 'https://ipsi.cnu.ac.kr',
-    '전남대학교': 'https://admission.jnu.ac.kr',
-    '강원대학교': 'https://admission.kangwon.ac.kr'
-  };
-
-  const unis = [
-    {
-      region: '서울', name: '서울대학교',
-      majors: [
-        { name: '컴퓨터공학부', cat: 'SW', grade: '1.1~1.4등급' },
-        { name: '통계학과', cat: '데이터', grade: '1.2~1.5등급' },
-        { name: '경제학부', cat: '경제', grade: '1.1~1.3등급' },
-        { name: '심리학과', cat: '심리', grade: '1.2~1.5등급' },
-        { name: '생명과학부', cat: '생명', grade: '1.3~1.6등급' },
-        { name: '경영학과', cat: '경영', grade: '1.1~1.4등급' },
-        { name: '사회학과', cat: '사회', grade: '1.2~1.5등급' },
-        { name: '국어국문학과', cat: '인문', grade: '1.3~1.6등급' },
-        { name: '수학과', cat: '수학', grade: '1.1~1.4등급' }
-      ]
-    },
-    {
-      region: '서울', name: '연세대학교',
-      majors: [
-        { name: '컴퓨터과학과', cat: 'SW', grade: '1.3~1.6등급' },
-        { name: '인공지능학과', cat: 'AI', grade: '1.4~1.7등급' },
-        { name: '경영학과', cat: '경영', grade: '1.3~1.6등급' },
-        { name: '심리학과', cat: '심리', grade: '1.4~1.8등급' },
-        { name: '생명공학과', cat: '생명', grade: '1.4~1.7등급' },
-        { name: '행정학과', cat: '법행정', grade: '1.3~1.6등급' },
-        { name: '교육학부', cat: '교육', grade: '1.4~1.7등급' }
-      ]
-    },
-    {
-      region: '서울', name: '고려대학교',
-      majors: [
-        { name: '컴퓨터학과', cat: 'SW', grade: '1.3~1.6등급' },
-        { name: '데이터과학과', cat: '데이터', grade: '1.4~1.7등급' },
-        { name: '미디어학부', cat: '미디어', grade: '1.3~1.6등급' },
-        { name: '심리학부', cat: '심리', grade: '1.4~1.8등급' },
-        { name: '생명과학부', cat: '생명', grade: '1.5~1.9등급' },
-        { name: '보건정책관리학부', cat: '보건', grade: '1.4~1.8등급' },
-        { name: '건축학과', cat: '건축', grade: '1.5~1.9등급' }
-      ]
-    },
-    {
-      region: '서울', name: '동국대학교',
-      majors: [
-        { name: 'AI소프트웨어융합학부', cat: 'AI', grade: '1.8~2.3등급' },
-        { name: '미디어커뮤니케이션학전공', cat: '미디어', grade: '1.7~2.2등급' },
-        { name: '경찰행정학부', cat: '법행정', grade: '1.5~1.9등급' },
-        { name: '경영학과', cat: '경영', grade: '1.8~2.4등급' },
-        { name: '사회복지학과', cat: '복지', grade: '1.9~2.5등급' },
-        { name: '식품생명공학과', cat: '식품', grade: '1.9~2.5등급' },
-        { name: '국어교육과', cat: '교육', grade: '1.7~2.2등급' }
-      ]
-    },
-    {
-      region: '서울', name: '이화여자대학교',
-      majors: [
-        { name: '간호학부', cat: '보건', grade: '1.5~1.9등급' },
-        { name: '심리학과', cat: '심리', grade: '1.6~2.1등급' },
-        { name: '교육학과', cat: '교육', grade: '1.7~2.2등급' },
-        { name: '인공지능학과', cat: 'AI', grade: '1.6~2.1등급' },
-        { name: '사회복지학과', cat: '복지', grade: '1.8~2.3등급' },
-        { name: '의류학과', cat: '패션', grade: '1.9~2.5등급' }
-      ]
-    },
-    {
-      region: '서울', name: '한양대학교',
-      majors: [
-        { name: '컴퓨터소프트웨어학부', cat: 'SW', grade: '1.4~1.7등급' },
-        { name: '기계공학부', cat: '기계', grade: '1.5~1.9등급' },
-        { name: '산업공학과', cat: '공학', grade: '1.6~2.1등급' },
-        { name: '경영학부', cat: '경영', grade: '1.6~2.1등급' },
-        { name: '건축학부', cat: '건축', grade: '1.6~2.2등급' },
-        { name: '파이낸스경영학과', cat: '경제', grade: '1.4~1.7등급' }
-      ]
-    },
-    {
-      region: '서울', name: '홍익대학교',
-      majors: [
-        { name: '건축학부', cat: '건축', grade: '1.7~2.3등급' },
-        { name: '시각디자인전공', cat: '디자인', grade: '1.6~2.2등급' },
-        { name: '컴퓨터공학과', cat: 'SW', grade: '1.8~2.4등급' },
-        { name: '경영학부', cat: '경영', grade: '1.9~2.5등급' },
-        { name: '국어교육과', cat: '교육', grade: '1.8~2.3등급' }
-      ]
-    },
-    {
-      region: '경기·인천', name: '아주대학교',
-      majors: [
-        { name: '소프트웨어학과', cat: 'SW', grade: '1.9~2.5등급' },
-        { name: '전자공학과', cat: '공학', grade: '2.0~2.6등급' },
-        { name: '심리학과', cat: '심리', grade: '2.1~2.7등급' },
-        { name: '경영학과', cat: '경영', grade: '2.2~2.8등급' },
-        { name: '간호학과', cat: '보건', grade: '1.8~2.3등급' }
-      ]
-    },
-    {
-      region: '경기·인천', name: '인하대학교',
-      majors: [
-        { name: '컴퓨터공학과', cat: 'SW', grade: '1.9~2.5등급' },
-        { name: '항공우주공학과', cat: '항공', grade: '1.8~2.4등급' },
-        { name: '기계공학과', cat: '기계', grade: '2.1~2.7등급' },
-        { name: '미디어커뮤니케이션학과', cat: '미디어', grade: '2.0~2.6등급' },
-        { name: '아동심리학과', cat: '심리', grade: '2.2~2.9등급' }
-      ]
-    },
-    {
-      region: '경기·인천', name: '가천대학교',
-      majors: [
-        { name: '컴퓨터공학과', cat: 'SW', grade: '2.1~2.8등급' },
-        { name: '간호학과', cat: '보건', grade: '1.8~2.4등급' },
-        { name: '경영학과', cat: '경영', grade: '2.4~3.1등급' },
-        { name: 'AI소프트웨어학부', cat: 'AI', grade: '2.0~2.7등급' },
-        { name: '경찰행정학과', cat: '법행정', grade: '2.2~2.9등급' }
-      ]
-    },
-    {
-      region: '대구·경북', name: '경북대학교',
-      majors: [
-        { name: '컴퓨터학부', cat: 'SW', grade: '2.0~2.7등급' },
-        { name: '전자공학부', cat: '공학', grade: '2.1~2.8등급' },
-        { name: '경영학부', cat: '경영', grade: '2.3~3.0등급' },
-        { name: '간호학과', cat: '보건', grade: '1.9~2.5등급' },
-        { name: '행정학부', cat: '법행정', grade: '2.1~2.8등급' },
-        { name: '심리학과', cat: '심리', grade: '2.2~2.9등급' }
-      ]
-    },
-    {
-      region: '대구·경북', name: '영남대학교',
-      majors: [
-        { name: '컴퓨터공학과', cat: 'SW', grade: '2.8~3.6등급' },
-        { name: '기계공학부', cat: '기계', grade: '3.0~3.8등급' },
-        { name: '경영학과', cat: '경영', grade: '3.1~3.9등급' },
-        { name: '식품영양학과', cat: '식품', grade: '3.2~4.0등급' },
-        { name: '심리학과', cat: '심리', grade: '3.0~3.9등급' }
-      ]
-    },
-    {
-      region: '대구·경북', name: 'POSTECH',
-      majors: [
-        { name: '컴퓨터공학과', cat: 'SW', grade: '1.2~1.5등급' },
-        { name: '기계공학과', cat: '기계', grade: '1.3~1.6등급' },
-        { name: '생명과학과', cat: '생명', grade: '1.3~1.6등급' },
-        { name: '화학공학과', cat: '화학', grade: '1.2~1.5등급' }
-      ]
-    },
-    {
-      region: '부산·울산·경남', name: '부산대학교',
-      majors: [
-        { name: '정보컴퓨터공학부', cat: 'SW', grade: '2.1~2.8등급' },
-        { name: '기계공학부', cat: '기계', grade: '2.2~2.9등급' },
-        { name: '경영학과', cat: '경영', grade: '2.4~3.2등급' },
-        { name: '심리학과', cat: '심리', grade: '2.3~3.0등급' },
-        { name: '관광컨벤션학과', cat: '관광', grade: '2.5~3.3등급' }
-      ]
-    },
-    {
-      region: '충청·대전·세종', name: 'KAIST',
-      majors: [
-        { name: '전산학부', cat: 'SW', grade: '1.1~1.3등급' },
-        { name: '전기및전자공학부', cat: '공학', grade: '1.1~1.4등급' },
-        { name: '기계공학과', cat: '기계', grade: '1.2~1.4등급' },
-        { name: '생명과학과', cat: '생명', grade: '1.2~1.5등급' }
-      ]
-    },
-    {
-      region: '충청·대전·세종', name: '충남대학교',
-      majors: [
-        { name: '컴퓨터융합학부', cat: 'SW', grade: '2.3~3.0등급' },
-        { name: '심리학과', cat: '심리', grade: '2.4~3.1등급' },
-        { name: '경영학부', cat: '경영', grade: '2.6~3.3등급' },
-        { name: '간호학과', cat: '보건', grade: '2.0~2.6등급' },
-        { name: '행정학부', cat: '법행정', grade: '2.3~3.0등급' }
-      ]
-    },
-    {
-      region: '호남·제주', name: '전남대학교',
-      majors: [
-        { name: '경영학부', cat: '경영', grade: '2.5~3.3등급' },
-        { name: '간호학과', cat: '보건', grade: '2.1~2.8등급' },
-        { name: '컴퓨터사이언스학과', cat: 'SW', grade: '2.4~3.1등급' },
-        { name: '심리학과', cat: '심리', grade: '2.6~3.4등급' }
-      ]
-    },
-    {
-      region: '강원', name: '강원대학교',
-      majors: [
-        { name: '컴퓨터공학과', cat: 'SW', grade: '2.7~3.5등급' },
-        { name: '경영학과', cat: '경영', grade: '3.0~3.8등급' },
-        { name: '간호학과', cat: '보건', grade: '2.3~3.0등급' },
-        { name: '관광경영학과', cat: '관광', grade: '3.1~4.0등급' }
-      ]
-    }
-  ];
-
-  let chosen = [];
-  let final = [];
-  let answers = [];
-  let question = 0;
-  let result = null;
-  let selectedFilterKeyword = '';
-
-  function show(id) {
-    ['step1', 'step1b', 'step2', 'step3'].forEach(x => $('#' + x).classList.toggle('hidden', x !== id));
-    
-    let pMap = { step1: 15, step1b: 35, step2: 65, step3: 100 };
-    let tMap = {
-      step1: 'STEP 1 / 3 : 활동 재료 5개 고르기',
-      step1b: 'STEP 1-2 / 3 : 핵심 레시피 3개 압축',
-      step2: 'STEP 2 / 3 : 진로 밸런스 월드컵',
-      step3: 'STEP 3 / 3 : 맞춤형 진로 & 입시 리포트'
-    };
-    $('#progress').style.width = pMap[id] + '%';
-    $('#stepIndicator').textContent = tMap[id];
-    $('#stepPercent').textContent = pMap[id] + '%';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function makeTile(m, selected, onClick) {
-    let b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'tile' + (selected ? ' selected' : '');
-    b.setAttribute('aria-pressed', String(selected));
-    b.innerHTML = `<span>${m.emoji}</span><strong>${m.label}</strong>`;
-    b.addEventListener('click', onClick);
-    return b;
-  }
-
-  function renderMaterials() {
-    let c = $('#materials');
-    c.replaceChildren();
-    materials.forEach((m, i) => {
-      c.append(makeTile(m, chosen.includes(i), () => {
-        if (chosen.includes(i)) {
-          chosen = chosen.filter(x => x !== i);
-        } else {
-          if (chosen.length >= 5) {
-            alert('활동 카드는 최대 5개까지만 고를 수 있어요!');
-            return;
-          }
-          chosen.push(i);
-        }
-        renderMaterials();
-      }));
-    });
-    $('#count').textContent = chosen.length;
-    $('#next1').disabled = chosen.length !== 5;
-  }
-
-  function renderFinal() {
-    let c = $('#finalMaterials');
-    c.replaceChildren();
-    chosen.forEach(i => {
-      c.append(makeTile(materials[i], final.includes(i), () => {
-        if (final.includes(i)) {
-          final = final.filter(x => x !== i);
-        } else {
-          if (final.length >= 3) {
-            alert('가장 중요한 핵심 재료는 3개만 골라주세요!');
-            return;
-          }
-          final.push(i);
-        }
-        renderFinal();
-      }));
-    });
-    $('#next2').disabled = final.length !== 3;
-  }
-
-  function renderQuestion() {
-    if (question >= questions.length) {
-      showResult();
-      return;
-    }
-    $('#questionNumber').textContent = `[밸런스 질문 ${question + 1} / ${questions.length}]`;
-    let q = questions[question], c = $('#duel');
-    c.replaceChildren();
-    
-    [[q[0], q[1]], [q[2], q[3]]].forEach(([label, cat], side) => {
-      let b = document.createElement('button');
-      b.className = 'tile';
-      b.type = 'button';
-      b.innerHTML = `<span>${side === 0 ? '💖' : '🌟'}</span><strong>${label}</strong>`;
-      b.addEventListener('click', () => {
-        answers[question] = cat;
-        question++;
-        renderQuestion();
-      });
-      c.append(b);
-    });
-  }
-
-  function renderClickableChips(node, items) {
-    node.replaceChildren();
-    items.forEach(t => {
-      let e = document.createElement('span');
-      e.className = 'chip' + (selectedFilterKeyword === t ? ' active-chip' : '');
-      e.textContent = t;
-      e.title = '클릭하면 관련 대학만 모아볼 수 있어요!';
-      e.addEventListener('click', () => {
-        if (selectedFilterKeyword === t) {
-          selectedFilterKeyword = '';
-        } else {
-          selectedFilterKeyword = t;
-        }
-        node.querySelectorAll('.chip').forEach(ch => {
-          ch.classList.toggle('active-chip', ch.textContent === selectedFilterKeyword);
-        });
-        renderUniversities();
-      });
-      node.append(e);
-    });
-  }
-
-  function showResult() {
-    let score = {};
-    final.forEach(i => {
-      let cat = materials[i].cat;
-      score[cat] = (score[cat] || 0) + 4;
-    });
-    answers.forEach(c => {
-      score[c] = (score[c] || 0) + 1;
-    });
-
-    let cats = Object.keys(score).sort((a, b) => score[b] - score[a]);
-    let topCats = cats.slice(0, 5);
-    let jobs = [...new Set(topCats.flatMap(c => db[c]?.[0] || []))].slice(0, 10);
-    let majors = [...new Set(topCats.flatMap(c => db[c]?.[1] || []))].slice(0, 8);
-    
-    result = {
-      cats: topCats,
-      allScores: score,
-      jobs,
-      majors,
-      recipe: final.map(i => materials[i].label)
-    };
-
-    $('#summaryTitle').textContent = `나의 주요 진로 성향: ${topCats.slice(0, 2).join(' × ')}`;
-    $('#resultText').textContent = `내가 고른 '나만의 미래 레시피'(${result.recipe.join(', ')})와 진로 밸런스 성향을 분석한 결과입니다. 아래 맞춤 학과 및 대학 입시 정보를 확인해보세요!`;
-    
-    let chipBox = $('#selectedChips');
-    chipBox.replaceChildren();
-    result.recipe.forEach(t => {
-      let e = document.createElement('span');
-      e.className = 'chip';
-      e.textContent = t;
-      chipBox.append(e);
-    });
-
-    renderClickableChips($('#jobs'), jobs);
-    renderClickableChips($('#majors'), majors);
-
-    $('#talk').innerHTML = `💬 <b>선화 진로 톡:</b> "나의 레시피 분석 결과에 가장 잘 맞는 대학 학과들이 상단에 <b>[🎯 맞춤 추천]</b>으로 정렬되었어! 입시처 링크를 눌러 꼼꼼히 확인해봐."`;
-
-    renderUniversities();
-    show('step3');
-  }
-
-  function renderUniversities() {
-    let region = $('#region').value;
-    let search = $('#search').value.trim().toLowerCase();
-    let box = $('#universityList');
-    box.replaceChildren();
-
-    let userCats = result ? result.cats : [];
-
-    let processedUnis = unis.map(u => {
-      let sortedMajors = [...u.majors].sort((a, b) => {
-        let aIndex = userCats.indexOf(a.cat);
-        let bIndex = userCats.indexOf(b.cat);
-        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-        if (aIndex !== -1) return -1;
-        if (bIndex !== -1) return 1;
-        return 0;
-      });
-      return { ...u, majors: sortedMajors };
-    });
-
-    let list = processedUnis.filter(u => {
-      let matchRegion = (region === '전체' || u.region === region);
-      let uniText = (u.name + ' ' + u.majors.map(m=>m.name + ' ' + m.cat).join(' ')).toLowerCase();
-      
-      let matchSearch = !search || uniText.includes(search);
-      let matchClickFilter = !selectedFilterKeyword || uniText.includes(selectedFilterKeyword.replace(/학과|학부|전공/g, '').toLowerCase());
-
-      return matchRegion && matchSearch && matchClickFilter;
-    });
-
-    list.forEach(u => {
-      let card = document.createElement('div');
-      card.className = 'uni-card';
-
-      let header = document.createElement('div');
-      header.className = 'uni-header';
-      
-      let url = admissionUrls[u.name] || 'https://www.adiga.kr';
-      let nameEl = document.createElement('a');
-      nameEl.className = 'uni-name';
-      nameEl.href = url;
-      nameEl.target = '_blank';
-      nameEl.rel = 'noopener noreferrer';
-      nameEl.innerHTML = `${u.name} <span style="font-size:12px; font-weight:normal; opacity:0.7;">입학처 ↗</span>`;
-      nameEl.title = `${u.name} 공식 입학처 홈페이지로 이동합니다`;
-
-      let regionEl = document.createElement('span');
-      regionEl.className = 'uni-region';
-      regionEl.textContent = u.region;
-
-      header.append(nameEl, regionEl);
-
-      let mList = document.createElement('div');
-      mList.className = 'major-list';
-
-      u.majors.forEach(m => {
-        let isMatch = userCats.includes(m.cat);
-        let item = document.createElement('div');
-        item.className = 'major-item' + (isMatch ? ' match-highlight' : '');
-        
-        let badgeHtml = isMatch 
-          ? `<span style="display:flex; gap:6px; align-items:center;"><span style="background:var(--primary); color:white; font-size:11px; padding:2px 6px; border-radius:4px; font-weight:700;">🎯 맞춤 추천</span><span class="grade-badge">${m.grade}</span></span>`
-          : `<span class="grade-badge">${m.grade}</span>`;
-
-        item.innerHTML = `<span>📚 ${m.name}</span>${badgeHtml}`;
-        mList.append(item);
+      lines.forEach((line, index) => {
+        ctx.fillText(line, 160, 780 + (index * 60));
       });
 
-      card.append(header, mList);
-      box.append(card);
-    });
+      // 하단 브랜딩 / 서비스 로고
+      ctx.fillStyle = '#999999';
+      ctx.font = '28px "Pretendard", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('My Career Discovery Report', 540, 1150);
 
-    if (!list.length) {
-      let p = document.createElement('p');
-      p.className = 'muted';
-      p.textContent = selectedFilterKeyword ? `"${selectedFilterKeyword}" 관련 개설 대학 정보가 없습니다. 필터를 해제하거나 다른 검색어를 입력해 보세요.` : '조건에 일치하는 대학 정보가 없습니다.';
-      box.append(p);
+      // 4. 이미지 파일 다운로드 처리
+      const imageURI = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'career-report-instagram.png';
+      link.href = imageURI;
+      link.click();
     }
-  }
 
-  function copyCareerReport() {
-    if (!result) return;
-    let reportText = `[🌸 선화여고 나의 진로 리포트]\n` +
-      `• 핵심 활동 레시피: ${result.recipe.join(' / ')}\n` +
-      `• 주요 진로 성향: ${result.cats.slice(0, 2).join(' & ')}\n` +
-      `• 추천 탐색 직업: ${result.jobs.slice(0, 5).join(', ')}\n` +
-      `• 추천 관심 학과: ${result.majors.slice(0, 4).join(', ')}\n\n` +
-      `"나만의 미래 레시피와 진로 탐색 결과를 확인했어요!"`;
+    // 태그 형태의 둥근 박스를 그리는 보조 함수
+    function drawTag(ctx, text, x, y) {
+      ctx.save();
+      ctx.font = 'bold 30px "Pretendard", sans-serif';
+      ctx.textAlign = 'center';
+      
+      const padding = 30;
+      const metrics = ctx.measureText(text);
+      const width = metrics.width + padding * 2;
+      const height = 60;
 
-    navigator.clipboard.writeText(reportText).then(() => {
-      alert('📋 진로 리포트 내용이 클립보드에 복사되었습니다!\n카카오톡이나 패들렛 등에 붙여넣기 해보세요.');
-    }).catch(() => {
-      prompt('아래 텍스트를 직접 복사해 주세요:', reportText);
-    });
-  }
+      ctx.fillStyle = '#f0ecf9';
+      ctx.roundRect(x - width / 2, y - height / 2, width, height, 30);
+      ctx.fill();
 
-  $('#next1').addEventListener('click', () => {
-    final = [];
-    renderFinal();
-    show('step1b');
-  });
-
-  // [수정] STEP 1-2에서 '이전으로'를 누르면 3개 고른 내역(final)을 초기화
-  $('#back1').addEventListener('click', () => {
-    final = [];
-    show('step1');
-  });
-  
-  $('#next2').addEventListener('click', () => {
-    answers = [];
-    question = 0;
-    show('step2');
-    renderQuestion();
-  });
-
-  // [수정] STEP 2 월드컵 1번 질문에서 '이전 질문' 클릭 시 STEP 1-2로 복귀 처리
-  $('#back2').addEventListener('click', () => {
-    if (question > 0) {
-      question--;
-      answers = answers.slice(0, question);
-      renderQuestion();
-    } else {
-      show('step1b');
+      ctx.fillStyle = '#764ba2';
+      ctx.fillText(text, x, y + 10);
+      ctx.restore();
     }
-  });
-
-  $('#region').addEventListener('change', renderUniversities);
-  $('#search').addEventListener('input', renderUniversities);
-  $('#copyReportBtn').addEventListener('click', copyCareerReport);
-  
-  $('#reset').addEventListener('click', () => {
-    chosen = [];
-    final = [];
-    answers = [];
-    question = 0;
-    result = null;
-    selectedFilterKeyword = '';
-    $('#region').value = '전체';
-    $('#search').value = '';
-    renderMaterials();
-    show('step1');
-  });
-
-  renderMaterials();
-})();
-</script>
+  </script>
 </body>
 </html>
