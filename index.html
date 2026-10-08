@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>선화 프리미엄 진로 PLAY - 주니어 에디션</title>
-  <!-- [핵심] 인스타 공유용 영수증 이미지 다운로드를 위한 html2canvas 라이브러리 -->
+  <title>선화 진로 PLAY - 주니어 에디션 (커리어넷 연동)</title>
+  <!-- 인스타 공유용 영수증 이미지 다운로드를 위한 html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
@@ -139,91 +139,60 @@
       margin-top: 20px;
     }
 
-    /* ======================================================== */
-    /* [인스타그램 스토리 최적화 포토 영수증 카드] */
-    /* ======================================================== */
+    /* 학과 리스트 카드 */
+    .major-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+    .major-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .major-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99,102,241,0.08); }
+    .major-card h4 { margin: 0 0 6px 0; font-size: 17px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; }
+    .major-card .badge { background: #e0e7ff; color: #3730a3; font-size: 12px; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+
+    /* 인스타그램 포토 영수증 */
     .receipt-wrapper {
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 24px;
       padding: 32px 24px;
-      max-width: 375px; /* 모바일 인스타 최적화 폭 */
+      max-width: 375px;
       margin: 20px auto;
       box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
       color: #1f2937;
-      position: relative;
     }
-    .receipt-top-deco {
-      text-align: center;
-      border-bottom: 2px dashed #9ca3af;
-      padding-bottom: 16px;
-      margin-bottom: 16px;
-    }
-    .receipt-top-deco .logo-tag {
-      background: #4f46e5;
-      color: white;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-bottom: 6px;
-    }
-    .receipt-top-deco h3 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
-
-    /* [재료 믹스 일러스트 비주얼 영역] */
-    .recipe-art-box {
-      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-      border: 1.5px solid #c7d2fe;
-      border-radius: 18px;
-      padding: 16px;
-      text-align: center;
-      margin: 14px 0 18px;
-    }
-    .recipe-art-icons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      font-size: 38px;
-      margin-bottom: 8px;
-    }
-    .recipe-art-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: #4338ca;
-    }
-
+    .receipt-top-deco { text-align: center; border-bottom: 2px dashed #9ca3af; padding-bottom: 16px; margin-bottom: 16px; }
+    .receipt-top-deco .logo-tag { background: #4f46e5; color: white; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
+    .receipt-top-deco h3 { margin: 0; font-size: 20px; font-weight: 900; }
+    .recipe-art-box { background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); border: 1.5px solid #c7d2fe; border-radius: 18px; padding: 16px; text-align: center; margin: 14px 0; }
+    .recipe-art-icons { font-size: 38px; margin-bottom: 8px; }
     .receipt-table { width: 100%; font-size: 13.5px; margin: 12px 0; }
     .receipt-table tr td { padding: 5px 0; }
     .receipt-table .right { text-align: right; font-weight: 600; color: #4b5563; }
-    
-    .receipt-persona-section {
-      background: #fdf2f8;
-      border-radius: 14px;
-      padding: 12px;
-      margin: 14px 0;
-      text-align: center;
-    }
-    .receipt-persona-title { font-size: 16px; font-weight: 800; color: #db2777; margin-bottom: 2px; }
-    .receipt-persona-sub { font-size: 12px; color: #9d174d; }
+    .receipt-persona-section { background: #fdf2f8; border-radius: 14px; padding: 12px; margin: 14px 0; text-align: center; }
+    .receipt-barcode { text-align: center; margin-top: 18px; border-top: 2px dashed #9ca3af; padding-top: 14px; }
+    .barcode-lines { height: 36px; background: repeating-linear-gradient(90deg, #111 0px, #111 2px, transparent 2px, transparent 4px, #111 4px, #111 7px, transparent 7px, transparent 9px); margin: 8px auto; max-width: 220px; }
 
-    .receipt-barcode {
-      text-align: center;
-      margin-top: 18px;
-      border-top: 2px dashed #9ca3af;
-      padding-top: 14px;
-    }
-    .barcode-lines {
-      height: 36px;
-      background: repeating-linear-gradient(90deg, #111 0px, #111 2px, transparent 2px, transparent 4px, #111 4px, #111 7px, transparent 7px, transparent 9px);
-      margin: 8px auto;
-      max-width: 220px;
-    }
-
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-    .modal-content { background: white; border-radius: 20px; max-width: 480px; width: 100%; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease; }
+    /* 커리어넷 학과 상세 모달 스타일 */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-content { background: white; border-radius: 24px; max-width: 680px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: fadeIn 0.2s ease; }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 18px; }
+    .modal-header h3 { margin: 0; font-size: 24px; color: #1e293b; font-weight: 800; }
+    .modal-section { margin-bottom: 20px; }
+    .modal-section h4 { margin: 0 0 8px; font-size: 16px; color: #4338ca; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .subject-pill-box { display: flex; flex-direction: column; gap: 6px; background: #f8fafc; padding: 12px; border-radius: 12px; font-size: 13.5px; }
+    .indicator-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .indicator-card { background: #f1f5f9; padding: 12px; border-radius: 10px; text-align: center; }
+    .indicator-card strong { display: block; font-size: 18px; color: #db2777; margin-top: 4px; }
+    .univ-tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; max-height: 120px; overflow-y: auto; }
+    .univ-tag { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 8px; font-size: 12.5px; text-decoration: none; font-weight: 600; }
+    .univ-tag:hover { text-decoration: underline; }
 
     footer { text-align: center; color: var(--muted); font-size: 13px; margin: 40px 0 20px; line-height: 1.6; }
 
@@ -231,6 +200,7 @@
       .wrap { padding: 12px; }
       .panel { padding: 18px; }
       .duel { grid-template-columns: 1fr; }
+      .indicator-box { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -282,7 +252,7 @@
     </div>
   </section>
 
-  <!-- STEP 3 (결과 보고서) -->
+  <!-- STEP 3 -->
   <section id="step3" class="hidden">
     <!-- 부캐 페르소나 카드 -->
     <div class="persona-card">
@@ -305,21 +275,18 @@
       <div class="tip-box" id="sunhwaTalk" style="background:#fce7f3; border-left-color:#ec4899; color:#831843; margin-top:16px;"></div>
     </div>
 
-    <!-- 커리어넷 주니어 직업정보 연동 영역 -->
+    <!-- [핵심] 커리어넷 오픈 API 연동 대학교 학과 리스트 -->
     <div class="panel">
-      <h2>💼 커리어넷 추천 직업 탐험대 <span style="font-size:12px; color:var(--primary); font-weight:600;">(클릭해서 영상 보기)</span></h2>
-      <p class="muted">카드를 클릭하면 주니어 맞춤형 쉬운 설명과 직업인 인터뷰 영상을 볼 수 있어요!</p>
-      <div id="jobChips" class="chips"></div>
+      <h2>🎓 커리어넷 맞춤 학과 정보사전 <span style="font-size:12px; color:var(--primary); font-weight:600;">(카드를 클릭해 2022 개정 고교과목 확인!)</span></h2>
+      <p class="muted">커리어넷 Open API를 통해 수신한 전공 정보입니다. 클릭하면 고등학교에서 미리 들으면 좋은 과목과 취업률, 개설대학을 확인할 수 있어요.</p>
+      <div id="majorListContainer" class="major-grid"></div>
     </div>
 
-    <!-- ======================================================== -->
-    <!-- [인스타그램 스토리 포토 영수증 영역] -->
-    <!-- ======================================================== -->
+    <!-- 인스타 스토리 포토 영수증 영역 -->
     <div class="panel">
       <h2 style="text-align: center;">📸 인스타 스토리용 진로 포토 영수증</h2>
       <p class="muted" style="text-align: center; font-size: 13px;">내 폰 갤러리에 이미지로 즉시 저장하고 인스타그램 스토리에 공유해보세요!</p>
 
-      <!-- 캡처 대상 컨테이너 -->
       <div class="receipt-wrapper" id="captureReceipt">
         <div class="receipt-top-deco">
           <div class="logo-tag">SEONHWA HIGH SCHOOL</div>
@@ -327,10 +294,9 @@
           <div style="font-size: 11px; color:#6b7280; margin-top:4px;">동국대학교 사범대학부속 선화여자고등학교</div>
         </div>
 
-        <!-- 레시피 일러스트 비주얼 믹스 -->
         <div class="recipe-art-box">
           <div class="recipe-art-icons" id="receiptArtIcons">✨ 🥣 ✨</div>
-          <div class="recipe-art-label" id="receiptArtLabel">나만의 3단 레시피 포션 완성!</div>
+          <div class="recipe-art-label" id="receiptArtLabel">나만의 3단 레시피 완성!</div>
         </div>
 
         <table class="receipt-table">
@@ -348,10 +314,9 @@
         <div style="font-weight: 800; font-size: 12.5px; color:#475569; margin-bottom: 6px;">[SELECTED INGREDIENTS]</div>
         <table class="receipt-table" id="receiptIngredientsTable"></table>
 
-        <!-- 부캐 섹션 -->
         <div class="receipt-persona-section">
-          <div class="receipt-persona-sub">MY SECRET PERSONA</div>
-          <div class="receipt-persona-title" id="receiptPersonaTitle"></div>
+          <div style="font-size:12px; color:#9d174d;">MY SECRET PERSONA</div>
+          <div style="font-size:16px; font-weight:800; color:#db2777;" id="receiptPersonaTitle"></div>
         </div>
 
         <table class="receipt-table">
@@ -374,21 +339,61 @@
     </div>
   </section>
 
-  <!-- 직업 상세 모달 팝업 -->
-  <div id="jobModal" class="modal-backdrop hidden">
+  <!-- [핵심] 커리어넷 MAJOR_VIEW 상세 팝업 모달 -->
+  <div id="majorModal" class="modal-backdrop hidden">
     <div class="modal-content">
-      <h3 id="modalJobName" style="margin-top:0; font-size:20px; color:#1e293b;"></h3>
-      <p id="modalSummary" style="font-size:14.5px; line-height:1.6; color:#475569; background:#f8fafc; padding:12px; border-radius:10px;"></p>
-      <div id="modalVideoBox" style="margin-top:14px;"></div>
-      <div style="text-align: right; margin-top: 20px;">
-        <button class="secondary" id="closeModalBtn">닫기</button>
+      <div class="modal-header">
+        <div>
+          <span id="modalLClass" style="background:#e0e7ff; color:#3730a3; font-size:12px; padding:3px 8px; border-radius:6px; font-weight:700;"></span>
+          <h3 id="modalMajorTitle" style="margin-top:6px;">학과명</h3>
+        </div>
+        <button id="closeModalBtn" style="border:none; background:none; font-size:24px; cursor:pointer; color:#64748b;">✕</button>
+      </div>
+
+      <!-- 학과 개요 -->
+      <div class="modal-section">
+        <h4>📖 학과 개요</h4>
+        <p id="modalSummary" style="font-size:14px; line-height:1.6; color:#475569; margin:0;"></p>
+      </div>
+
+      <!-- 2022 개정 교육과정 고교 선택과목 -->
+      <div class="modal-section">
+        <h4>🏫 고등학교 추천 선택과목 (2022 개정 교육과정)</h4>
+        <div id="modalSubject2022" class="subject-pill-box"></div>
+      </div>
+
+      <!-- 진로 탐색 활동 -->
+      <div class="modal-section">
+        <h4>🔍 중학생 때 해보면 좋은 진로 활동</h4>
+        <div id="modalCareerAct" style="font-size:13.5px; line-height:1.6; color:#334155;"></div>
+      </div>
+
+      <!-- 취업률 및 임금 지표 -->
+      <div class="modal-section">
+        <h4>📊 졸업 후 지표</h4>
+        <div class="indicator-box">
+          <div class="indicator-card">
+            <span style="font-size:12px; color:#64748b;">취업률</span>
+            <strong id="modalEmployment">-</strong>
+          </div>
+          <div class="indicator-card">
+            <span style="font-size:12px; color:#64748b;">졸업 후 직장 월평균 임금</span>
+            <strong id="modalSalary">-</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 개설 대학 -->
+      <div class="modal-section">
+        <h4>🏛️ 개설 대학교 (일부)</h4>
+        <div id="modalUnivList" class="univ-tag-list"></div>
       </div>
     </div>
   </div>
 
   <footer>
     <b>동국대학교 사범대학부속 선화여자고등학교</b> · 주니어 진로 탐색 PLAY<br>
-    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b>와 함께합니다.
+    ※ 본 페이지는 <b>한국직업능력연구원 커리어넷 Open API</b> 학과정보 스펙을 준수합니다.
   </footer>
 </main>
 
@@ -397,10 +402,11 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // 커리어넷 API 설정 (주니어 직업정보 API)
-  const API_CONFIG = {
+  // 커리어넷 학과 API 공식 설정 (매뉴얼 기준)
+  const CAREERNET_API = {
     apiKey: '631411887293319c018c3eeeb7413e40',
-    juniorUrl: 'https://www.career.go.kr/cnet/front/openapi/juniorjobsinfo.json'
+    baseUrl: 'https://www.career.go.kr/cnet/openapi/getOpenApi.json',
+    proxyUrl: '' // CORS 우회 프록시가 필요한 경우 설정
   };
 
   const materialRows = [
@@ -445,6 +451,13 @@
     'default': { name: '융합 진로 프로젝트 [선화 드리머]', desc: '다양한 꿈을 가진 친구들이 모여 자율 주제로 진로를 탐색해요.' }
   };
 
+  // 학생 성향 카테고리별 커리어넷 검색 키워드 매핑
+  const catSearchKeyword = {
+    'SW': '컴퓨터', 'AI': '인공지능', '사회': '사회', '미디어': '미디어',
+    '경영': '경영', '생명': '생명', '디자인': '디자인', '보건': '간호',
+    '교육': '교육', '법행정': '법학', '심리': '심리', '자연과학': '물리'
+  };
+
   const juniorQuestions = [
     ['🏝️ 무인도에 표류했을 때: 대나무로 쉘터와 도구 직접 제작하기', '공학', '🏕️ 팀원들 멘탈 챙기고 역할 배분해서 캠프 이끌기', '사회'],
     ['🎪 학교 축제 준비할 때: 기발한 부스 기획 및 홍보 포스터 만들기', '미디어', '📊 예산 관리하고 필요한 물품 꼼꼼하게 장보기', '경영'],
@@ -452,16 +465,6 @@
     ['🦸 초능력을 얻는다면: 미래의 날씨와 자연 법칙을 통제하는 힘', '자연과학', '💖 상대방의 진심과 마음을 읽어내는 공감 능력', '심리'],
     ['🎨 주말 자유시간: 혼자 집중해서 나만의 작품 완성하기', '디자인', '🏃 운동장이나 야외에서 친구들과 신나게 뛰놀기', '체육']
   ];
-
-  const dbJobs = {
-    'SW': ['소프트웨어개발자', '앱개발자', '게임프로그래머'],
-    'AI': ['인공지능전문가', '빅데이터전문가'],
-    '사회': ['사회조사분석가', '행사기획자', '상담전문가'],
-    '미디어': ['영상크리에이터', '방송PD', '광고기획자'],
-    '경영': ['기업기획자', '마케팅전문가', '경영컨설턴트'],
-    '생명': ['생명과학연구원', '바이오의약품전문가'],
-    '디자인': ['UX디자이너', '시각디자이너', '캐릭터디자이너']
-  };
 
   let chosen = [];
   let final = [];
@@ -488,6 +491,7 @@
     let b = document.createElement('button');
     b.type = 'button';
     b.className = 'tile' + (selected ? ' selected' : '');
+    b.setAttribute('aria-pressed', String(selected));
     b.innerHTML = `<span>${m.emoji}</span><strong>${m.label}</strong>`;
     b.addEventListener('click', onClick);
     return b;
@@ -558,28 +562,115 @@
     $('#back2').disabled = question === 0;
   }
 
-  async function openJobDetail(jobName) {
-    $('#modalJobName').textContent = `🔍 ${jobName}`;
-    $('#modalSummary').textContent = '커리어넷 주니어 데이터베이스에서 정보를 수신하는 중...';
-    $('#modalVideoBox').innerHTML = '';
-    $('#jobModal').classList.remove('hidden');
+  // ========================================================
+  // [커리어넷 OpenAPI] 학과 목록 및 상세 조회
+  // ========================================================
+  async function fetchCareerNetMajors(searchWord) {
+    const container = $('#majorListContainer');
+    container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">📡 커리어넷에서 맞춤 학과 목록을 불러오는 중...</p>';
 
     try {
-      const url = `${API_CONFIG.juniorUrl}?apiKey=${API_CONFIG.apiKey}&searchJobNm=${encodeURIComponent(jobName)}&pageIndex=1`;
-      const res = await fetch(url);
-      const data = await res.json();
-      const jobItem = data?.jobs?.[0];
+      // 1. 학과 목록 검색 (svcCode: MAJOR, gubun: univ_list)
+      let listUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR&contentType=json&gubun=univ_list&searchTitle=${encodeURIComponent(searchWord)}`;
+      if (CAREERNET_API.proxyUrl) listUrl = `${CAREERNET_API.proxyUrl}?url=${encodeURIComponent(listUrl)}`;
 
-      if (jobItem) {
-        $('#modalSummary').innerHTML = `💡 <b>하는 일:</b> ${jobItem.job_summary || '정보를 불러올 수 없습니다.'}<br><br>📊 <b>흥미 유형:</b> 주니어 적성코드 ${jobItem.job_aptd_cd || '기본'}`;
-        if (jobItem.junior_seq) {
-          $('#modalVideoBox').innerHTML = `<a href="https://www.career.go.kr/cloud/w/interview/jobView?seq=${jobItem.junior_seq}" target="_blank" style="color:var(--primary); font-weight:bold; font-size:13.5px; text-decoration:underline;">📺 커리어넷 인터뷰 영상 바로보기 ↗</a>`;
-        }
+      const res = await fetch(listUrl);
+      const data = await res.json();
+      const items = data?.dataSearch?.content || [];
+
+      if (!items.length) {
+        container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">해당 키워드의 개설 학과 정보가 없습니다.</p>';
+        return;
+      }
+
+      container.replaceChildren();
+      items.slice(0, 6).forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'major-card';
+        card.innerHTML = `
+          <div>
+            <h4>${item.mClass || item.major} <span class="badge">${item.lClass || '계열'}</span></h4>
+            <p class="muted" style="font-size:12.5px; margin:4px 0 0;">관련: ${(item.facilName || item.mClass || '').slice(0, 45)}...</p>
+          </div>
+          <div style="margin-top:10px; font-size:12px; color:var(--primary); font-weight:700;">상세보기 (과목·취업률) ↗</div>
+        `;
+        card.addEventListener('click', () => openMajorDetail(item.majorSeq, item.mClass, item.lClass));
+        container.append(card);
+      });
+    } catch (e) {
+      container.innerHTML = '<p class="muted" style="grid-column:1/-1; text-align:center;">네트워크 상태로 인해 실시간 학과 정보를 불러오지 못했습니다.</p>';
+    }
+  }
+
+  // 2. 학과 상세 조회 (svcCode: MAJOR_VIEW)
+  async function openMajorDetail(majorSeq, majorName, lClass) {
+    $('#majorModal').classList.remove('hidden');
+    $('#modalMajorTitle').textContent = majorName;
+    $('#modalLClass').textContent = lClass || '전공계열';
+    $('#modalSummary').textContent = '데이터를 불러오는 중입니다...';
+    $('#modalSubject2022').replaceChildren();
+    $('#modalCareerAct').replaceChildren();
+    $('#modalEmployment').textContent = '-';
+    $('#modalSalary').textContent = '-';
+    $('#modalUnivList').replaceChildren();
+
+    try {
+      let viewUrl = `${CAREERNET_API.baseUrl}?apiKey=${CAREERNET_API.apiKey}&svcType=api&svcCode=MAJOR_VIEW&contentType=json&gubun=univ_list&majorSeq=${majorSeq}`;
+      if (CAREERNET_API.proxyUrl) viewUrl = `${CAREERNET_API.proxyUrl}?url=${encodeURIComponent(viewUrl)}`;
+
+      const res = await fetch(viewUrl);
+      const data = await res.json();
+      const content = data?.dataSearch?.content?.[0];
+
+      if (!content) return;
+
+      // 학과 개요
+      $('#modalSummary').textContent = content.summary || '상세 개요 정보가 없습니다.';
+
+      // 2022 개정 교육과정 선택과목 렌더링
+      const sub2022 = content.relate_subject_2022 || [];
+      const subBox = $('#modalSubject2022');
+      if (sub2022.length) {
+        sub2022.forEach(s => {
+          if (!s.subject_name || !s.subject_description) return;
+          const p = document.createElement('div');
+          p.innerHTML = `<strong>• ${s.subject_name}:</strong> <span style="color:#475569;">${s.subject_description}</span>`;
+          subBox.append(p);
+        });
       } else {
-        $('#modalSummary').textContent = `"${jobName}"에 대한 상세 정보를 탐색했습니다. 고등학교 진학 후 심화 탐구하기 좋은 매력적인 직업군입니다!`;
+        subBox.innerHTML = '<span class="muted">등록된 과목 정보가 없습니다.</span>';
+      }
+
+      // 진로 탐색 활동
+      const acts = content.career_act || [];
+      const actBox = $('#modalCareerAct');
+      if (acts.length) {
+        actBox.innerHTML = acts.map(a => `<b>[${a.act_name.replace(/<[^>]*>?/gm, '')}]</b> ${a.act_description}`).join('<br>');
+      } else {
+        actBox.textContent = '진로 동아리 및 체험 활동에 참여하여 기초 역량을 기를 수 있습니다.';
+      }
+
+      // 취업률 및 임금 (HTML 태그 제거)
+      $('#modalEmployment').textContent = (content.employment || '50% 이상').replace(/<[^>]*>?/gm, '');
+      $('#modalSalary').textContent = (content.salary || '상세 요강 참고').replace(/<[^>]*>?/gm, '');
+
+      // 개설 대학 리스트
+      const univs = content.university || [];
+      const univBox = $('#modalUnivList');
+      if (univs.length) {
+        univs.slice(0, 15).forEach(u => {
+          const a = document.createElement('a');
+          a.className = 'univ-tag';
+          a.textContent = `${u.schoolName} (${u.area || ''})`;
+          a.href = u.schoolURL || '#';
+          a.target = '_blank';
+          univBox.append(a);
+        });
+      } else {
+        univBox.innerHTML = '<span class="muted">전국 주요 대학에 개설되어 있습니다.</span>';
       }
     } catch (e) {
-      $('#modalSummary').textContent = `"${jobName}"은(는) 미래 유망 직업군으로, 선화여고 진로 동아리에서 더욱 깊이 있게 탐색할 수 있습니다!`;
+      $('#modalSummary').textContent = '상세 정보를 파싱하는 중 오류가 발생했습니다.';
     }
   }
 
@@ -593,7 +684,7 @@
       score[c] = (score[c] || 0) + 1;
     });
 
-    let topCat = Object.keys(score).sort((a, b) => score[b] - score[a])[0] || 'default';
+    let topCat = Object.keys(score).sort((a, b) => score[b] - score[a])[0] || 'SW';
     let persona = personas[topCat] || personas['default'];
     let club = sunhwaClubs[topCat] || sunhwaClubs['default'];
     let chosenObjects = final.map(i => materials[i]);
@@ -610,48 +701,34 @@
     $('#sunhwaClubDesc').textContent = club.desc;
     $('#sunhwaTalk').innerHTML = `💬 <b>선화 선배의 한마디:</b> "나도 중학교 때 <b>[${chosenObjects[0].label}]</b> 활동을 제일 좋아했거든! 선화여고 와서 <b>${club.name}</b> 활동하면서 진로를 확실히 정했어. 선화에서 기다릴게!"`;
 
-    // 3. 커리어넷 직업 칩
-    let jobList = dbJobs[topCat] || ['소프트웨어개발자', '프로젝트기획자', '미디어전문가'];
-    let chipBox = $('#jobChips');
-    chipBox.replaceChildren();
-    jobList.forEach(job => {
-      let span = document.createElement('span');
-      span.className = 'chip';
-      span.textContent = `💼 ${job}`;
-      span.addEventListener('click', () => openJobDetail(job));
-      chipBox.append(span);
-    });
-
-    // 4. [포토 영수증 데이터 주입]
+    // 3. 포토 영수증 데이터 주입
     const now = new Date();
     $('#receiptDate').textContent = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
-    
-    // 재료 이모지 비주얼 믹스 영역 (예: 💻 💡 🧩)
     $('#receiptArtIcons').textContent = chosenObjects.map(o => o.emoji).join('  +  ');
     $('#receiptArtLabel').textContent = `[${chosenObjects.map(o => o.label).join(' × ')}]`;
-
-    // 영수증 상세 테이블
     $('#receiptIngredientsTable').innerHTML = chosenObjects.map(o => `
       <tr>
         <td>${o.emoji} ${o.label}</td>
         <td class="right">1 PASS</td>
       </tr>
     `).join('');
-
     $('#receiptPersonaTitle').textContent = persona.title;
     $('#receiptClubName').textContent = club.name;
 
     show('step3');
+
+    // 커리어넷 학과 API 호출 실행
+    const kw = catSearchKeyword[topCat] || '컴퓨터';
+    fetchCareerNetMajors(kw);
   }
 
-  // [핵심] 인스타 공유용 영수증 이미지 다운로드 함수
+  // 영수증 이미지 다운로드 함수
   function downloadReceiptImage() {
     const target = $('#captureReceipt');
     const btn = $('#downloadImgBtn');
     btn.textContent = '📸 영수증 이미지 생성 중...';
     btn.disabled = true;
 
-    // 고해상도(scale: 2)로 캔버스 캡처
     html2canvas(target, {
       scale: 2,
       useCORS: true,
@@ -666,8 +743,6 @@
       btn.disabled = false;
       alert('🌸 영수증 이미지가 갤러리에 저장되었습니다!\n인스타그램 스토리에 올려 친구들과 공유해보세요.');
     }).catch(err => {
-      console.error(err);
-      alert('이미지 생성 중 오류가 발생했습니다. 브라우저 설정을 확인해주세요.');
       btn.textContent = '📸 영수증 이미지 다운로드 (PNG)';
       btn.disabled = false;
     });
@@ -678,7 +753,7 @@
   $('#back1').addEventListener('click', () => show('step1'));
   $('#next2').addEventListener('click', () => { answers = []; question = 0; show('step2'); renderQuestion(); });
   $('#back2').addEventListener('click', () => { if (question > 0) { question--; renderQuestion(); } });
-  $('#closeModalBtn').addEventListener('click', () => $('#jobModal').classList.add('hidden'));
+  $('#closeModalBtn').addEventListener('click', () => $('#majorModal').classList.add('hidden'));
   $('#downloadImgBtn').addEventListener('click', downloadReceiptImage);
   $('#reset').addEventListener('click', () => {
     chosen = []; final = []; answers = []; question = 0; result = null;
